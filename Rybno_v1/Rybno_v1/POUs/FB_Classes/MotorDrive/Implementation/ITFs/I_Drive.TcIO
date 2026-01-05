@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <Itf Name="I_Drive" Id="{5652c658-3bc0-46b0-8a55-4cd96ce276a2}">
+    <Declaration><![CDATA[INTERFACE I_Drive EXTENDS __System.IQueryInterface
+]]></Declaration>
+    <Folder Name="Properties" Id="{6188cf33-eac6-4dd3-999e-08f15132f7cc}">
+      <Folder Name="HMI" Id="{0368c45f-4237-4001-822a-946a2cb87574}" />
+      <Folder Name="Speed" Id="{6f47c755-e81f-4abf-a5bd-c023fe2f0be0}" />
+      <Folder Name="Status" Id="{4649ee0d-a8e2-4f80-9501-9896de81c646}" />
+    </Folder>
+    <Property Name="AtSpeed" Id="{059f2f20-2acb-4ec2-9875-a7a7fa9f63ca}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY AtSpeed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{518147c9-05e2-4f6e-8fc2-91d1f88cae4d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="CommOk" Id="{698cbb84-b7ff-48bb-b480-fc1be6be3283}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY CommOk : BOOL]]></Declaration>
+      <Get Name="Get" Id="{55c9f6d8-12b0-4d98-ab3b-74b55228b0a2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{16749a78-1280-40f3-ae8e-e21e0a4063e1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="Cycle" Id="{9b188fd1-b4d1-47c9-9507-2e3d557170ac}">
+      <Declaration><![CDATA[METHOD Cycle : BOOL
+
+]]></Declaration>
+    </Method>
+    <Property Name="Fault" Id="{9596f027-2c8b-465d-98e0-847fa870080e}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Fault : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{fc611778-67ef-46bf-abab-d40c4d7ec71d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="InvStatWord" Id="{46a8d0a5-54c9-411e-8f74-c2c7c13914b6}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY InvStatWord : WORD]]></Declaration>
+      <Get Name="Get" Id="{9fc34c4a-8d5f-4311-ad37-e463b3e8042f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{e408fbbf-0dbd-40de-9355-8a7b378f3189}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="IsRunning" Id="{87413025-7684-44ac-8ab6-cba034074957}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY IsRunning : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{b5b898e1-33e2-45a6-adb3-8186416bd34c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="IsRunningRev" Id="{19f0c459-7835-439b-a056-9cc2f65cfe1b}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY IsRunningRev : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{faa526e1-298e-497d-9745-ecf5dad1c0c6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="ResetFault" Id="{700d6887-c969-4560-85a9-06b8356ac8df}">
+      <Declaration><![CDATA[METHOD ResetFault : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="SetAutoLed" Id="{3cdcb26a-0742-4d67-973b-4b630dfc50ab}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetAutoLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c78b6538-0718-462f-b672-74866297a66a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{5340144a-3999-4261-8c19-3bd99f5a2cbc}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SetFwdLed" Id="{4a8ee14c-2a2e-4d76-bf30-4a431910462f}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetFwdLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c509d126-d7ed-485a-934d-bc5c8a93b6d9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{14b2b55e-21af-41e4-a68c-aa59ddffd842}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SetLedEnum" Id="{aabefb97-74d8-409e-b70b-550f7057f7b0}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetLedEnum : E_DriveLedState]]></Declaration>
+      <Set Name="Set" Id="{ed0013ad-400a-4eed-a40d-9c556fc97dd2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SetLedInt" Id="{fd4dc593-e1bc-4f3d-908c-71ca4821b8b4}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetLedInt : INT]]></Declaration>
+      <Get Name="Get" Id="{e1b470e2-a207-43dc-90bf-cf09066ab989}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SetRevLed" Id="{6fa03f44-cd51-4cc7-8535-8fbc61a7ba27}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetRevLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{db34069e-e7af-476c-87a6-45bb47ce1285}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{9a09fe91-53a2-4369-aae7-2e4b5d03c10f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SetStatusLabel" Id="{67495ff0-eea5-426d-8490-26ca952898ac}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetStatusLabel : STRING]]></Declaration>
+      <Get Name="Get" Id="{a83abc97-cb0d-4c4f-ba50-4db0e608b43c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{9a2ebc70-c8a2-4448-8695-86ae170ff1d2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SetSupplyLed" Id="{20962245-02f5-4c28-b32a-f48ddf1ff086}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetSupplyLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f28f3a2c-e14c-43e3-90b6-78f4c1483144}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{fc4bf025-1373-4c95-a8d4-c418a1637195}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="SetWorkCounter" Id="{a0d20bde-b171-4191-a28a-c36e83ee2bea}">
+      <Declaration><![CDATA[METHOD SetWorkCounter : BOOL
+VAR_INPUT
+	bEnable	:	BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="SlaveId" Id="{eebff13b-de8d-4614-81f0-bb6d90f6f4bc}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY SlaveId : BYTE]]></Declaration>
+      <Get Name="Get" Id="{edab9dce-6ffa-4ab1-baa4-5099e8e0ae31}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="SpeedAct_Hz" Id="{b8d17dac-b7b8-40ad-b5c8-1330b711e514}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY SpeedAct_Hz : REAL]]></Declaration>
+      <Get Name="Get" Id="{58c263e0-7c31-40f4-b052-6500fe6d8c81}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{e4ffcbd0-f9d0-4018-83a1-97a89ef726b8}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SpeedSet_Hz" Id="{d9d6653c-d4e6-44fd-bedc-7c79a2a4b079}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY SpeedSet_Hz : REAL]]></Declaration>
+      <Get Name="Get" Id="{38f2f6de-88da-4dfb-ab1a-c77f179ce1aa}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{096fc9de-d676-432c-b803-c1584f92cdfa}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="StartForward" Id="{2148ce58-9eed-4941-ab05-70f29bb11195}">
+      <Declaration><![CDATA[METHOD StartForward : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="StartReverse" Id="{e2f0d693-e695-421b-8af5-0a003575d4a1}">
+      <Declaration><![CDATA[METHOD StartReverse : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Stop" Id="{d5e1397b-5d77-4da8-9d4c-a71371ccd46f}">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="TermFuseActive" Id="{93c395fd-8ef2-4636-9a29-7b2f871faf56}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY TermFuseActive : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3c5e7a1c-1ee1-42fe-b8e7-6c34d130a059}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="WorkTime" Id="{bba33641-a68e-4dc4-818a-0f355969d39d}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY WorkTime : ST_WorkTime]]></Declaration>
+      <Get Name="Get" Id="{7ce3e3c4-b0fd-4e8c-b8a4-0db171c70744}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

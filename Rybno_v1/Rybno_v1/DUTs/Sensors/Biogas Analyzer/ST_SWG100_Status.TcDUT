@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_SWG100_Status" Id="{b322e2f4-a7e0-41e7-99ce-b462d2ed4bcb}">
+    <Declaration><![CDATA[TYPE ST_SWG100_Status:
+STRUCT
+    // ===== surowe =====
+    dwRawStatus      : DWORD;   // surowe słowo statusu z analizatora
+
+    // ===== bity (BOOL) =====
+    bPowerOn         : BOOL;    // bit 0
+    bSystemAlarm     : BOOL;    // bit 1  (tylko flaga "jest alarm w wordzie alarmów")
+    bZeroing         : BOOL;    // bit 2
+    bSamplingPrep    : BOOL;    // bit 3  (przygotowanie pomiaru, nie pomiar)
+    bSensorPurged    : BOOL;    // bit 8
+    bSensorCutOff    : BOOL;    // bit 9
+    bStandBy         : BOOL;    // bit 11
+    bAutoCalibration : BOOL;    // bit 12
+    bDueForService   : BOOL;    // bit 13
+    bGasSumOver100   : BOOL;    // bit 14
+    bPurgingPhase    : BOOL;    // bit 15
+
+    // ===== pola wielobitowe =====
+    uiSamplePoint    : USINT;   // bity 4..7 - u Ciebie zwykle 1 lub 0 podczas zero/purge
+
+
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

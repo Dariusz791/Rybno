@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_MixitIO" Id="{3c9594a2-d237-4046-9962-81d014fd62ce}">
+    <Declaration><![CDATA[// 0=Off, 1=Auto, 2=Manual
+TYPE ST_MixitIO :
+STRUCT
+	// --- Wejścia/konfiguracja z SCADA ---
+	bEnable	    : BOOL;	   // SCADA -> PLC zezwol na załączenie petli w regulatorze FB_TwoPositionController		
+    Mode 		: INT;     // SCADA -> PLC
+    rSP  		: REAL;    // SCADA -> PLC [°C]
+    rH   		: REAL;    // SCADA -> PLC [K]
+	bCooling 	: BOOL;    //SCADA -> PLC (ustawianie chłodzenie = true, grzanie = false)
+	// --- Wyjścia do SCADA / podgląd ---
+    Cmd  		: BOOL;    // PLC -> SCADA (komenda logiczna do obiegu)
+    Out  		: BOOL;    // PLC -> SCADA (stan WYJŚCIA po przekaźniku)
+	rCv			: REAL;	
+	rE      	: REAL;    // uchyb (opcjonalnie)
+    rLo         : REAL;    // -H/2 (opcjonalnie)
+    rHi         : REAL;    // +H/2 (opcjonalnie)
+	    // Status tekstowy
+    StatusText  : T_MaxString;  // np. "AWARIA Mixit", "PRACA", "AUTO"
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

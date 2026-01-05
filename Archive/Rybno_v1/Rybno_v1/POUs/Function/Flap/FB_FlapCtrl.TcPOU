@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_FlapCtrl" Id="{635223af-7d75-45d4-827e-1e513765a4e7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FlapCtrl
+VAR_INPUT
+    bAuto           : BOOL;   // TRUE = AUTO, FALSE = MANUAL
+    bCmdOpen        : BOOL;   // przycisk OTWÓRZ
+    bCmdClose       : BOOL;   // przycisk ZAMKNIJ
+    bCmdHome        : BOOL;   // przycisk BAZUJ
+    bResetFault     : BOOL;   // RESET AWARII
+
+    uiPosSP_Percent : UINT;   // zadany % w AUTO 0..100
+
+    nEnc            : DINT;   // licznik enkodera
+    nTargetOpen     : DINT;   // impulsy = 100% otwarcia
+    bHomeSensor     : BOOL;   // Z z EL5151
+    bMotorFault     : BOOL;   // fault z napędu / silnikówki
+END_VAR
+
+VAR_OUTPUT
+    // status do SCADA
+    rPosPV_Percent  : REAL;
+    bIsOpen         : BOOL;
+    bIsClosed       : BOOL;
+    bIsMoving       : BOOL;
+    bFlapFault      : BOOL;
+
+    // sterowanie napędem
+    bDrvOpen        : BOOL;   // Reverse = OTWÓRZ
+    bDrvClose       : BOOL;   // Forward = ZAMKNIJ
+    rFreqSetpoint   : REAL;   // Hz na falownik
+
+    // enkoder
+    bSetCounter     : BOOL;
+    uiSetCounterVal : UINT;
+
+    // diagnostyka
+    eState          : E_FlapState;
+    sStatusText     : T_MaxString;
+END_VAR
+VAR
+   // wewnętrzny stan – na niego pracuje automat
+    eStateInt       : E_FlapState := E_FlapState.IdleClosed;
+
+    // triggery zboczy
+    fbTrigOpen      : R_TRIG;
+    fbTrigClose     : R_TRIG;
+    rZ              : R_TRIG;
+
+    // parametry
+    rSP_Percent     : REAL;
+    rTolPerc        : REAL := 2.0;   // tolerancja % open/closed
+    rDeadBandPerc   : REAL := 1.0;   // martwa strefa % w AUTO
+
+    rOpenFast       : REAL := 5.0;
+    rOpenSlow       : REAL := 3.0;
+    rCloseFast      : REAL := 5.0;
+    rCloseSlow      : REAL := 3.0;
+
+    nDecelImp       : DINT := 80;    // zwalnianie przed końcem
+    TOLImp          : DINT := 3;     // tolerancja impulsów przy otwarciu
+
+    nEncClamped     : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// 1) Triggery, domyślne wyjścia
+fbTrigOpen(CLK := bCmdOpen);
+fbTrigClose(CLK := bCmdClose);
+rZ(CLK := bHomeSensor);
+
+bDrvOpen        := FALSE;
+bDrvClose       := FALSE;
+rFreqSetpoint   := 0.0;
+bSetCounter     := FALSE;
+uiSetCounterVal := 0;
+
+bIsMoving       := FALSE;
+
+// 2) Awaria napędu → stan Fault
+IF bMotorFault THEN
+    bFlapFault := TRUE;
+    eStateInt  := E_FlapState.Fault;
+END_IF;
+
+// 3) Bazowanie z palca
+IF bCmdHome AND (eStateInt <> E_FlapState.Fault) THEN
+    eStateInt := E_FlapState.Closing;
+END_IF;
+
+// 4) Przeliczenie pozycji na %
+nEncClamped := nEnc;
+
+IF nEncClamped < 0 THEN
+    nEncClamped := 0;
+END_IF;
+
+IF (nTargetOpen > 0) AND (nEncClamped > nTargetOpen) THEN
+    nEncClamped := nTargetOpen;
+END_IF;
+
+IF nTargetOpen > 0 THEN
+    rPosPV_Percent := DINT_TO_REAL(nEncClamped) * 100.0 / DINT_TO_REAL(nTargetOpen);
+ELSE
+    rPosPV_Percent := 0.0;
+END_IF;
+
+// 5) AUTO / MANUAL – decyzja wejścia w Opening/Closing
+IF eStateInt <> E_FlapState.Fault THEN
+
+    // MANUAL
+    IF NOT bAuto THEN
+        IF fbTrigOpen.Q THEN
+            eStateInt := E_FlapState.Opening;
+        END_IF;
+
+        IF fbTrigClose.Q THEN
+            eStateInt := E_FlapState.Closing;
+        END_IF;
+
+    // AUTO
+    ELSE
+        rSP_Percent := DINT_TO_REAL(uiPosSP_Percent);
+
+        IF (eStateInt = E_FlapState.IdleClosed) OR (eStateInt = E_FlapState.Opened) THEN
+            IF (rSP_Percent >  rPosPV_Percent + rDeadBandPerc) THEN
+                eStateInt := E_FlapState.Opening;
+            ELSIF (rSP_Percent < rPosPV_Percent - rDeadBandPerc) THEN
+                eStateInt := E_FlapState.Closing;
+            END_IF;
+        END_IF;
+    END_IF;
+
+END_IF;
+
+// 6) Maszyna stanów
+CASE eStateInt OF
+
+    // zamknięta
+    E_FlapState.IdleClosed:
+        bDrvOpen      := FALSE;
+        bDrvClose     := FALSE;
+        rFreqSetpoint := 0.0;
+        bIsMoving     := FALSE;
+
+        IF NOT bHomeSensor THEN
+            eStateInt := E_FlapState.Closing;
+        END_IF;
+
+        IF bHomeSensor AND (nEnc <> 0) THEN
+            uiSetCounterVal := 0;
+            bSetCounter     := TRUE;
+        END_IF;
+
+    // otwieranie
+    E_FlapState.Opening:
+
+        IF bMotorFault THEN
+            eStateInt := E_FlapState.Fault;
+        ELSE
+            bDrvOpen      := TRUE;
+            bDrvClose     := FALSE;
+            bIsMoving     := TRUE;
+            bSetCounter   := FALSE;
+
+            IF nEnc < (nTargetOpen - nDecelImp) THEN
+                rFreqSetpoint := rOpenFast;
+            ELSE
+                rFreqSetpoint := rOpenSlow;
+            END_IF;
+
+            IF nEnc >= (nTargetOpen - TOLImp) THEN
+                bDrvOpen      := FALSE;
+                rFreqSetpoint := 0.0;
+                eStateInt     := E_FlapState.Opened;
+            END_IF;
+        END_IF;
+
+    // otwarta
+    E_FlapState.Opened:
+        bDrvOpen      := FALSE;
+        bDrvClose     := FALSE;
+        rFreqSetpoint := 0.0;
+        bIsMoving     := FALSE;
+
+    // zamykanie
+    E_FlapState.Closing:
+
+        IF bMotorFault THEN
+            eStateInt := E_FlapState.Fault;
+        ELSE
+            bDrvOpen      := FALSE;
+            bDrvClose     := TRUE;
+            bIsMoving     := TRUE;
+
+            IF nEnc > nDecelImp THEN
+                rFreqSetpoint := rCloseFast;
+            ELSE
+                rFreqSetpoint := rCloseSlow;
+            END_IF;
+
+            IF rZ.Q THEN
+                bDrvClose     := FALSE;
+                rFreqSetpoint := 0.0;
+                eStateInt     := E_FlapState.IdleClosed;
+            END_IF;
+        END_IF;
+
+    // awaria
+    E_FlapState.Fault:
+        bDrvOpen      := FALSE;
+        bDrvClose     := FALSE;
+        rFreqSetpoint := 0.0;
+        bIsMoving     := FALSE;
+        bFlapFault    := TRUE;
+        bSetCounter   := FALSE;
+
+        IF bResetFault AND NOT bMotorFault THEN
+            bFlapFault := FALSE;
+            eStateInt  := E_FlapState.IdleClosed;
+        END_IF;
+
+END_CASE;
+
+// 7) boole open/closed
+bIsClosed :=
+    (rPosPV_Percent <= rTolPerc) OR
+    ((eStateInt = E_FlapState.IdleClosed) AND bHomeSensor);
+
+bIsOpen :=
+    (rPosPV_Percent >= (100.0 - rTolPerc)) OR
+    (eStateInt = E_FlapState.Opened);
+
+// 8) statusy na wyjście
+eState := eStateInt;
+
+CASE eStateInt OF
+    E_FlapState.IdleClosed:
+        sStatusText := 'Zamknięta';
+    E_FlapState.Opening:
+        sStatusText := 'Otwieranie';
+    E_FlapState.Opened:
+        sStatusText := 'Otwarta';
+    E_FlapState.Closing:
+        sStatusText := 'Zamykanie';
+    E_FlapState.Fault:
+        sStatusText := 'Awaria klapy';
+    ELSE
+        sStatusText := 'Nieznany stan';
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

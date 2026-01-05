@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_TwoPositionController" Id="{0b33c6cf-9c1f-4e49-9d86-ee260adb73d8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TwoPositionController
+VAR_INPUT
+    bEnable       : BOOL;   // globalne zezwolenie
+    rSetPoint     : REAL;   // SP
+    rCurrentValue : REAL;   // PV
+    rH            : REAL;   // szerokość histerezy [K]
+    bManualOn     : BOOL;   // ręczne wymuszenie w MANUAL_ON
+    bCooling      : BOOL;   // TRUE=chłodzenie, FALSE=grzanie
+END_VAR
+VAR_OUTPUT
+    bDemand 		: BOOL;   // zapotrzebowanie: załącz czujnik/obieg MIXIT
+    rE      		: REAL;   // uchyb (SP - PV)
+    rLo     		: REAL;   // próg -H/2 (dla SCADA)
+    rHi     		: REAL;   // próg +H/2 (dla SCADA)
+END_VAR         	
+VAR
+	fbHys          : FB_Hysteresis;   // Schmitt
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*
+Wejścia:
+  __bCooling = TRUE  → tryb CHŁODZENIE: włącz gdy za ciepło (PV > SP)
+  __bCooling = FALSE → tryb GRZANIE   : włącz gdy za zimno (PV < SP)
+
+Realizacja:
+  Używamy symetrycznych progów na uchybie:  rLo = -H/2, rHi = +H/2.
+  - Grzanie:  histereza na E = (SP - PV)
+              ON  gdy E >= +H/2
+              OFF gdy E <= -H/2
+              → fIn =  +E, fOn = rHi, fOff = rLo
+  - Chłodzenie: histereza na -E
+              ON  gdy -E >= +H/2  ↔  E <= -H/2  (za ciepło)
+              OFF gdy -E <= -H/2    E >= +H/2
+              → fIn =  -E, fOn = rHi, fOff = rLo 
+*)
+			  
+
+IF NOT bEnable THEN
+    rE      := rSetPoint - rCurrentValue;
+    rLo     := -rH * 0.5;
+    rHi     := rH * 0.5;
+    bDemand := FALSE;
+    RETURN;
+END_IF;
+
+// 1) Uchyby i progi (do SCADA)
+rE  := rSetPoint - rCurrentValue;
+rLo := -rH * 0.5;
+rHi :=  rH * 0.5;
+
+// 2) Rdzeń: histereza (Schmitt) na uchybie z wyborem kierunku
+fbHys.fOn      := rHi;
+fbHys.fOff     := rLo;
+
+IF bCooling THEN  
+	fbHys.fIn := -rE;  // chłodzenie: pracujemy na -E (włącz gdy za wysoko)
+ELSE    
+    fbHys.fIn :=  rE; // grzanie: pracujemy na  E  (włącz gdy za nisko)
+END_IF;
+
+fbHys();  // bQ = wynik Schmitta
+
+// 3) Wyjście + ręczne wymuszenie
+bDemand := fbHys.bQ OR bManualOn;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

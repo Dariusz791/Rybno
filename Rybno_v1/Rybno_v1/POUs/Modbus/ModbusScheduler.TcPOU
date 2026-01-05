@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="ModbusScheduler" Id="{6f526b89-a8fa-4751-9110-58707dadd2bd}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM ModbusScheduler
+VAR
+    MB               : ModbusRtuMaster_KL6x22B;
+    aMBData          : ARRAY[0..40] OF WORD;
+    bMBBusy          : BOOL;
+    tTimeout         : TIME := T#300MS;
+    errMdb           : MODBUS_ERRORS;
+
+    iStep            : INT := 0;
+
+    (* Timery cykliczne *)
+    fbSimex          : TON;   // 500 ms
+    fbBiogas         : TON;   // 60 s
+    fbCHP            : TON;   // 1 s
+
+    bDoSimex         : BOOL;
+    bDoBiogas        : BOOL;
+    bDoCHP           : BOOL;
+
+    iUnitId          : INT;
+
+    (* do zerowania simexa *)
+    fbTpZeroSimex    : TP;         // podtrzymanie sygnału zerowania
+    bZeroRequest     : BOOL;       // sygnał z SCADA/PLC: "wyzeruj wagę"
+	
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ======================================================
+// 1) Timery samoodnawiające
+// ======================================================
+fbSimex(IN := NOT fbSimex.Q, PT := T#500MS);
+//fbChpTimer  (IN := NOT fbChpTimer.Q,   PT := T#1S);
+fbBiogas(IN := NOT fbBiogas.Q, PT := T#1S);
+
+// ustaw flagi gdy timer „pyknie”
+IF fbSimex.Q THEN bDoSimex := TRUE; END_IF
+//IF fbChpTimer.Q   THEN bDoCHP   := TRUE; END_IF
+IF fbBiogas.Q THEN bDoBiogas := TRUE; END_IF
+
+// zerowanie z SCADY
+IF GVL_Fertilizer.WeightSens_VR01.bZeroingScale THEN
+    fbTpZeroSimex(IN := TRUE, PT := T#2S);
+ELSE
+    fbTpZeroSimex(IN := FALSE);
+END_IF
+
+
+// ======================================================
+// 2) Główna maszyna stanów
+// ======================================================
+CASE iStep OF
+
+// ------------------------------------------------------
+// 0 – idle / wybór zadania
+// ------------------------------------------------------
+0:
+    // wyczyść ewentualne wykonania
+    MB.ReadRegs(Execute := FALSE);
+   
+    // PRIORYTET 1: jeśli ktoś trzyma zero i minęło 2 s -> zeruj Simexa
+    IF fbTpZeroSimex.Q THEN
+        iStep := 5;
+
+    // PRIORYTET 2: odczyt Simexa co 500 ms
+    ELSIF bDoSimex THEN
+        bDoSimex := FALSE;
+        iStep := 10;
+
+    // PRIORYTET 3: CHP co 1 s
+    ELSIF bDoCHP THEN
+        bDoCHP := FALSE;
+        iStep := 30;
+
+    // PRIORYTET 4: analizator co 60 s
+    ELSIF bDoBiogas THEN
+        bDoBiogas := FALSE;
+        iStep := 50;
+    END_IF
+
+
+// ------------------------------------------------------
+// 5 – ZEROWANIE WAGI SIMEX
+// ------------------------------------------------------
+5:
+    iUnitId := 102;
+    aMBData[0] := 0;
+
+    MB.WriteSingleRegister(
+        UnitID      := INT_TO_BYTE(iUnitId),
+        Quantity    := 1,
+        MBAddr      := 16#0019,      // rejestr zero w Simex
+        cbLength    := 2,
+        pMemoryAddr := ADR(aMBData[0]),
+        Execute     := TRUE,
+        Timeout     := tTimeout,
+        Busy        => bMBBusy
+    );
+
+    IF NOT bMBBusy THEN
+        MB.WriteSingleRegister(Execute := FALSE);
+        errMdb := MB.ErrorId;
+        iStep := 0;
+    END_IF
+
+
+// ------------------------------------------------------
+// 10 – ODCZYT SIMEX (500 ms)
+// ------------------------------------------------------
+10:
+    iUnitId := 102;
+
+    MB.ReadRegs(
+        UnitID      := INT_TO_BYTE(iUnitId),
+        Quantity    := 4,
+        MBAddr      := 16#0002,
+        cbLength    := 8,
+        pMemoryAddr := ADR(aMBData[0]),
+        Execute     := TRUE,
+        Timeout     := tTimeout,
+        Busy        => bMBBusy
+    );
+
+    IF NOT bMBBusy THEN
+        MB.ReadRegs(Execute := FALSE);
+        errMdb := MB.ErrorId;
+
+        IF NOT MB.Error THEN
+            GVL_Fertilizer.WeightSens_VR01.rRawWeightValue := aMBData[0];
+        END_IF
+
+        iStep := 0;
+    END_IF
+
+
+// ------------------------------------------------------
+// 30 – CHP (placeholder)
+// ------------------------------------------------------
+30:
+    // tu potem wstawisz swój odczyt CHP
+    // teraz tylko wracamy
+    iStep := 0;
+
+
+// ------------------------------------------------------
+// 50 – Analizator biogazu (placeholder)
+// ------------------------------------------------------
+50:
+	
+    iUnitId := 238;
+    // tu potem wstawisz swój odczyt analizatora
+   MB.ReadRegs(
+        UnitID      := INT_TO_BYTE(iUnitId),
+        Quantity    := 12,
+        MBAddr      := 16#0028, // Modbus 40 start mozna uzywac tylko parzystych Quantity i parzystych MBAaddr
+        cbLength    := 24,
+        pMemoryAddr := ADR(aMBData[0]),
+        Execute     := TRUE,
+        Timeout     := tTimeout,
+        Busy        => bMBBusy
+    );
+
+    IF NOT bMBBusy THEN
+        MB.ReadRegs(Execute := FALSE);
+        errMdb := MB.ErrorId;
+
+        IF NOT MB.Error THEN
+			 
+			GVL_Biogas.stSWG100_Status := SWG100_StatusFromDword(ModbusToDword(aMBData[0], aMBData[1])); // Bigendian DWORD from SWG100 BIOCOMPACT -> konwersja statusu bitów na Bool	
+			GVL_Biogas.stSWG100_Alarms := SWG100_AlarmsFromDword(ModbusToDword(aMBData[2], aMBData[3]));		
+			GVL_Biogas.stSWG100_Biogas.rO2 := ModbusToReal(aMBData[4], aMBData[5]); // ModbusToReal(aMBData[4], aMBData[5]);  // O2 konwersja na real SWG100 daje od razu float czyli real na dwoch slowach
+			GVL_Biogas.stSWG100_Biogas.rCO2 := ModbusToReal(aMBData[6], aMBData[7]); // CO2 
+			GVL_Biogas.stSWG100_Biogas.rCH4 := ModbusToReal(aMBData[8], aMBData[9]); // CH4
+ 			GVL_Biogas.stSWG100_Biogas.rH2S := ModbusToReal(aMBData[10], aMBData[11]); // H2S
+			GVL_Biogas.stSWG100_Biogas.rH2 := ModbusToReal(aMBData[12], aMBData[13]); // H2
+			GVL_Biogas.stSWG100_Biogas.rWO_MjKg := ModbusToReal(aMBData[13], aMBData[14]); // Wartośc Opałowa w MJ/KG
+			GVL_Biogas.stSWG100_Biogas.rCS_MjKg := ModbusToReal(aMBData[15], aMBData[16]); // Ciepło Spalania w MJ/KG
+			GVL_Biogas.stSWG100_Biogas.rWO_Mjm3 := ModbusToReal(aMBData[17], aMBData[18]); // Wartośc Opałowa w MJ/m3
+			GVL_Biogas.stSWG100_Biogas.rCS_Mjm3 := ModbusToReal(aMBData[19], aMBData[20]); // Ciepło Spalania w MJ/m3
+        END_IF
+
+        iStep := 0;
+    END_IF
+ 
+
+   //iStep := 0;
+
+END_CASE
+
+
+
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="DewateringProcess" Id="{2dba32da-2625-43de-81be-5f749617ce24}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM DewateringProcess
+VAR
+	
+	//Stacja odwadniania SO-01
+	stDew				: ST_Dewatering;
+	
+	//Napedy U11 pompy SP02	
+	fbDrvInv_SP02 		: FB_DriveInv(1, E_InvType.Schneider);
+	fbDrvContrInv_SP02  : FB_DriveControl(fbDrvInv_SP02);
+
+
+	
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Action
+ACT_Motor(); //nastawy z SCADA
+
+(*******************SO-01*********************************************)
+// --- WYJŚCIE: bStart z SCADA steruje stykiem START ---
+GVL_Dewatering.DO_Start := stDew.bStart;
+
+// --- WEJŚCIA: aktualizujemy statusy do SCADA ---
+stDew.bPraca  := GVL_Dewatering.DI_Praca;
+stDew.bAwaria := GVL_Dewatering.DI_Awaria;
+
+
+
+//  dołożyc automatyczną obsługę tej pompy gdy wystartuje stacja odwadniania
+(******************SP-02*********************************************)
+fbDrvContrInv_SP02();
+GVL_Dewatering.stDriveStatus_SP02 := fbDrvContrInv_SP02.StatusStruct(); //zwróc strukturę
+
+
+
+]]></ST>
+    </Implementation>
+    <Action Name="ACT_Motor" Id="{83b1bc49-7ea7-4234-9576-dfa7d251ef33}">
+      <Implementation>
+        <ST><![CDATA[//Naped ustawienia SP01
+//nastawy z SCADA
+fbDrvContrInv_SP02.SetForward:=GVL_Dewatering.stDriveStatus_SP02.bForward;
+fbDrvContrInv_SP02.SetReverse:=GVL_Dewatering.stDriveStatus_SP02.bReverse;
+fbDrvContrInv_SP02.FreqSetPoint:=GVL_Dewatering.stDriveStatus_SP02.FrequencySet;
+
+]]></ST>
+      </Implementation>
+    </Action>
+  </POU>
+</TcPlcObject>

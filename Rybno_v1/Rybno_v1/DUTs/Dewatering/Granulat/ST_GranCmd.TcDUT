@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_GranCmd" Id="{571c5f0d-8501-4176-9e90-4f90bfc21161}">
+    <Declaration><![CDATA[TYPE ST_GranCmd :
+STRUCT
+    // Odwadnianie
+    bDewaterStart  : BOOL;
+
+    // SP02 pompa osadu (falownik)
+    bSP02_Fwd      : BOOL;
+    bSP02_Rev      : BOOL;
+    rSP02_Hz       : REAL;
+
+    // SC02 perlit (stycznik) + E01 wibrator
+    bSC02_On       : BOOL;
+    bE01_VibOn     : BOOL;
+
+    // SC01 wapno (stycznik) + E02 wibrator
+    bSC01_On       : BOOL;
+    bE02_VibOn     : BOOL;
+
+    // Granulator VR01_M01 / VR01_M02 (falowniki)
+    bM01_Fwd       : BOOL;
+    bM02_Fwd       : BOOL;
+    rMix_Hz        : REAL;    // stałe 50
+
+    // Klapa VR01_M03 – tryb auto z pozycją
+    bFlapAutoOpen  : BOOL;    // "Open:=TRUE" w Twoim FB klapy
+    uiFlapPosSP    : UINT;    // 0..100
+    bFlapClose     : BOOL;    // jeśli masz osobno "Close" (opcjonalnie)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_WorkTimeCounter" Id="{539c6177-5426-412c-af6f-6d0308516e6a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_WorkTimeCounter
+VAR
+	_timer		: TON;   
+    _lastEnable : BOOL;
+
+    _Hours   	: UDINT;
+    _Minutes 	: UINT;
+    _Seconds 	: UINT;
+	_isRunning 	: BOOL;
+    _Display 	: T_MaxString;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{532a4bd7-9e18-445d-9e13-7ed063efd145}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	Enable	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Start lub zatrzymanie zliczania
+
+IF Enable AND NOT _lastEnable THEN
+	_isRunning := TRUE;
+ELSIF NOT Enable AND _lastEnable THEN
+	_isRunning := FALSE;
+END_IF;
+_lastEnable := Enable;
+
+// Wywołanie timera jeśli aktywne zliczanie
+_timer(IN := _isRunning, PT := T#1s);
+
+// Zliczanie co 1 sekunda
+IF _timer.Q THEN
+    _timer(IN := FALSE); // resetuj timer na kolejne 1s
+
+    _Seconds := _Seconds + 1;
+    IF _Seconds >= 60 THEN
+        _Seconds := 0;
+        _Minutes := _Minutes + 1;
+
+        IF _Minutes >= 60 THEN
+            _Minutes := 0;
+            _Hours := _Hours + 1;
+        END_IF;
+    END_IF;
+END_IF;
+
+//wywolaj metodę odpowiedzialna za formatowanie tekstu na potrzeby wyświetlania w twincat
+UpdateWorkTimeLabel();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateWorkTimeLabel" Id="{bfed0ccb-ad79-4541-9004-d431ed3db1d3}">
+      <Declaration><![CDATA[METHOD UpdateWorkTimeLabel : T_MaxString
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//stworz string do wyswietlenia
+_Display := CONCAT(UDINT_TO_STRING(_Hours), ':');
+_Display := CONCAT(_Display, UINT_TO_STRING(_Minutes));
+_Display := CONCAT(_Display, ':');
+_Display := CONCAT(_Display, UINT_TO_STRING(_Seconds));
+
+
+//zwórc sformatowany string HH:MM:SS
+UpdateWorkTimeLabel := _Display;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="WorkTime" Id="{078cd6f8-f31b-4d51-98df-7be906a939db}">
+      <Declaration><![CDATA[PROPERTY WorkTime : ST_WorkTime]]></Declaration>
+      <Get Name="Get" Id="{9df6d5b1-f0b6-4c57-a9a2-1dcd020b6b04}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[WorkTime.Hours := _Hours;
+WorkTime.Minutes := _Minutes;
+WorkTime.Seconds := _Seconds;
+WorkTime.Display := _Display;
+WorkTime.Running := _isRunning;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

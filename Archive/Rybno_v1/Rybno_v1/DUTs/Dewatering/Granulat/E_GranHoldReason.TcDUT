@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_GranHoldReason" Id="{a9aa2ab8-385f-43ff-afbd-50f61a19be72}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+(*
+===============================================================================
+  ENUM: Powody HOLD (pauza)
+===============================================================================
+*)
+TYPE E_GranHoldReason :
+(
+    NONE            := 0,   // brak pauzy
+    OPERATOR_STOP   := 1,   // bRun=0 (operator STOP)
+
+    // Odwadnianie
+    DEWATER_FAULT   := 10,  // sygnał AWARIA ze stacji odwadniania
+    DEWATER_NOT_RUN := 11,  // brak PRACA (w fazie osadu)
+
+    // Surowce
+    S01_MIN_LEVEL   := 20,  // perlit minimum (S01)
+    S02_MIN_LEVEL   := 21,  // wapno minimum (S02)
+
+    // Klapa jako interlock procesu
+    FLAP_NOT_CLOSED := 40   // klapa nie zamknięta w fazach dozowania
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

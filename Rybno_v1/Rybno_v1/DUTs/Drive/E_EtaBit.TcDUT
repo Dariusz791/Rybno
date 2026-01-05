@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_EtaBit" Id="{fb3f4996-2879-4a5f-b765-25573cd3ac58}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_EtaBit :
+(
+    ReadyToSwitchOn := 0,
+    SwitchedOn      := 1,
+    OperEnabled     := 2,
+    Fault           := 3,
+    VoltageEnabled  := 4,
+    QuickStop       := 5,
+    SwitchOnDisabled:= 6,
+    Warning         := 7,
+    FieldbusRef     := 9,
+    AtSpeed         := 10,
+    RefInLimits     := 11,
+    DirRev          := 15
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

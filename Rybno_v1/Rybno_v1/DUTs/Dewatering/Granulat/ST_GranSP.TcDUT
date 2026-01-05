@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_GranSP" Id="{c6a27476-3a8a-4a6d-8ebe-ae16af555c15}">
+    <Declaration><![CDATA[TYPE ST_GranSP :
+STRUCT
+    rSludgeKg      : REAL;   // osad na cykl
+    rPerliteKg     : REAL;   // perlit na cykl
+    rLimeKg        : REAL;   // wapno na cykl
+    uiMixMin       : UINT;   // czas mieszania [min]
+    uiFlapOpenPct  : UINT;   // 0..100%
+    rResiduumKg    : REAL;   // ile może zostać po wysypie
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

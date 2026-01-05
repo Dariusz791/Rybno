@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_DigitalSensNC" Id="{bc8c9ce5-05eb-43da-a6ef-61809be1250e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DigitalSensNC
+VAR_INPUT
+	_input	: BOOL;
+END_VAR
+
+VAR_OUTPUT
+	_output : BOOL;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[_output := NOT _input;]]></ST>
+    </Implementation>
+    <Property Name="IsActive" Id="{8a6a15d5-0eeb-4501-90c4-2aa077e15e25}">
+      <Declaration><![CDATA[PROPERTY IsActive : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b609fe4a-581c-4e60-bed0-a275fdba00d6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsActive:= _output;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

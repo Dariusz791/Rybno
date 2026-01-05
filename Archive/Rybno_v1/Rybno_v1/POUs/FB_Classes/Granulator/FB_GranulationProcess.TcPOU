@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_GranulationProcess" Id="{3d67fde4-c1e9-4f29-898f-7d50f923d7fc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GranulationProcess
+VAR_INPUT
+    // --- Sterowanie ---
+    bRun            : BOOL;      // START / STOP procesu
+
+    // --- Nastawy dozowań ---
+    rSludgeKg_SP    : REAL;      // osad [kg]
+    rPerliteKg_SP   : REAL;      // perlit [kg]
+    rLimeKg_SP      : REAL;      // wapno [kg]
+
+    // --- Pomiar ---
+    rMassRawKg      : REAL;      // waga aktualna [kg]
+END_VAR
+
+
+VAR_OUTPUT
+    // --- Wyjścia procesowe (komendy AUTO) ---
+    bDewaterStart   : BOOL;
+
+    bSP02_Fwd       : BOOL;
+    rSP02_Hz        : REAL;
+
+    bSC02_On        : BOOL;
+    bSC01_On        : BOOL;
+
+    bM01_Fwd        : BOOL;
+    bM02_Fwd        : BOOL;
+    rMix_Hz         : REAL;
+
+    bFlapOpen       : BOOL;
+    bFlapClose      : BOOL;
+
+    // --- Przejęcie trybu AUTO dla obiektów wykonawczych (do MUX/SEL w CFC) ---
+    bAuto_SP02      : BOOL;
+    bAuto_SC01      : BOOL;
+    bAuto_SC02      : BOOL;
+    bAuto_M01       : BOOL;
+    bAuto_M02       : BOOL;
+    bAuto_Flap      : BOOL;
+    bAuto_Dewater   : BOOL;
+
+    // --- Diagnostyka ---
+    bRunning        : BOOL;
+    eStep           : E_GranStep;
+
+    rTareKg         : REAL;
+    rBatchKg        : REAL;
+
+    rDosSludgeKg    : REAL;
+    rDosPerliteKg   : REAL;
+    rDosLimeKg      : REAL;
+
+    uiCycleCnt      : UDINT;
+    sDiag           : T_MaxString;
+END_VAR
+
+
+VAR
+    // --- Stan automatu ---
+    _step       : E_GranStep := E_GranStep.IDLE;
+
+    // --- Wagi referencyjne ---
+    _mSludge0   : REAL := 0.0;   // start osadu
+    _mPerl0     : REAL := 0.0;   // start perlitu
+    _mLime0     : REAL := 0.0;   // start wapna
+
+    // --- Timery ---
+    _tMix       : TON;
+    _tStep      : TON;
+
+    // --- Licznik cykli ---
+    _cycleCnt   : UDINT := 0;
+
+    // --- Stałe technologiczne ---
+    cPumpHz       : REAL := 10.0;          // SP02
+    cMixHz        : REAL := 50.0;          // granulator
+    cMixTime      : TIME := T#120S;        // mieszanie
+    cDischTime    : TIME := T#60S;         // wysyp
+    cCloseSettle  : TIME := T#5S;          // wyciszenie po zatrzymaniu i zamknięciu
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ============================================================================
+// DOMYŚLNE WYJŚCIA OFF
+// ============================================================================
+bDewaterStart := FALSE;
+
+bSP02_Fwd := FALSE;
+rSP02_Hz  := cPumpHz;
+
+bSC02_On := FALSE;
+bSC01_On := FALSE;
+
+bM01_Fwd := FALSE;
+bM02_Fwd := FALSE;
+rMix_Hz  := cMixHz;
+
+bFlapOpen  := FALSE;
+bFlapClose := FALSE;
+
+// takeover AUTO – domyślnie FALSE
+bAuto_SP02    := FALSE;
+bAuto_SC01    := FALSE;
+bAuto_SC02    := FALSE;
+bAuto_M01     := FALSE;
+bAuto_M02     := FALSE;
+bAuto_Flap    := FALSE;
+bAuto_Dewater := FALSE;
+
+
+// ============================================================================
+// DIAGNOSTYKA
+// ============================================================================
+eStep    := _step;
+bRunning := bRun AND (_step <> E_GranStep.IDLE);
+
+rBatchKg := rMassRawKg - rTareKg;
+
+rDosSludgeKg  := rMassRawKg - _mSludge0;
+rDosPerliteKg := rMassRawKg - _mPerl0;
+rDosLimeKg    := rMassRawKg - _mLime0;
+
+uiCycleCnt := _cycleCnt;
+
+
+// ============================================================================
+// MASTER STOP
+// ============================================================================
+IF NOT bRun THEN
+    _step := E_GranStep.IDLE;
+
+    _tMix(IN := FALSE);
+    _tStep(IN := FALSE);
+
+    sDiag := 'STOP: bRun=0';
+    RETURN;
+END_IF
+
+
+// ============================================================================
+// AUTOMAT KROKOWY
+// ============================================================================
+CASE _step OF
+
+    E_GranStep.IDLE:
+        sDiag := 'IDLE: start procesu';
+        // Start odwadniania tylko raz na start procesu
+        _tMix(IN := FALSE);
+        _tStep(IN := FALSE);
+        _step := E_GranStep.START_DEWATER;
+
+
+    E_GranStep.START_DEWATER:
+        sDiag := 'START_DEWATER: uruchomienie odwadniania';
+
+        // automat przejmuje sterowanie odwadnianiem (jeśli jest sterowane)
+        bAuto_Dewater := TRUE;
+        bDewaterStart := TRUE;
+
+        // od razu przechodzimy do tary
+        _step := E_GranStep.TARE;
+
+
+    E_GranStep.TARE:
+        sDiag := 'TARE: zapis tary';
+
+        // tu już zakładamy, że masa jest ustabilizowana (po wyciszeniu w DISCH_CLOSE)
+        rTareKg := rMassRawKg;
+
+        _mSludge0 := rMassRawKg;   // start osadu
+        _step := E_GranStep.DOSE_SLUDGE;
+
+
+    E_GranStep.DOSE_SLUDGE:
+        sDiag := 'DOSE_SLUDGE: dozowanie osadu';
+
+        bAuto_Dewater := TRUE;
+        bDewaterStart := TRUE;
+
+        bAuto_SP02 := TRUE;
+        bSP02_Fwd  := TRUE;
+        rSP02_Hz   := cPumpHz;
+
+        IF (rMassRawKg - _mSludge0) >= rSludgeKg_SP THEN
+            _mPerl0 := rMassRawKg;     // start perlitu = masa po osadzie
+            _step := E_GranStep.DOSE_PERLITE;
+        END_IF
+
+
+    E_GranStep.DOSE_PERLITE:
+        sDiag := 'DOSE_PERLITE: dozowanie perlitu';
+
+        bAuto_Dewater := TRUE;
+        bDewaterStart := TRUE;
+
+        bAuto_SC02 := TRUE;
+        bSC02_On   := TRUE;
+
+        IF (rMassRawKg - _mPerl0) >= rPerliteKg_SP THEN
+            _mLime0 := rMassRawKg;     // start wapna = masa po perlicie
+            _step := E_GranStep.DOSE_LIME;
+        END_IF
+
+
+    E_GranStep.DOSE_LIME:
+        sDiag := 'DOSE_LIME: dozowanie wapna';
+
+        bAuto_Dewater := TRUE;
+        bDewaterStart := TRUE;
+
+        bAuto_SC01 := TRUE;
+        bSC01_On   := TRUE;
+
+        IF (rMassRawKg - _mLime0) >= rLimeKg_SP THEN
+            _tMix(IN := FALSE);
+            _step := E_GranStep.MIXING;
+        END_IF
+
+
+    E_GranStep.MIXING:
+        sDiag := 'MIXING: mieszanie 120s';
+
+        bAuto_M01 := TRUE;
+        bAuto_M02 := TRUE;
+
+        bM01_Fwd := TRUE;
+        bM02_Fwd := TRUE;
+        rMix_Hz  := cMixHz;
+
+        _tMix(IN := TRUE, PT := cMixTime);
+
+        IF _tMix.Q THEN
+            _tMix(IN := FALSE);
+            _tStep(IN := FALSE);
+            _step := E_GranStep.DISCH_WAIT;
+        END_IF
+
+
+    E_GranStep.DISCH_WAIT:
+        sDiag := 'DISCH: wysyp 60s z mieszaniem';
+
+        bAuto_M01 := TRUE;
+        bAuto_M02 := TRUE;
+
+        bM01_Fwd := TRUE;
+        bM02_Fwd := TRUE;
+
+        bAuto_Flap := TRUE;
+        bFlapOpen  := TRUE;
+
+        _tStep(IN := TRUE, PT := cDischTime);
+
+        IF _tStep.Q THEN
+            _tStep(IN := FALSE);
+            // przechodzimy do zamykania + wyciszenia
+            _step := E_GranStep.DISCH_CLOSE;
+        END_IF
+
+
+    E_GranStep.DISCH_CLOSE:
+        // w tym kroku:
+        // 1) STOP mieszania
+        // 2) zamknij klapę
+        // 3) odczekaj 5s na wyciszenie i stabilizację masy
+        // 4) zlicz cykl i wróć do TARE
+        sDiag := 'DISCH_CLOSE: zamykam i wyciszam 5s';
+
+        bAuto_Flap := TRUE;
+        bFlapClose := TRUE;
+
+        // mieszanie zatrzymane (default OFF też to wymusi)
+        // bM01_Fwd := FALSE; bM02_Fwd := FALSE;
+
+        _tStep(IN := TRUE, PT := cCloseSettle);
+
+        IF _tStep.Q THEN
+            _tStep(IN := FALSE);
+
+            _cycleCnt := _cycleCnt + 1;
+
+            // Nowy cykl od TARE (waga już uspokojona)
+            _mSludge0 := rMassRawKg;
+            _mPerl0   := rMassRawKg;
+            _mLime0   := rMassRawKg;
+
+            _step := E_GranStep.TARE;
+        END_IF
+
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

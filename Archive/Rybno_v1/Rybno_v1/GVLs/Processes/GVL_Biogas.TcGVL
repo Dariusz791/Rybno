@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <GVL Name="GVL_Biogas" Id="{8dfb3913-2151-4699-afbe-a42ce21137df}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	
+
+
+(**************************************************** GH-01 *****************************************************************)		
+	//**************************** Pressure Sensor 01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '4935745'  }(*EngeneeringUnit = kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:10'  } (*0- 10kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '3:6'  }			(*pracujemy w zakresie od 3 do 6 kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)
+	PressureSens_GH01 : ST_AnalogSens;
+	
+
+
+
+(**************************************************** DS-01 *****************************************************************)		
+	//**************************** Pressure Sensor 01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '4935745'  }(*EngeneeringUnit = kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:10'  } (*0- 10kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '3:6'  }			(*pracujemy w zakresie od 3 do 6 kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)
+	PressureSens_DS01 : ST_AnalogSens;
+	
+	
+(**************************************************** Flowemeter F-01 *****************************************************************)	
+	//**************************** Flow Sensor F-01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '5059400'}   (* M3H = m³/h *)
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:20'  } (*0- 20m3/h*)
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '2:18'  }			(*pracujemy w zakresie od 3 do 6 kPa*)
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)
+	FlowSens_F01 : ST_AnalogSens;
+	
+	
+	
+	
+
+(**************************************************** Tch-01 *****************************************************************)		
+	//**************************** Torch 01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stTorchAds_Tch01 (structured) type '} 
+	stTorchAds_Tch01 : ST_TorchAdsStruct;
+	
+	//**************************** Torch reset SCADA BUTTON - ze stacyjki pcohodni ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	bResetScadaButton	: BOOL;
+	
+	
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

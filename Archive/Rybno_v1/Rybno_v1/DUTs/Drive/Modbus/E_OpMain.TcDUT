@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_OpMain" Id="{a3b682d4-b9cd-4304-9f62-0163d9679fa6}">
+    <Declaration><![CDATA[//obsluga maszyny stanu w InvModbusOperation
+
+//{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_OpMain :
+(
+	PICK      := 0,
+    RUN	      := 1,
+    ADVANCE   := 2
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

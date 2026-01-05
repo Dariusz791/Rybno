@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_Contactor" Id="{b5deb811-b8df-4876-8da3-b68b1459149e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Contactor
+VAR
+	 //Q  	 : BOOL;
+	Q AT %Q* : BOOL;  // fizyczna cewka
+    _enRef   : REFERENCE TO BOOL;	// zezwolenie na załączenie
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ciało FB (co cykl)
+Q := _enRef;
+]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{55d4e91c-c271-4c8a-b6fe-8a6eb116147d}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode  : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    en           : REFERENCE TO BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_enRef  REF= en;   
+
+ ]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="State" Id="{6b2b9c82-4e46-4ab7-93a2-0858f95ec526}">
+      <Declaration><![CDATA[PROPERTY State : BOOL]]></Declaration>
+      <Get Name="Get" Id="{25ba1c66-7bd1-45d5-9e6d-0ebe7821e585}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[state := Q;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

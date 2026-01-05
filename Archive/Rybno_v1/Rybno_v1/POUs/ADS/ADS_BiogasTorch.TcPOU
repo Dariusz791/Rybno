@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="ADS_BiogasTorch" Id="{467da0c1-4dfa-4d5c-9015-1234191eda6c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM ADS_BiogasTorch
+VAR
+	fbTimerRead				: TON;
+	fbTimerWrite			: TON;
+	
+	fbRead					: FB_ReadAdsSymByName;
+	fbWrite					: FB_WriteAdsSymByName;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+//ustaw timer do wywoływania bloku fbRead co 1 sekunda
+fbTimerRead( IN := NOT fbTimerRead.Q, PT := T#1S );
+
+//Odczytaj PO ADS
+fbRead(
+	bRead			:= fbTimerRead.Q, 
+	sNetId			:= '192.168.140.100.1.1', 
+	nPort			:= 851, 
+	sVarName		:= 'TorchStatus.stStatusWordAds', // struktura przesyłana po nazwie z PLC pochodni CX7080
+	nDestAddr		:= ADR(GVL_Biogas.stTorchAds_Tch01 ), //Struktura przeznaczenia do której mają byc zapisane dane
+	nLen			:= SIZEOF(GVL_Biogas.stTorchAds_Tch01) // rozmiar struktury przeznaczenia
+);	
+	
+
+//jeśli błąd ustaw falgę bład komunikacji ADS
+IF fbRead.bError THEN
+	;
+END_IF
+
+
+fbTimerWrite( IN := NOT fbTimerWrite.Q, PT := T#1S );
+
+//Zapisz po ADS stan przycisku reset ze SCADA
+fbWrite(
+	bWrite			:= fbTimerWrite.Q, 
+	sNetId			:= '192.168.140.100.1.1', 
+	nPort			:= 851, 
+	sVarName		:= 'TorchStatus.bResetScadaButton', // GVL_ADS.stData // GVL_ADS.stMotor
+	nSrcAddr		:= ADR(GVL_Biogas.bResetScadaButton ), 
+	nLen			:= SIZEOF(GVL_Biogas.bResetScadaButton) 
+);
+	
+
+//jeśli błąd ustaw falgę bład komunikacji ADS
+IF fbWrite.bError THEN
+	;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

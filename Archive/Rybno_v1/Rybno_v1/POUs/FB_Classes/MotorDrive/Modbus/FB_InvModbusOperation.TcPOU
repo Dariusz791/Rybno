@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_InvModbusOperation" Id="{f454968d-cdec-4403-a28d-63aa0b90974c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_InvModbusOperation
+VAR
+	// obsługa Modbus
+	_MB           			: ModbusRtuMaster_KL6x22B;
+	_MBdata      			: ARRAY[0..40] OF WORD;	(* The size of this array can be adapted to the modbus slaves register area *)
+ 	_bBusy		 			: BOOL;
+	_bError					: BOOL;	
+	_timeoutvalue			: TIME:=T#100MS;		(* Timeout while waiting for an answer of the modbus slave *)
+	                    	
+	_nNotRespCount			: INT:=1;
+
+	//obsługa napedów
+	_reg					: FB_DriveRegistry; 		// uchwyt do wspolnego rejestru napedów modbusa
+	_pInv   			    : POINTER TO ST_Inverter;	// wskaznik do struktury pobranej z rejestru
+    _invRef 				: REFERENCE TO ST_Inverter; // referencja do struktury dla latwiejszej obsługi
+	
+	//obsługa maszyny stanow
+	_rrIdx  				: UINT := 1;                      // który napęd aktualnie obsługujemy (1..CountUsed)
+    _main   				: E_OpMain:=PICK;       // poziom A FSM flow state machine
+    _step   				: INT := 0;                       // poziom B FSM (stepy 0/10/20)
+	
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//maszyna stanu PICK RUN ADVANCE
+
+CASE _main OF
+
+PICK:   // wybierz napęd i zwiąż referencję
+    IF _reg.CountUsed = 0 THEN
+        RETURN;
+    END_IF
+
+    IF _rrIdx > _reg.CountUsed THEN
+       _rrIdx := 1;
+    END_IF
+
+    _pInv := _reg.GetPtrByIndex(_rrIdx);
+    IF _pInv = 0 THEN
+        // teoretycznie nie powinno się zdarzyć przy ciągłym zakresie 1..CountUsed,      
+        _rrIdx := _rrIdx + 1;  // ale na wszelki wypadek przeskocz do kolejnego
+    ELSE
+        _invRef REF= _pInv^;    // pointer → reference (alias do TEJ SAMEJ pamięci)
+        _main := RUN;
+		_step := 0;            // start sekwencji dla wybranego napędu
+    END_IF
+
+RUN:    // wykonaj wszystkie kroki dla bieżącego napędu
+	
+	CASE _step OF
+		
+    0:
+		(*Initialize*)
+		_MB.ReadRegs(Execute:= FALSE); (* initialize *) 
+		_step:= 10;
+		
+    10: (*Read status of Inverter*) (*Sprawdzić status po wystąpieniu bledu przerwania komunikacji*)	
+			
+		_MB.ReadRegs(
+			UnitID:= _invRef.nSlaveId,
+			Quantity:= 1,
+			MBAddr:=3201,
+			cbLength:= 2,
+			pMemoryAddr:= ADR(_MBdata[0]),
+			Execute:= TRUE,	//wyzwala zboczem w step 0: bylo false
+			Timeout:= _timeoutvalue,
+			Busy => _bBusy,
+			ERROR => _bError);
+
+
+		IF NOT _bBusy AND NOT _bError THEN //sukces
+			
+			_MB.ReadRegs(Execute:=FALSE);	//zmien poziom na false					
+			_invRef.bCommOk := TRUE;
+			_invRef.nNoResp := 0;
+			_invRef.wInvStatusWord := _MBdata[0];	
+
+			_step :=20;
+			
+		ELSIF NOT _bBusy AND _bError THEN //bład
+			
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false					
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp	 := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi per-Slave		
+			END_IF					
+			
+			_step :=40; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
+			
+		END_IF
+
+    20: (*Write the setPointFrequency*)
+		 
+		
+    	IF ABS(_invRef.rFreqSetPoint - _invRef.rLastWrittenSetPt) <= 0.1 THEN //zapisz tylko jesli nastapila zmiana czestotliwosc per-Slave
+    	    _step := 30;   // nic nie wysyłaj, przejdź dalej
+        	RETURN;
+        END_IF
+
+		_MBdata[0] := REAL_TO_WORD(_invRef.rFreqSetPoint *10);
+	
+		_MB.WriteSingleRegister(
+					UnitID:=_invRef.nSlaveId,
+					Quantity:=1,
+					MBAddr:=8502,
+					cbLength:= 2,
+					pMemoryAddr:= ADR(_MBdata[0]),
+					Execute:= TRUE,
+					Timeout:= _timeoutvalue,
+					Busy => _bBusy,
+					Error =>_bError);
+	
+		IF NOT _bBusy AND NOT _bError THEN //sukces
+			
+			_MB.WriteSingleRegister(Execute:=FALSE); //czysc blok MB
+			_invRef.bCommOk := TRUE;
+			_invRef.nNoResp := 0;	
+			_invRef.rLastWrittenSetPt := _invRef.rFreqSetPoint; // zapamietaj ostatni Setpoint
+			
+			_step :=30;
+			
+		ELSIF NOT _bBusy AND _bError THEN
+
+			_MB.WriteSingleRegister(Execute:=FALSE); //czysc blok MB	
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp	 := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi per-Slave		
+			END_IF	
+	
+			_step:=40;
+		END_IF
+		
+
+		
+    30: (*Read actual Frequency*)
+
+		_MB.ReadRegs(
+					UnitID:=_invRef.nSlaveId,
+					Quantity:=1,
+					MBAddr:=3202,
+					cbLength:= 2,
+					pMemoryAddr:= ADR(_MBdata[0]),
+					Execute:= TRUE,
+					Timeout:= _timeoutvalue,
+					Busy => _bBusy,
+					ERROR =>_bError);
+	
+		IF NOT _bBusy AND NOT _bError THEN
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false
+			_invRef.bCommOk := TRUE;
+			_invRef.rFreqActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0]))*0.1; //dzielimy przez 10	
+			_MB.ReadRegs(Execute:=FALSE);
+			_step :=40;			
+		ELSIF NOT _bBusy AND _bError THEN
+			
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false			
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi
+			END_IF
+					
+			_step :=40; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
+			
+		END_IF	
+	
+	
+	40:
+        // zakończ sekwencję dla bieżącego napędu
+        _main := ADVANCE;
+	
+		
+	END_CASE
+
+	
+ADVANCE:	// przejdź do następnego napędu i wróć do wyboru
+    
+	_rrIdx := _rrIdx + 1;
+    IF _rrIdx > _reg.CountUsed THEN
+        _rrIdx := 1;           // wrap-around: od nowa od indeksu 1
+    END_IF
+    _main := PICK;
+
+
+
+END_CASE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

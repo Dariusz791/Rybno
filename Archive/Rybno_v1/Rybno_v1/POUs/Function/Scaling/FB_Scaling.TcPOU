@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_Scaling" Id="{eebbcc18-6460-4e68-8024-24f2bc2c29b2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Scaling
+VAR
+	_rA		: REAL;		// factor 'a' in linear equation
+	_rB		: REAL;		// factor 'b' in linear equation	 
+END_VAR
+
+VAR_INPUT
+	_rX     : REAL; 	// input value
+	_rXmin  : REAL;		// low value of input range
+	_rXmax  : REAL;		// high value of input range
+	_rYmin  : REAL;		// low value of output range
+	_rYmax  : REAL;		// high value of output range
+END_VAR
+
+VAR_OUTPUT
+	_bAlarmHi: BOOL;
+	_bAlarmLo: BOOL;
+	_rY: REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF ABS (_rXmax - _rXmin) > 0.01 THEN 
+	IF _rX <= _rXmin THEN 
+		_bAlarmLo := TRUE; 
+        _bAlarmHi := FALSE; 
+		_rY := _rYmin; 
+	ELSIF _rX >= _rXmax THEN 
+		_bAlarmLo := FALSE; 
+		_bAlarmHi := TRUE; 
+		_rY := _rYmax; 
+	ELSE 
+		_bAlarmLo := FALSE; 
+		_bAlarmHi := FALSE; 
+		_rA := (_rYmax - _rYmin)/(_rXmax - _rXmin); 
+		_rB := _rYmax - _rA *_rXmax; 
+		_rY := _rA * _rX + _rB; 
+	END_IF 
+ELSE 
+	_rY := _rYmin; 
+	_bAlarmHi := TRUE; 
+	_bAlarmLo := TRUE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
