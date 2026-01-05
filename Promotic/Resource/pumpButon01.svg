@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--Created with Sketsa SVG Editor (http://www.kiyut.com)-->
+
+<svg
+   contentScriptType="text/ecmascript"
+   width="100.0px"
+   zoomAndPan="magnify"
+   contentStyleType="text/css"
+   height="100.0px"
+   preserveAspectRatio="xMidYMid meet"
+   version="1.0"
+   id="svg9454"
+   sodipodi:docname="pumpButon01.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview9456"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="8.37"
+     inkscape:cx="46.714456"
+     inkscape:cy="50.059737"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9454" />
+  <defs
+     id="defs9446">
+    <linearGradient
+       x1="0.0%"
+       x2="100.0%"
+       y1="0.0%"
+       y2="100.0%"
+       id="tien1">
+      <stop
+         stop-opacity="1"
+         stop-color="#e6e6e6"
+         offset="10%"
+         id="stop9439" />
+      <stop
+         stop-opacity="1"
+         stop-color="#999999"
+         offset="50%"
+         id="stop9441" />
+      <stop
+         stop-opacity="1"
+         stop-color="#000000"
+         offset="95%"
+         id="stop9443" />
+    </linearGradient>
+  </defs>
+  <ellipse
+     fill="url(#tien1)"
+     rx="45"
+     cx="50"
+     ry="45"
+     cy="50"
+     stroke="#000000"
+     id="ellipse9448" />
+  <ellipse
+     rx="40"
+     fill="#999999"
+     ry="40"
+     cx="50"
+     cy="50"
+     stroke="none"
+     id="ellipse9450" />
+  <polygon
+     fill="#ffffff"
+     points="83.5,70 50,11 16.5,70 "
+     stroke="#000000"
+     id="polygon9452"
+     transform="rotate(90.097746,50.247196,50.15139)" />
+</svg>
