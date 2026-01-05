@@ -259,3 +259,39 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# TwinCAT 3 - pliki tymczasowe, backupy, katalogi buildów
+*.tcbak
+*.db
+*.DB
+*.plc
+*.runtime
+*.tmc
+*.tsproj.user
+*.tsproj~
+*.TcSln
+*.TcSln.*
+*.TcTTO
+*.TcVTO
+
+# TwinCAT foldery tymczasowe i build
+Boot/
+_Log/
+_LogBak/
+Sys/Plc/*
+*.cr.c
+*.sv.sv
+*.sv.a
+*.cr.m
+*.cr.cu
+*.cr.dy
+*.cr.do
+*.cr.cs
+*.pyc
+
+# Pliki eksportowane, archiwalne, backupy
+*.tnzip
+*.zip
+~*.*
+*.backup
+*.bak
