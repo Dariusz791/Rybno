@@ -295,3 +295,7 @@ Sys/Plc/*
 ~*.*
 *.backup
 *.bak
+
+# Wykluczaj kopie zapasowe i dane runtime Promotic
+Promotic/DtBackup/
+Promotic/Data/
