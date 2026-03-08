@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.65">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.74">
 	<Project ProjectGUID="{294242EE-D4AB-4EB6-857E-812D64858EDE}" TargetNetId="192.168.140.102.1.1" ShowHideConfigurations="#x6">
 		<System>
-			<Licenses>
-				<Target>
+			<Licenses IgnoreProjectLicenses="true">
+				<Target BkhfOrder="01584711">
 					<ManualSelect>{BDCC0070-42D5-49AE-ABF1-1D4434813D60}</ManualSelect>
+					<ManualSelect>{66689887-CCBD-452C-AC9A-039D997C6E66}</ManualSelect>
+					<ManualSelect>{A1AF8A04-C08D-4853-A5A0-0E6C3A278A8C}</ManualSelect>
 				</Target>
 			</Licenses>
 			<Tasks>

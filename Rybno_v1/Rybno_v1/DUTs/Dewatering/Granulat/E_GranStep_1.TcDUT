@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_GranStep_1" Id="{6a783b28-5635-4863-8964-0de45550bfe9}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+(*
+===============================================================================
+  ENUM: Kroki automatu
+===============================================================================
+*)
+TYPE E_GranStep_1 :
+(
+    IDLE            := 0,    // Spoczynek: nie pracujemy; jeśli bRun=1 -> start cyklu
+    PRECHECK        := 10,   // Sprawdzenie warunków startu (klapa zamknięta, surowce, odwadnianie OK)
+    START_DEWATER   := 20,   // Podaj komendę start na odwadnianie i czekaj na PRACA (z timeout)
+    TARE            := 40,   // Zapisz tarę przy stabilnej wadze (granulator nie miesza)
+    DOSE_SLUDGE     := 50,   // Dozowanie osadu pompą SP02 (do masy)
+    SLUDGE_STAB     := 60,   // Krótka stabilizacja wagi po osadzie
+    DOSE_PERLITE    := 70,   // Dozowanie perlitu SC02 (do masy) + E01 impulsowo
+    PERLITE_STAB    := 80,   // Stabilizacja po perlicie
+    DOSE_LIME       := 90,   // Dozowanie wapna SC01 (do masy) + E02 impulsowo
+    LIME_STAB       := 100,  // Stabilizacja po wapnie
+    MIXING          := 110,  // Mieszanie M01+M02 przez czas, 50 Hz (waga w tym czasie niewiarygodna)
+    DISCH_SET       := 120,  // Zadaj pozycję klapy i czekaj na potwierdzenie (open/inpos)
+    DISCH_WAIT      := 130,  // Czekaj aż masa spadnie do (tara+residuum) lub timeout
+    DISCH_CLOSE     := 140,  // Zamknij klapę i czekaj na potwierdzenie zamknięcia
+    DONE            := 150,  // Cykl zakończony; jeśli bRun=1 -> kolejny cykl
+
+    HOLD            := 800,  // Pauza procesu (zamrożony krok) – wyjścia OFF – auto-wznowienie
+    FAULT           := 900   // Awaria procesu – wymaga bResetFault po usunięciu przyczyny
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

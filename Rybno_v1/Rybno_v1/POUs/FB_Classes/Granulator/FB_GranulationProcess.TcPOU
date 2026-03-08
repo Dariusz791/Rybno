@@ -5,7 +5,6 @@
 VAR_INPUT
     // --- Sterowanie ---
     bRun         : BOOL;      // START / STOP procesu
-    bCmdPause    : BOOL;      // PAUZA / WZNÓW (z SCADA, 1 zmienna)
     bFlapPosMode : BOOL;      // FALSE=Open/Close, TRUE=pozycjonowanie (SP)
 
     // --- Nastawy dozowań ---
@@ -27,11 +26,12 @@ VAR_OUTPUT
     bSP02_Fwd     : BOOL;
     rSP02_Hz      : REAL;
 
-    bSC01_On      : BOOL;     // WAPNO podajnik
-    bSC02_On      : BOOL;     // PERLIT podajnik
+    bSC01_On      : BOOL; //wapno podajnik
+	bSC02_On      : BOOL; //perlit podajnik
+ 
 
-    bE01_On       : BOOL;     // WAPNO vibrator
-    bE02_On       : BOOL;     // PERLIT vibrator
+    bE01_On       : BOOL; //wapno vibrator
+    bE02_On       : BOOL; //perlit vibrator
 
     bBL01_On      : BOOL;
 
@@ -45,11 +45,8 @@ VAR_OUTPUT
 
     // --- Diagnostyka ---
     bRunning      : BOOL;
-    eStep         : E_GranStep;         // kroki automatu głównego
-    eSlDoseStep   : E_SludgeDoseStep;   // mini automat dozowania osadu
-
-    eHoldReason   : E_GranHoldReason;   // powód HOLD/PAUZA (do SCADA)
-    bHoldReq      : BOOL;               // żądanie wymuszenia pauzy przez proces (dla PRG->GVL)
+    eStep         : E_GranStep;        //kroki automatu głównego
+	eSlDoseStep   : E_SludgeDoseStep;  //mini automat dozowania osadu
 
     rTareKg       : REAL;
     rBatchKg      : REAL;
@@ -76,7 +73,7 @@ VAR
     _tMix     : TON;
     _tStep    : TON;
 
-    // --- Wibratory: generator ON/OFF ---
+    // --- Wibratory: generator 2s ON / 5s OFF ---
     _tE01      : TON;
     _tE02      : TON;
     _bE01Phase : BOOL := FALSE;
@@ -101,51 +98,34 @@ VAR
     _mSlDelta     : REAL := 0; // Δm z ostatniego impulsu
     _bSlFlow      : BOOL := FALSE;
 
-    // =========================================================================
-    // WATCHDOG PRZYROSTU MASY (PERLIT / WAPNO)
-    // =========================================================================
-    _mPerlWd0 : REAL := 0.0;   // masa referencyjna okna perlitu
-    _mLimeWd0 : REAL := 0.0;   // masa referencyjna okna wapna
-    _tPerlWd  : TON;           // timer okna perlitu
-    _tLimeWd  : TON;           // timer okna wapna
-
-    // --- Stałe technologiczne osadu ---
+    // --- Stałe technologiczne ---
     cPumpHz_Prime    : REAL := 10.0;    // opcjonalne "prime"
     cPumpHz_Test     : REAL := 25.0;    // test czy leci
     cPumpHz_Collect  : REAL := 30.0;    // robocze impulsy
 
-    cSlPrimeTime     : TIME := T#60S;
-    cSlTestOnTime    : TIME := T#30S;
-    cSlTestOffTime   : TIME := T#20S;
-    cSlWaitEmptyTime : TIME := T#10M;
-    cSlWaitFlowTime  : TIME := T#20S;
-    cSlCollectOnTime : TIME := T#30S;
+    cSlPrimeTime     : TIME := T#60S;   // wstępne przepchnięcie (możesz dać 0 i pominąć)
+    cSlTestOnTime    : TIME := T#30S;   // impuls testowy ON
+    cSlTestOffTime   : TIME := T#20S;   // pauza po teście + ocena
+    cSlWaitEmptyTime : TIME := T#10M;   // długie czekanie, gdy nic nie poleciało
+    cSlWaitFlowTime  : TIME := T#20S;   // krótkie czekanie, gdy było poleciało
+    cSlCollectOnTime : TIME := T#30S;   // impuls roboczy ON
 
-    cSlMinDeltaKg    : REAL := 1.0;
+    cSlMinDeltaKg    : REAL := 1.0;     // próg Δm uznający "poleciało" (waga stabilna ~1kg)
 
-    // --- Mieszanie / wysyp ---
     cMixHz       : REAL := 50.0;
     cMixTime     : TIME := T#90S;
     cDischTime   : TIME := T#60S;
     cCloseSettle : TIME := T#5S;
 
-    // --- Wibratory ---
     cVibOnTime   : TIME := T#5S;
     cVibOffTime  : TIME := T#5S;
 
-    // --- Stop-hold takeover ---
-    cStopHoldTime : TIME := T#1S;
-
-    // --- Watchdogi surowców (ustalone) ---
-    cPerlWdTime     : TIME := T#120S;   // perlit: okno 2 min
-    cLimeWdTime     : TIME := T#30S;    // wapno: okno 30 s
-    cPerlMinDeltaKg : REAL := 2.0;      // perlit: min 2 kg/okno
-    cLimeMinDeltaKg : REAL := 2.0;      // wapno: min 2 kg/okno
+    cStopHoldTime: TIME := T#1S;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// ============================================================================
-// 0) Detekcja STOP + krótki takeover na OFF (tylko takeover, nie timer 2x)
+// 0) Detekcja STOP + krótki takeover na OFF
 // ============================================================================
 _ftRun(CLK := bRun);
 
@@ -167,8 +147,6 @@ END_IF
 // ============================================================================
 // 1) DOMYŚLNE WYJŚCIA OFF
 // ============================================================================
-bHoldReq := FALSE;
-
 bDewaterStart := FALSE;
 
 bSP02_Fwd := FALSE;
@@ -231,49 +209,13 @@ IF NOT bRun THEN
     _bSlFlow := FALSE;
     _mSlDelta := 0.0;
 
-    // watchdogi
-    _tPerlWd(IN := FALSE);
-    _tLimeWd(IN := FALSE);
-    _mPerlWd0 := rMassRawKg;
-    _mLimeWd0 := rMassRawKg;
-
-    // HOLD info reset
-    eHoldReason := E_GranHoldReason.NONE;
-
     sDiag := 'STOP: bRun=0';
     RETURN;
 END_IF
 
 
 // ============================================================================
-// 4) Powód pauzy z operatora + kasowanie powodu po WZNÓW
-//    (HOLD procesowy ustawia się w krokach dozowania perlitu/wapna)
-// ============================================================================
-IF bCmdPause AND (eHoldReason = E_GranHoldReason.NONE) THEN
-    eHoldReason := E_GranHoldReason.OPERATOR_PAUSE;
-END_IF
-
-IF NOT bCmdPause THEN
-    eHoldReason := E_GranHoldReason.NONE;
-END_IF
-
-
-// ============================================================================
-// 5) BRAMKA PAUZY (natychmiastowa) - wyjątek: MIXING i rozładunek
-//    Pauza po cyklu zatrzymuje się na TARE.
-// ============================================================================
-IF bCmdPause THEN
-    IF NOT ( (_step = E_GranStep.MIXING) OR
-             (_step = E_GranStep.DISCH_WAIT) OR
-             (_step = E_GranStep.DISCH_CLOSE) ) THEN
-        sDiag := 'PAUZA/HOLD: STOP napędów dozowania (czekam na WZNÓW)';
-        RETURN;
-    END_IF
-END_IF
-
-
-// ============================================================================
-// 6) AUTOMAT GŁÓWNY (ENTRY + logika w każdym kroku)
+// 4) AUTOMAT GŁÓWNY (ENTRY + logika w każdym kroku)
 // ============================================================================
 CASE _step OF
 
@@ -292,10 +234,6 @@ CASE _step OF
             _tSl(IN := FALSE);
             _slStep := E_SludgeDoseStep.IDLE;
             _slStepPrev := E_SludgeDoseStep.IDLE;
-
-            // watchdogi
-            _tPerlWd(IN := FALSE);
-            _tLimeWd(IN := FALSE);
 
             _stepPrev := _step;
         END_IF
@@ -323,24 +261,16 @@ CASE _step OF
         IF _step <> _stepPrev THEN
             _tStep(IN := FALSE);
             _stepPrev := _step;
-
-            sDiag := 'TARE: zapis tary';
-            rTareKg   := rMassRawKg;
-            _mSludge0 := rMassRawKg;
         END_IF
 
-        // Pauza po cyklu: stoimy na TARE
-        IF bCmdPause THEN
-            sDiag := 'PAUZA: stoję na TARE (po cyklu) - czekam na WZNÓW';
-            RETURN;
-        END_IF
-
-        // Normalnie start dozowania osadu
+        sDiag := 'TARE: zapis tary';
+        rTareKg := rMassRawKg;
+        _mSludge0 := rMassRawKg;
         _step := E_GranStep.DOSE_SLUDGE;
 
 
     // ------------------------------------------------------------
-    // DOSE_SLUDGE (mini automat w środku) - HOLD tylko operator (bramka globalna)
+    // DOSE_SLUDGE (mini automat w środku)
     // ------------------------------------------------------------
     E_GranStep.DOSE_SLUDGE:
         // ENTRY kroku głównego
@@ -365,25 +295,30 @@ CASE _step OF
             _tSl(IN := FALSE);
             _slStep := E_SludgeDoseStep.IDLE;
 
-            // watchdog perlit przygotujemy w entry DOSE_PERLITE
             sDiag := 'DOSE_SLUDGE: SP osiągnięte -> DOSE_PERLITE';
             _step := E_GranStep.DOSE_PERLITE;
 
         ELSE
             // ==============================
-            // MINI-AUTOMAT OSADU
+            // MINI-AUTOMAT OSADU (ENTRY w każdym podkroku)
             // ==============================
             CASE _slStep OF
 
+                // ---------------- IDLE ----------------
                 E_SludgeDoseStep.IDLE:
+                    // ENTRY
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _slStepPrev := _slStep;
                     END_IF
+
                     sDiag := 'DOSE_SLUDGE/IDLE -> TEST_ON';
                     _slStep := E_SludgeDoseStep.TEST_ON;
 
+
+                // ---------------- PRIME ----------------
                 E_SludgeDoseStep.PRIME:
+                    // ENTRY
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _slStepPrev := _slStep;
@@ -404,7 +339,10 @@ CASE _step OF
                         END_IF
                     END_IF
 
+
+                // ---------------- TEST_ON ----------------
                 E_SludgeDoseStep.TEST_ON:
+                    // ENTRY (ZAPIS MASY STARTOWEJ TESTU)
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _mSlTestStart := rMassRawKg;
@@ -421,7 +359,10 @@ CASE _step OF
                         _slStep := E_SludgeDoseStep.TEST_OFF_EVAL;
                     END_IF
 
+
+                // ---------------- TEST_OFF_EVAL ----------------
                 E_SludgeDoseStep.TEST_OFF_EVAL:
+                    // ENTRY (OCENA Δm)
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _mSlDelta := rMassRawKg - _mSlTestStart;
@@ -430,6 +371,8 @@ CASE _step OF
                     END_IF
 
                     sDiag := 'DOSE_SLUDGE/TEST_OFF_EVAL';
+                    // pompa OFF (z defaultów)
+
                     _tSl(IN := TRUE, PT := cSlTestOffTime);
                     IF _tSl.Q THEN
                         _tSl(IN := FALSE);
@@ -441,7 +384,10 @@ CASE _step OF
                         END_IF
                     END_IF
 
+
+                // ---------------- WAIT_EMPTY ----------------
                 E_SludgeDoseStep.WAIT_EMPTY:
+                    // ENTRY
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _slStepPrev := _slStep;
@@ -454,7 +400,10 @@ CASE _step OF
                         _slStep := E_SludgeDoseStep.TEST_ON;
                     END_IF
 
+
+                // ---------------- COLLECT_ON ----------------
                 E_SludgeDoseStep.COLLECT_ON:
+                    // ENTRY (ZAPIS MASY STARTOWEJ IMPULSU ROBOCZEGO)
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _mSlTestStart := rMassRawKg;
@@ -471,7 +420,10 @@ CASE _step OF
                         _slStep := E_SludgeDoseStep.WAIT_COLLECT;
                     END_IF
 
+
+                // ---------------- WAIT_COLLECT ----------------
                 E_SludgeDoseStep.WAIT_COLLECT:
+                    // ENTRY (OCENA Δm PO COLLECT)
                     IF _slStep <> _slStepPrev THEN
                         _tSl(IN := FALSE);
                         _mSlDelta := rMassRawKg - _mSlTestStart;
@@ -485,9 +437,11 @@ CASE _step OF
 
                         IF _tSl.Q THEN
                             _tSl(IN := FALSE);
+
+                            // przejście do następnego impulsu roboczego
                             _slStep := E_SludgeDoseStep.COLLECT_ON;
 
-                            // bez 1-skanowej dziury
+                            // >>> POPRAWKA: start pompy już w tym skanie (bez 1-skanowej dziury)
                             bSP02_Fwd := TRUE;
                             rSP02_Hz  := cPumpHz_Collect;
                         END_IF
@@ -503,13 +457,14 @@ CASE _step OF
                     END_IF
 
             ELSE
+                // awaryjnie
                 _slStep := E_SludgeDoseStep.TEST_ON;
             END_CASE
         END_IF
 
 
     // ------------------------------------------------------------
-    // PERLIT: SC02 + E02 (watchdog 120s/2kg)
+    // PERLIT: SC02 + E02
     // ------------------------------------------------------------
     E_GranStep.DOSE_PERLITE:
         // ENTRY
@@ -517,45 +472,23 @@ CASE _step OF
             _tStep(IN := FALSE);
 
             _tE02(IN := FALSE);
-            _bE02Phase := TRUE;
-
-            // watchdog perlit start okna
-            _mPerlWd0 := rMassRawKg;
-            _tPerlWd(IN := FALSE);
+            _bE02Phase := TRUE;     // start od ON
 
             _stepPrev := _step;
         END_IF
 
-        // Jeśli jest pauza w trakcie dozowania - bramka globalna już RETURN zrobiła
         sDiag := 'DOSE_PERLITE';
         bDewaterStart := TRUE;
 
-        bSC02_On := TRUE; // PERLIT
+        bSC02_On := TRUE;          // PERLIT
 
-        // Wibrator PERLIT (E02): generator ON/OFF
         _tE02(IN := TRUE, PT := SEL(_bE02Phase, cVibOffTime, cVibOnTime));
         IF _tE02.Q THEN
             _tE02(IN := FALSE);
             _bE02Phase := NOT _bE02Phase;
         END_IF
-        bE02_On := _bE02Phase;
+        bE02_On := _bE02Phase;     // PERLIT
 
-        // Watchdog przyrostu masy – PERLIT
-        _tPerlWd(IN := TRUE, PT := cPerlWdTime);
-        IF _tPerlWd.Q THEN
-            _tPerlWd(IN := FALSE);
-
-            IF (rMassRawKg - _mPerlWd0) < cPerlMinDeltaKg THEN
-                eHoldReason := E_GranHoldReason.PERLITE_NO_GAIN;
-                bHoldReq := TRUE;
-                sDiag := 'HOLD: brak przyrostu masy (PERLIT)';
-                RETURN;
-            ELSE
-                _mPerlWd0 := rMassRawKg; // restart okna
-            END_IF
-        END_IF
-
-        // Warunek SP
         IF (rMassRawKg - _mPerl0) >= rPerliteKg_SP THEN
             _mLime0 := rMassRawKg;
             _step := E_GranStep.DOSE_LIME;
@@ -563,7 +496,7 @@ CASE _step OF
 
 
     // ------------------------------------------------------------
-    // WAPNO: SC01 + E01 (watchdog 30s/2kg)
+    // WAPNO: SC01 + E01
     // ------------------------------------------------------------
     E_GranStep.DOSE_LIME:
         // ENTRY
@@ -571,11 +504,7 @@ CASE _step OF
             _tStep(IN := FALSE);
 
             _tE01(IN := FALSE);
-            _bE01Phase := TRUE;
-
-            // watchdog wapno start okna
-            _mLimeWd0 := rMassRawKg;
-            _tLimeWd(IN := FALSE);
+            _bE01Phase := TRUE;     // start od ON
 
             _stepPrev := _step;
         END_IF
@@ -583,32 +512,15 @@ CASE _step OF
         sDiag := 'DOSE_LIME';
         bDewaterStart := TRUE;
 
-        bSC01_On := TRUE; // WAPNO
+        bSC01_On := TRUE;          // WAPNO
 
-        // Wibrator WAPNO (E01)
         _tE01(IN := TRUE, PT := SEL(_bE01Phase, cVibOffTime, cVibOnTime));
         IF _tE01.Q THEN
             _tE01(IN := FALSE);
             _bE01Phase := NOT _bE01Phase;
         END_IF
-        bE01_On := _bE01Phase;
+        bE01_On := _bE01Phase;     // WAPNO
 
-        // Watchdog przyrostu masy – WAPNO
-        _tLimeWd(IN := TRUE, PT := cLimeWdTime);
-        IF _tLimeWd.Q THEN
-            _tLimeWd(IN := FALSE);
-
-            IF (rMassRawKg - _mLimeWd0) < cLimeMinDeltaKg THEN
-                eHoldReason := E_GranHoldReason.LIME_NO_GAIN;
-                bHoldReq := TRUE;
-                sDiag := 'HOLD: brak przyrostu masy (WAPNO)';
-                RETURN;
-            ELSE
-                _mLimeWd0 := rMassRawKg;
-            END_IF
-        END_IF
-
-        // Warunek SP
         IF (rMassRawKg - _mLime0) >= rLimeKg_SP THEN
             _tMix(IN := FALSE);
             _tStep(IN := FALSE);
@@ -625,13 +537,7 @@ CASE _step OF
             _stepPrev := _step;
         END_IF
 
-        // Pauza w MIXING: kończymy cykl do wysypu, ale sygnalizujemy
-        IF bCmdPause THEN
-            sDiag := 'PAUZA przyjęta – kończę cykl do wysypu';
-        ELSE
-            sDiag := 'MIXING';
-        END_IF
-
+        sDiag := 'MIXING';
         bM01_Fwd := TRUE;
         bM02_Fwd := TRUE;
         rMix_Hz  := cMixHz;
@@ -653,12 +559,7 @@ CASE _step OF
             _stepPrev := _step;
         END_IF
 
-        IF bCmdPause THEN
-            sDiag := 'PAUZA przyjęta – rozładunek (kończę cykl)';
-        ELSE
-            sDiag := 'DISCH_WAIT';
-        END_IF
-
+        sDiag := 'DISCH_WAIT';
         bM01_Fwd := TRUE;
         bM02_Fwd := TRUE;
         rMix_Hz  := cMixHz;
@@ -685,12 +586,7 @@ CASE _step OF
             _stepPrev := _step;
         END_IF
 
-        IF bCmdPause THEN
-            sDiag := 'PAUZA przyjęta – zamykam klapę (kończę cykl)';
-        ELSE
-            sDiag := 'DISCH_CLOSE';
-        END_IF
-
+        sDiag := 'DISCH_CLOSE';
         IF bFlapPosMode THEN
             uiFlapPosSP := 0;
         ELSE
@@ -707,12 +603,11 @@ CASE _step OF
             _mPerl0   := rMassRawKg;
             _mLime0   := rMassRawKg;
 
-            // Po cyklu zawsze idziemy do TARE (tam pauza zatrzyma, jeśli aktywna)
             _step := E_GranStep.TARE;
         END_IF
 
-
 ELSE
+    // awaryjnie
     _step := E_GranStep.IDLE;
 END_CASE
 ]]></ST>

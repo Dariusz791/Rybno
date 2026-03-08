@@ -275,7 +275,7 @@ __pycache__/
 *.TcVTO
 
 # TwinCAT foldery tymczasowe i build
-Boot/
+_Boot/
 _Log/
 _LogBak/
 Sys/Plc/*
@@ -295,6 +295,28 @@ Sys/Plc/*
 ~*.*
 *.backup
 *.bak
+
+# TwinCAT build artifacts
+_Boot/
+_CompileInfo/
+_Libraries/
+
+# PLC runtime
+*.app
+*.cid
+*.crc
+*.occ
+*.ocm
+*.dbg
+*.tizip
+*.tpzip
+*.tszip
+
+# temporary TwinCAT
+*.~u
+
+LineIDs.dbg
+*.tclrs
 
 # Wykluczaj kopie zapasowe i dane runtime Promotic
 Promotic/DtBackup/
