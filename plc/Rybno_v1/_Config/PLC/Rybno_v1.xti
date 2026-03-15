@@ -53,7 +53,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{23B2FFFF-8BE8-71AA-7D7B-58BD11039024}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{4D2BDEB7-DA5E-3C61-7993-688E3133D3B2}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
@@ -197,6 +197,26 @@
 					<Name>GVL_Fertilizer.nEnc</Name>
 					<Comment><![CDATA[ Counter value z EL5151 (do podglądu)]]></Comment>
 					<Type>UINT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.ValvePosition_ZR01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.ValvePosition_ZR02.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.ValvePosition_ZR01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.ValvePosition_ZR02.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
 				</Var>
 			</Vars>
 			<Vars VarGrpType="2" AreaNo="1">

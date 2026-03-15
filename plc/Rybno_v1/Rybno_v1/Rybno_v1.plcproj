@@ -42,6 +42,9 @@
     <Compile Include="DUTs\Dewatering\Granulat\OPCUA\ST_GranHmiSts.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Dewatering\Sludge\ST_SludgeDosing.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Dewatering\ST_Dewatering.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -137,6 +140,9 @@
     <Compile Include="POUs\FB_Classes\Contact\FB_ContactNO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_Classes\DigitalSens\FB_DigitalSensNO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_Classes\Granulator\FB_GranulationProcess.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -200,6 +206,9 @@
     <Compile Include="POUs\FB_Classes\RotarySens\FB_DigitalSensNC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_Classes\SludgeDosing\FB_SludgeDosing.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Function\EtaHasBit.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -260,6 +269,7 @@
     <Folder Include="DUTs" />
     <Folder Include="DUTs\Dewatering\Granulat" />
     <Folder Include="DUTs\Dewatering\Granulat\OPCUA" />
+    <Folder Include="DUTs\Dewatering\Sludge" />
     <Folder Include="DUTs\Drive" />
     <Folder Include="DUTs\Drive\Modbus" />
     <Folder Include="DUTs\Fertilizer" />
@@ -286,6 +296,8 @@
     <Folder Include="POUs\FB_Classes\MotorDrive\Modbus" />
     <Folder Include="POUs\FB_Classes\Mixit" />
     <Folder Include="POUs\FB_Classes\Granulator" />
+    <Folder Include="POUs\FB_Classes\DigitalSens" />
+    <Folder Include="POUs\FB_Classes\SludgeDosing" />
     <Folder Include="POUs\FB_Classes\RotarySens" />
     <Folder Include="POUs\FB_Classes\ReactorMixer" />
     <Folder Include="POUs\Function" />

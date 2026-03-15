@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
-  <POU Name="FB_DigitalSensNC" Id="{bc8c9ce5-05eb-43da-a6ef-61809be1250e}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_DigitalSensNC
+  <POU Name="FB_DigitalSensNO" Id="{9b7f398c-5bf7-4085-9c37-3cc19cb2758d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DigitalSensNO
 VAR_INPUT
 	_input	: BOOL;
 END_VAR
@@ -12,11 +12,11 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[_output := NOT _input;]]></ST>
+      <ST><![CDATA[_output := _input;]]></ST>
     </Implementation>
-    <Property Name="IsActive" Id="{8a6a15d5-0eeb-4501-90c4-2aa077e15e25}">
+    <Property Name="IsActive" Id="{d21f2347-78c6-48ff-b8b4-4796ac7e56b7}">
       <Declaration><![CDATA[PROPERTY IsActive : BOOL]]></Declaration>
-      <Get Name="Get" Id="{b609fe4a-581c-4e60-bed0-a275fdba00d6}">
+      <Get Name="Get" Id="{10566830-eb48-451a-8cea-d902e630293f}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -25,10 +25,10 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <LineIds Name="FB_DigitalSensNC">
+    <LineIds Name="FB_DigitalSensNO">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_DigitalSensNC.IsActive.Get">
+    <LineIds Name="FB_DigitalSensNO.IsActive.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
