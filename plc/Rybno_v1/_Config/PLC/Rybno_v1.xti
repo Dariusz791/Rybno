@@ -53,11 +53,16 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{4D2BDEB7-DA5E-3C61-7993-688E3133D3B2}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{43DE5DB9-674D-17D7-1148-891EBC17F62E}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
 				<Name>PlcTask Inputs</Name>
+				<Var>
+					<Name>BiogasProcess.inFlow_F01</Name>
+					<Comment><![CDATA[wejscie licznika]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
 				<Var>
 					<Name>MAIN.fbModbusoperation._MB.InData</Name>
 					<Type GUID="{F852D9F7-9DB9-AE77-EE6D-D9BA52CDE308}" Namespace="Tc2_ModbusRTU">MB_KL6inData22B</Type>
@@ -119,6 +124,10 @@
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
+					<Name>GVL_Biogas.bVar</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
 					<Name>GVL_Biogas.PressureSens_GH01.iRawValue</Name>
 					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
 					<Type>INT</Type>
@@ -129,9 +138,9 @@
 					<Type>INT</Type>
 				</Var>
 				<Var>
-					<Name>GVL_Biogas.FlowSens_F01.iRawValue</Name>
-					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
-					<Type>INT</Type>
+					<Name>GVL_Biogas.FlowSens_F01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
 				</Var>
 				<Var>
 					<Name>GVL_Cogeneration.TempSens_HC01.iRawValue</Name>
@@ -205,16 +214,6 @@
 				</Var>
 				<Var>
 					<Name>GVL_Fertilizer.ValvePosition_ZR02.bRaw</Name>
-					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
-					<Type>BOOL</Type>
-				</Var>
-				<Var>
-					<Name>FertilizerProcess.ValvePosition_ZR01.bRaw</Name>
-					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
-					<Type>BOOL</Type>
-				</Var>
-				<Var>
-					<Name>FertilizerProcess.ValvePosition_ZR02.bRaw</Name>
 					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
 					<Type>BOOL</Type>
 				</Var>
@@ -508,7 +507,8 @@
 				<Link VarA="PlcTask Inputs^FermentationProcess.fbDrv_MX02._termFuseOk._input" VarB="Channel 4^Input" Size="1"/>
 				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M01._termFuseOk._input" VarB="Channel 7^Input" Size="1"/>
 				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M02._termFuseOk._input" VarB="Channel 8^Input" Size="1"/>
-				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_SP02._termFuseOk._input" VarB="Channel 2^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_SP02._termFuseOk._input" VarB="Channel 1^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Biogas.FlowSens_F01.bRaw" VarB="Channel 2^Input" Size="1"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL1008)">
 				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M03._termFuseOk._input" VarB="Channel 1^Input" Size="1"/>

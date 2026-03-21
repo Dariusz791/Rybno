@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="DewateringProcess" Id="{2dba32da-2625-43de-81be-5f749617ce24}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM DewateringProcess
 VAR
@@ -15,9 +15,7 @@ END_VAR
       <ST><![CDATA[//Action
 ACT_Contact();
 
-(*******************SO-01*********************************************)
-// --- WYJŚCIE: bStart z SCADA steruje stykiem START ---
-GVL_Dewatering.DO_Start := GVL_Dewatering.stDewatering.bStart;
+
 
 
 
@@ -657,5 +655,10 @@ GVL_Dewatering.DO_Start := GVL_Dewatering.stDewatering.bStart;
         </CFC>
       </Implementation>
     </Action>
+    <LineIds Name="DewateringProcess">
+      <LineId Id="3" Count="2" />
+      <LineId Id="8" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

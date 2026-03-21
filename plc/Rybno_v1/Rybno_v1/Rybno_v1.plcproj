@@ -7,7 +7,7 @@
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
-    <GenerateTpy>false</GenerateTpy>
+    <GenerateTpy>true</GenerateTpy>
     <Name>Rybno_v1</Name>
     <ProgramVersion>3.1.4024.0</ProgramVersion>
     <Application>{78e7f714-2f25-47c8-9722-75a33d5afb75}</Application>

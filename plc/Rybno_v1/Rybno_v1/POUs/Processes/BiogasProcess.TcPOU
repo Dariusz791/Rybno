@@ -1,29 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="BiogasProcess" Id="{42ee1a91-553f-4003-838c-56a71dec62fc}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM BiogasProcess
 VAR
 	
-(************** Temp Sensor **************************************************)
-	fbPressureSens_GH01	 : FB_Scaling; //Czujnik temperatury w reaktorze R01
-	
-(************** Ph Sensor **************************************************)
-	fbPressureSens_DS01	 : FB_Scaling; //Czujnik ph w reaktorze R01
-
 (************** Pressure Sensor **************************************************)
-	fbPressureSens_P01	 : FB_Scaling; //Czujnik ciśnienia w reaktorze R01
+	fbPressureSens_GH01	 : FB_Scaling; //Czujnik ciśnienia w  GH01
 	
+
 (************** Level Sensor **************************************************)
-	fbLevelSens_L01		 : FB_Scaling; //Czujnik poziomu cieczy w reaktorze R01
-	
-(************** Level Sensor **************************************************)
-	fbFlowSens_F01		 : FB_Scaling; //Czujnik poziomu cieczy w reaktorze R01
-	
+	fbFlowSens_F01		 : FB_DigitalSensNO; //Czujnik poziomu cieczy w reaktorze R01
+
+    inFlow_F01   AT%I* : BOOL;            //wejscie licznika
+
+
 
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[ACT_PressureSens();
+ACT_FlowSens();
 ADS_BiogasTorch();
 ]]></ST>
     </Implementation>
@@ -35,98 +31,6 @@ ADS_BiogasTorch();
               <o xml:space="preserve" t="CFCImplementationObject">
                 <o n="Items" t="CFCItemList">
                   <l2 n="InnerList">
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">35L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"0"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">36L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 25, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">34L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">39L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"32767"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">40L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 26, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">38L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">43L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"0"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">44L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 27, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">42L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">47L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"20"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">48L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 28, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">46L</v>
-                    </o>
                     <o t="CFCBoxElement">
                       <o n="Inputs" t="CFCItemList">
                         <l2 n="InnerList" cet="CFCInputPin">
@@ -140,55 +44,7 @@ ADS_BiogasTorch();
                             <v n="SetReset" t="SetReset">None</v>
                             <v n="SetResetRef" t="SetResetRef">None</v>
                             <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">10L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">12L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">14L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">16L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">18L</v>
+                            <v n="Id">59L</v>
                           </o>
                         </l2>
                       </o>
@@ -201,25 +57,7 @@ ADS_BiogasTorch();
                             <v n="SetReset" t="SetReset">None</v>
                             <v n="SetResetRef" t="SetResetRef">None</v>
                             <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">20L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">22L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">24L</v>
+                            <v n="Id">61L</v>
                           </o>
                         </l2>
                       </o>
@@ -228,72 +66,30 @@ ADS_BiogasTorch();
                           <o>
                             <v n="Bounds">"0, 0, 0, 0"</v>
                             <n n="ElementGroupId" />
-                            <v n="Text">"_rX"</v>
+                            <v n="Text">"_input"</v>
                             <v n="Modifiable">true</v>
-                            <v n="Id">11L</v>
+                            <v n="Id">60L</v>
                           </o>
                           <o>
                             <v n="Bounds">"0, 0, 0, 0"</v>
                             <n n="ElementGroupId" />
-                            <v n="Text">"_rXmin"</v>
+                            <v n="Text">"_output"</v>
                             <v n="Modifiable">true</v>
-                            <v n="Id">13L</v>
+                            <v n="Id">62L</v>
                           </o>
                           <o>
                             <v n="Bounds">"0, 0, 0, 0"</v>
                             <n n="ElementGroupId" />
-                            <v n="Text">"_rXmax"</v>
+                            <v n="Text">"FB_DigitalSensNO"</v>
                             <v n="Modifiable">true</v>
-                            <v n="Id">15L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rYmin"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">17L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rYmax"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">19L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_bAlarmHi"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">21L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_bAlarmLo"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">23L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rY"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">25L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"FB_Scaling"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">8L</v>
+                            <v n="Id">57L</v>
                           </o>
                           <o>
                             <v n="Bounds">"0, 0, 0, 0"</v>
                             <n n="ElementGroupId" />
                             <v n="Text">"fbFlowSens_F01"</v>
                             <v n="Modifiable">true</v>
-                            <v n="Id">9L</v>
+                            <v n="Id">58L</v>
                           </o>
                         </l2>
                       </o>
@@ -302,14 +98,14 @@ ADS_BiogasTorch();
                       </o>
                       <n n="PreparedParameters" />
                       <v n="PageArea">0</v>
-                      <v n="Bounds">"35, 22, 0, 0"</v>
+                      <v n="Bounds">"19, 9, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="EnEno">false</v>
                       <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
                       <v n="ContainsExtensibleInputs">false</v>
                       <v n="Forced">false</v>
                       <v n="OwningPageId">-1L</v>
-                      <v n="Id">1L</v>
+                      <v n="Id">50L</v>
                     </o>
                     <o t="CFCInputElement">
                       <o n="Output" t="CFCOutputPin">
@@ -319,27 +115,27 @@ ADS_BiogasTorch();
                         <v n="SetReset" t="SetReset">None</v>
                         <v n="SetResetRef" t="SetResetRef">None</v>
                         <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">27L</v>
+                        <v n="Id">64L</v>
                       </o>
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
                         <n n="ElementGroupId" />
-                        <v n="Text">"GVL_Biogas.FlowSens_F01.rValue"</v>
+                        <v n="Text">"GVL_Biogas.FlowSens_F01.bRaw"</v>
                         <v n="Modifiable">true</v>
-                        <v n="Id">28L</v>
+                        <v n="Id">65L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 24, 0, 0"</v>
+                      <v n="Bounds">"2, 11, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
-                      <v n="Id">26L</v>
+                      <v n="Id">63L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
-                      <v n="SourcePinId">27L</v>
-                      <v n="DestPinId">10L</v>
-                      <v n="Id">29L</v>
+                      <v n="SourcePinId">64L</v>
+                      <v n="DestPinId">59L</v>
+                      <v n="Id">66L</v>
                     </o>
                     <o t="CFCOutputElement">
                       <o n="Input" t="CFCInputPinWithSetReset">
@@ -351,55 +147,27 @@ ADS_BiogasTorch();
                         <v n="SetReset" t="SetReset">None</v>
                         <v n="SetResetRef" t="SetResetRef">None</v>
                         <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">31L</v>
+                        <v n="Id">68L</v>
                       </o>
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
                         <n n="ElementGroupId" />
-                        <v n="Text">"GVL_Biogas.FlowSens_F01.rValue"</v>
+                        <v n="Text">"GVL_Biogas.FlowSens_F01.bValue"</v>
                         <v n="Modifiable">true</v>
-                        <v n="Id">32L</v>
+                        <v n="Id">69L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 26, 0, 0"</v>
+                      <v n="Bounds">"33, 11, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
-                      <v n="Id">30L</v>
+                      <v n="Id">67L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
-                      <v n="SourcePinId">24L</v>
-                      <v n="DestPinId">31L</v>
-                      <v n="Id">33L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">35L</v>
-                      <v n="DestPinId">12L</v>
-                      <v n="Id">37L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">39L</v>
-                      <v n="DestPinId">14L</v>
-                      <v n="Id">41L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">43L</v>
-                      <v n="DestPinId">16L</v>
-                      <v n="Id">45L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">47L</v>
-                      <v n="DestPinId">18L</v>
-                      <v n="Id">49L</v>
+                      <v n="SourcePinId">61L</v>
+                      <v n="DestPinId">68L</v>
+                      <v n="Id">70L</v>
                     </o>
                   </l2>
                 </o>
@@ -407,66 +175,10 @@ ADS_BiogasTorch();
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">49L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">28</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">15</v>
-                          <v n="Y">28</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">100</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">28</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">45L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">27</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">14</v>
-                          <v n="Y">27</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">27</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">41L</v>
+                      <v n="ConnectionId">66L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">16</v>
-                        <v n="Y">26</v>
+                        <v n="Y">11</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -478,23 +190,23 @@ ADS_BiogasTorch();
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
                           <v n="X">16</v>
-                          <v n="Y">26</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
+                          <v n="Flags">100</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">26</v>
+                          <v n="X">18</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">37L</v>
+                      <v n="ConnectionId">70L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">25</v>
+                        <v n="X">28</v>
+                        <v n="Y">11</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -505,70 +217,14 @@ ADS_BiogasTorch();
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
-                          <v n="Y">25</v>
+                          <v n="X">28</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">25</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">33L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
-                        <v n="Y">26</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">45</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">53</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">29L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">25</v>
-                        <v n="Y">24</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">25</v>
-                          <v n="Y">24</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">24</v>
+                          <v n="X">32</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -577,8 +233,8 @@ ADS_BiogasTorch();
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">69</v>
-                <v n="CanvasHeight">30</v>
+                <v n="CanvasWidth">48</v>
+                <v n="CanvasHeight">12</v>
               </o>
             </Data>
             <TypeList>
@@ -635,7 +291,7 @@ ADS_BiogasTorch();
                         <v n="Id">36L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 25, 0, 0"</v>
+                      <v n="Bounds">"10, 8, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">34L</v>
@@ -658,7 +314,7 @@ ADS_BiogasTorch();
                         <v n="Id">40L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 26, 0, 0"</v>
+                      <v n="Bounds">"10, 9, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">38L</v>
@@ -681,7 +337,7 @@ ADS_BiogasTorch();
                         <v n="Id">44L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 27, 0, 0"</v>
+                      <v n="Bounds">"10, 10, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">42L</v>
@@ -704,334 +360,10 @@ ADS_BiogasTorch();
                         <v n="Id">48L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 28, 0, 0"</v>
+                      <v n="Bounds">"10, 11, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">46L</v>
-                    </o>
-                    <o t="CFCBoxElement">
-                      <o n="Inputs" t="CFCItemList">
-                        <l2 n="InnerList" cet="CFCInputPin">
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">63L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">64L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">65L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">66L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">67L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Outputs" t="CFCItemList">
-                        <l2 n="InnerList" cet="CFCOutputPin">
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">68L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">69L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">70L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Texts" t="CFCItemList">
-                        <l2 n="InnerList" cet="CFCText">
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rX"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">71L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rXmin"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">72L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rXmax"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">73L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rYmin"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">74L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rYmax"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">75L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_bAlarmHi"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">76L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_bAlarmLo"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">77L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"_rY"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">78L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"FB_Scaling"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">79L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"fbPressureSens_DS01"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">80L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Parameters" t="CFCItemList">
-                        <l2 n="InnerList" />
-                      </o>
-                      <n n="PreparedParameters" />
-                      <v n="PageArea">0</v>
-                      <v n="Bounds">"35, 38, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="EnEno">false</v>
-                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
-                      <v n="ContainsExtensibleInputs">false</v>
-                      <v n="Forced">false</v>
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">62L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">82L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"GVL_Biogas.PressureSens_DS01.iRawValue"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">83L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 40, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">81L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">51L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"0"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">52L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 41, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">50L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">54L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"32767"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">55L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 42, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">53L</v>
-                    </o>
-                    <o t="CFCOutputElement">
-                      <o n="Input" t="CFCInputPinWithSetReset">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="ProcessValue">""</v>
-                        <v n="Access" t="ProcessValueAccess">None</v>
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">85L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"GVL_Biogas.PressureSens_DS01.rValue"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">86L</v>
-                      </o>
-                      <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 42, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">84L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">57L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"0"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">58L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 43, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">56L</v>
-                    </o>
-                    <o t="CFCInputElement">
-                      <o n="Output" t="CFCOutputPin">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Negated">false</v>
-                        <v n="SetReset" t="SetReset">None</v>
-                        <v n="SetResetRef" t="SetResetRef">None</v>
-                        <v n="PretendsToBeConnected">false</v>
-                        <v n="Id">60L</v>
-                      </o>
-                      <o n="Text" t="CFCText">
-                        <v n="Bounds">"0, 0, 0, 0"</v>
-                        <n n="ElementGroupId" />
-                        <v n="Text">"10"</v>
-                        <v n="Modifiable">true</v>
-                        <v n="Id">61L</v>
-                      </o>
-                      <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 44, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">59L</v>
                     </o>
                     <o t="CFCBoxElement">
                       <o n="Inputs" t="CFCItemList">
@@ -1208,7 +540,7 @@ ADS_BiogasTorch();
                       </o>
                       <n n="PreparedParameters" />
                       <v n="PageArea">0</v>
-                      <v n="Bounds">"35, 22, 0, 0"</v>
+                      <v n="Bounds">"34, 5, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="EnEno">false</v>
                       <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
@@ -1235,7 +567,7 @@ ADS_BiogasTorch();
                         <v n="Id">28L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 24, 0, 0"</v>
+                      <v n="Bounds">"10, 7, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">26L</v>
@@ -1267,7 +599,7 @@ ADS_BiogasTorch();
                         <v n="Id">32L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 26, 0, 0"</v>
+                      <v n="Bounds">"53, 9, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">30L</v>
@@ -1307,114 +639,16 @@ ADS_BiogasTorch();
                       <v n="DestPinId">18L</v>
                       <v n="Id">49L</v>
                     </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">82L</v>
-                      <v n="DestPinId">63L</v>
-                      <v n="Id">87L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">70L</v>
-                      <v n="DestPinId">85L</v>
-                      <v n="Id">88L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">51L</v>
-                      <v n="DestPinId">64L</v>
-                      <v n="Id">89L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">54L</v>
-                      <v n="DestPinId">65L</v>
-                      <v n="Id">90L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">57L</v>
-                      <v n="DestPinId">66L</v>
-                      <v n="Id">91L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">60L</v>
-                      <v n="DestPinId">67L</v>
-                      <v n="Id">92L</v>
-                    </o>
                   </l2>
                 </o>
                 <n n="ParameterInitializationMethodGenerator" />
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">29L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">29</v>
-                        <v n="Y">24</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">29</v>
-                          <v n="Y">24</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">24</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">33L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
-                        <v n="Y">26</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">45</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">53</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">37L</v>
+                      <v n="ConnectionId">49L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">14</v>
-                        <v n="Y">25</v>
+                        <v n="Y">11</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1426,41 +660,13 @@ ADS_BiogasTorch();
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
                           <v n="X">14</v>
-                          <v n="Y">25</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
+                          <v n="Flags">100</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">25</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">41L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">26</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">16</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">26</v>
+                          <v n="X">33</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -1469,8 +675,8 @@ ADS_BiogasTorch();
                     <o>
                       <v n="ConnectionId">45L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">27</v>
+                        <v n="X">13</v>
+                        <v n="Y">10</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1481,24 +687,24 @@ ADS_BiogasTorch();
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
-                          <v n="Y">27</v>
+                          <v n="X">13</v>
+                          <v n="Y">10</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">27</v>
+                          <v n="X">33</v>
+                          <v n="Y">10</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">49L</v>
+                      <v n="ConnectionId">41L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">15</v>
-                        <v n="Y">28</v>
+                        <v n="Y">9</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1510,23 +716,23 @@ ADS_BiogasTorch();
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
                           <v n="X">15</v>
-                          <v n="Y">28</v>
+                          <v n="Y">9</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">28</v>
+                          <v n="X">33</v>
+                          <v n="Y">9</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">92L</v>
+                      <v n="ConnectionId">37L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">44</v>
+                        <v n="X">13</v>
+                        <v n="Y">8</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1537,24 +743,24 @@ ADS_BiogasTorch();
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">15</v>
-                          <v n="Y">44</v>
+                          <v n="X">13</v>
+                          <v n="Y">8</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">44</v>
+                          <v n="X">33</v>
+                          <v n="Y">8</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">91L</v>
+                      <v n="ConnectionId">33L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">43</v>
+                        <v n="X">44</v>
+                        <v n="Y">9</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1565,24 +771,24 @@ ADS_BiogasTorch();
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
-                          <v n="Y">43</v>
+                          <v n="X">44</v>
+                          <v n="Y">9</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">43</v>
+                          <v n="X">52</v>
+                          <v n="Y">9</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">90L</v>
+                      <v n="ConnectionId">29L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">42</v>
+                        <v n="X">28</v>
+                        <v n="Y">7</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1593,98 +799,14 @@ ADS_BiogasTorch();
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">16</v>
-                          <v n="Y">42</v>
+                          <v n="X">28</v>
+                          <v n="Y">7</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">42</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">89L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">41</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">14</v>
-                          <v n="Y">41</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">41</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">88L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
-                        <v n="Y">42</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">45</v>
-                          <v n="Y">42</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">53</v>
-                          <v n="Y">42</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">87L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">29</v>
-                        <v n="Y">40</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">29</v>
-                          <v n="Y">40</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">40</v>
+                          <v n="X">33</v>
+                          <v n="Y">7</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -1693,8 +815,8 @@ ADS_BiogasTorch();
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">71</v>
-                <v n="CanvasHeight">46</v>
+                <v n="CanvasWidth">70</v>
+                <v n="CanvasHeight">12</v>
               </o>
             </Data>
             <TypeList>
@@ -1725,5 +847,11 @@ ADS_BiogasTorch();
         </CFC>
       </Implementation>
     </Action>
+    <LineIds Name="BiogasProcess">
+      <LineId Id="3" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -76,7 +76,7 @@ ACT_TempSens();		//Sensor temperatury
 ACT_DigitalSens();  //Sensory poziomu
 
 //Automat dozowania granulowania  i dozowania fermentacji
-ACT_Control(); //Sterowanie procesem granulacji
+//ACT_Control(); //Sterowanie procesem granulacji
 ACT_SludgeDosing(); //sterowanie dozowaniem osadu do reaktora fermentacji R01
 
 
@@ -3204,34 +3204,6 @@ True = SP, False = Open/Close"</v>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">475L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">37</v>
-                        <v n="Y">46</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">37</v>
-                          <v n="Y">46</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">46</v>
-                          <v n="Y">46</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
                       <v n="ConnectionId">395L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">17</v>
@@ -3512,6 +3484,34 @@ True = SP, False = Open/Close"</v>
                       </l2>
                     </o>
                     <o>
+                      <v n="ConnectionId">475L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">37</v>
+                        <v n="Y">46</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">37</v>
+                          <v n="Y">46</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">46</v>
+                          <v n="Y">46</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
                       <v n="ConnectionId">403L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">36</v>
@@ -3534,34 +3534,6 @@ True = SP, False = Open/Close"</v>
                         <o>
                           <v n="X">49</v>
                           <v n="Y">20</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">400L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">36</v>
-                        <v n="Y">4</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">36</v>
-                          <v n="Y">4</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">49</v>
-                          <v n="Y">4</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -3848,6 +3820,34 @@ True = SP, False = Open/Close"</v>
                       </l2>
                     </o>
                     <o>
+                      <v n="ConnectionId">400L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">36</v>
+                        <v n="Y">4</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">36</v>
+                          <v n="Y">4</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">49</v>
+                          <v n="Y">4</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
                       <v n="ConnectionId">542L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">36</v>
@@ -3926,46 +3926,6 @@ True = SP, False = Open/Close"</v>
                         <o>
                           <v n="X">49</v>
                           <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">499L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">37</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">15</v>
-                          <v n="Y">37</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">18</v>
-                          <v n="Y">37</v>
-                          <v n="IsJoint">true</v>
-                          <v n="Flags">23</v>
-                        </o>
-                        <o>
-                          <v n="X">18</v>
-                          <v n="Y">8</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">12</v>
-                        </o>
-                        <o>
-                          <v n="X">21</v>
-                          <v n="Y">8</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -4252,6 +4212,46 @@ True = SP, False = Open/Close"</v>
                       </l2>
                     </o>
                     <o>
+                      <v n="ConnectionId">499L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">15</v>
+                        <v n="Y">37</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">15</v>
+                          <v n="Y">37</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">18</v>
+                          <v n="Y">37</v>
+                          <v n="IsJoint">true</v>
+                          <v n="Flags">23</v>
+                        </o>
+                        <o>
+                          <v n="X">18</v>
+                          <v n="Y">8</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">12</v>
+                        </o>
+                        <o>
+                          <v n="X">21</v>
+                          <v n="Y">8</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
                       <v n="ConnectionId">473L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">38</v>
@@ -4274,34 +4274,6 @@ True = SP, False = Open/Close"</v>
                         <o>
                           <v n="X">46</v>
                           <v n="Y">44</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">181L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">100</v>
-                        <v n="Y">50</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">100</v>
-                          <v n="Y">50</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">112</v>
-                          <v n="Y">50</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -4618,6 +4590,34 @@ True = SP, False = Open/Close"</v>
                         <o>
                           <v n="X">46</v>
                           <v n="Y">48</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">181L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">100</v>
+                        <v n="Y">50</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">100</v>
+                          <v n="Y">50</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">112</v>
+                          <v n="Y">50</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -6235,7 +6235,7 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
                         <n n="ElementGroupId" />
-                        <v n="Text">"GVL_Fertilizer.stDriveStatus_SP02.FrequencySet"</v>
+                        <v n="Text">"30"</v>
                         <v n="Modifiable">true</v>
                         <v n="Id">73L</v>
                       </o>
@@ -6453,13 +6453,13 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                           <v n="X">42</v>
                           <v n="Y">20</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">3</v>
+                          <v n="Flags">35</v>
                         </o>
                         <o>
                           <v n="X">42</v>
                           <v n="Y">19</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">12</v>
+                          <v n="Flags">44</v>
                         </o>
                         <o>
                           <v n="X">45</v>
@@ -6493,13 +6493,13 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                           <v n="X">43</v>
                           <v n="Y">22</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">3</v>
+                          <v n="Flags">35</v>
                         </o>
                         <o>
                           <v n="X">43</v>
                           <v n="Y">20</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">15</v>
+                          <v n="Flags">47</v>
                         </o>
                         <o>
                           <v n="X">45</v>
@@ -6512,7 +6512,7 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                     <o>
                       <v n="ConnectionId">74L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">36</v>
+                        <v n="X">21</v>
                         <v n="Y">24</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
@@ -6524,22 +6524,22 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">36</v>
+                          <v n="X">21</v>
                           <v n="Y">24</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
+                          <v n="Flags">100</v>
                         </o>
                         <o>
                           <v n="X">44</v>
                           <v n="Y">24</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">3</v>
+                          <v n="Flags">35</v>
                         </o>
                         <o>
                           <v n="X">44</v>
                           <v n="Y">21</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">12</v>
+                          <v n="Flags">44</v>
                         </o>
                         <o>
                           <v n="X">45</v>
@@ -6657,13 +6657,13 @@ fbDrvContr_BL01.SetForward	:=SEL(fbGranulationProcess.bAutoTakeOver, GVL_Fertili
                           <v n="X">41</v>
                           <v n="Y">14</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">9</v>
+                          <v n="Flags">41</v>
                         </o>
                         <o>
                           <v n="X">41</v>
                           <v n="Y">17</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">6</v>
+                          <v n="Flags">38</v>
                         </o>
                         <o>
                           <v n="X">45</v>
