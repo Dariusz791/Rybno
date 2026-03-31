@@ -18,6 +18,9 @@
     <LibraryReferences>{3cc19c5e-9ded-42ca-84d0-2ff9b9cfee54}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\Contactor\ST_Contactor.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Dewatering\Granulat\E_GranFault.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -93,6 +96,9 @@
     <Compile Include="DUTs\Sensors\Biogas Analyzer\ST_SWG100_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Sensors\FlowCounter\ST_FlowCounter.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Sensors\ST_AnalogSens.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -143,7 +149,13 @@
     <Compile Include="POUs\FB_Classes\DigitalSens\FB_DigitalSensNO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_Classes\Flowmeter\FB_FlowCounter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_Classes\Granulator\FB_GranulationProcess.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Classes\MedianFiltr\FB_Median5.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\Mixit\FB_Mixit.TcPOU">
@@ -275,8 +287,10 @@
     <Folder Include="DUTs\Fertilizer" />
     <Folder Include="DUTs\Mixit" />
     <Folder Include="DUTs\Dewatering" />
+    <Folder Include="DUTs\Contactor" />
     <Folder Include="DUTs\ReactorMixer" />
     <Folder Include="DUTs\Sensors\Biogas Analyzer" />
+    <Folder Include="DUTs\Sensors\FlowCounter" />
     <Folder Include="DUTs\Torch" />
     <Folder Include="DUTs\Sensors" />
     <Folder Include="DUTs\WorkTime" />
@@ -297,6 +311,8 @@
     <Folder Include="POUs\FB_Classes\Mixit" />
     <Folder Include="POUs\FB_Classes\Granulator" />
     <Folder Include="POUs\FB_Classes\DigitalSens" />
+    <Folder Include="POUs\FB_Classes\Flowmeter" />
+    <Folder Include="POUs\FB_Classes\MedianFiltr" />
     <Folder Include="POUs\FB_Classes\SludgeDosing" />
     <Folder Include="POUs\FB_Classes\RotarySens" />
     <Folder Include="POUs\FB_Classes\ReactorMixer" />
@@ -315,6 +331,7 @@
   <ItemGroup>
     <PlaceholderReference Include="Tc2_DataExchange">
       <DefaultResolution>Tc2_DataExchange, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_DataExchange</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_ModbusRTU">
       <DefaultResolution>Tc2_ModbusRTU, * (Beckhoff Automation GmbH)</DefaultResolution>
@@ -327,6 +344,9 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

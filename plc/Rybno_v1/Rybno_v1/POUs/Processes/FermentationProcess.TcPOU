@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="FermentationProcess" Id="{553c9373-2315-45e5-ad38-9104f2f846ac}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM FermentationProcess
 VAR
@@ -29,7 +29,14 @@ VAR
 (************** Reactor Mixers ***********************************************)
 	fbReactorMixers	 : FB_ReactorMixer;	
 	
-
+(****************** ZW01 ******************************************************)
+	fbContactor_ZW01	:	FB_Contactor(en:=GVL_Fermentation.stContactor_ZW01.bCmd);
+	
+	//filtry medianowe czujników analagowych
+	fbMedian5_temp			: FB_Median5;
+	fbMedian5_Pressure		: FB_Median5;
+	fbMedian5_HydroPressure	: FB_Median5;
+	fbMedian5_PhSens		: FB_Median5;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -49,7 +56,11 @@ GVL_Fermentation.stDriveStatus_MX01 := fbDrvContr_MX01.StatusStruct(); //zwróc 
 
 //MX02
 fbDrvContr_MX02();
-GVL_Fermentation.stDriveStatus_MX02 := fbDrvContr_MX02.StatusStruct(); //zwróc strukturę]]></ST>
+GVL_Fermentation.stDriveStatus_MX02 := fbDrvContr_MX02.StatusStruct(); //zwróc strukturę
+
+//ZW01
+fbContactor_ZW01();
+GVL_Fermentation.stContactor_ZW01.bOut	:=	fbContactor_ZW01.State; //zwróc stan]]></ST>
     </Implementation>
     <Action Name="ACT_LevelSens" Id="{5aba7613-72d4-4290-9316-0bee355161b2}">
       <Implementation>
@@ -97,7 +108,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">36L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 25, 0, 0"</v>
+                      <v n="Bounds">"2, 10, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">34L</v>
@@ -120,7 +131,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">40L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 26, 0, 0"</v>
+                      <v n="Bounds">"2, 11, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">38L</v>
@@ -143,10 +154,121 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">44L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 27, 0, 0"</v>
+                      <v n="Bounds">"2, 12, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">42L</v>
+                    </o>
+                    <o t="CFCBoxElement">
+                      <o n="Inputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCInputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">59L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">61L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Outputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCOutputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">63L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">65L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Texts" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCText">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"In"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">60L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"TickMax"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">62L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Out"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">64L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Valid"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">66L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"FB_Median5"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">57L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"fbMedian5_PhSens"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">58L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Parameters" t="CFCItemList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <n n="PreparedParameters" />
+                      <v n="PageArea">0</v>
+                      <v n="Bounds">"40, 9, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="EnEno">false</v>
+                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
+                      <v n="ContainsExtensibleInputs">false</v>
+                      <v n="Forced">false</v>
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">50L</v>
                     </o>
                     <o t="CFCInputElement">
                       <o n="Output" t="CFCOutputPin">
@@ -166,7 +288,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">48L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 28, 0, 0"</v>
+                      <v n="Bounds">"2, 13, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">46L</v>
@@ -346,7 +468,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </o>
                       <n n="PreparedParameters" />
                       <v n="PageArea">0</v>
-                      <v n="Bounds">"35, 22, 0, 0"</v>
+                      <v n="Bounds">"21, 7, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="EnEno">false</v>
                       <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
@@ -373,7 +495,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">28L</v>
                       </o>
                       <v n="PageArea">3</v>
-                      <v n="Bounds">"11, 24, 0, 0"</v>
+                      <v n="Bounds">"2, 9, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">26L</v>
@@ -405,17 +527,10 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">32L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 26, 0, 0"</v>
+                      <v n="Bounds">"53, 11, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">30L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">24L</v>
-                      <v n="DestPinId">31L</v>
-                      <v n="Id">33L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
@@ -445,100 +560,60 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <v n="DestPinId">18L</v>
                       <v n="Id">49L</v>
                     </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">24L</v>
+                      <v n="DestPinId">59L</v>
+                      <v n="Id">67L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">63L</v>
+                      <v n="DestPinId">31L</v>
+                      <v n="Id">68L</v>
+                    </o>
+                    <o t="CFCInputElement">
+                      <o n="Output" t="CFCOutputPin">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Negated">false</v>
+                        <v n="SetReset" t="SetReset">None</v>
+                        <v n="SetResetRef" t="SetResetRef">None</v>
+                        <v n="PretendsToBeConnected">false</v>
+                        <v n="Id">70L</v>
+                      </o>
+                      <o n="Text" t="CFCText">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Text">"20"</v>
+                        <v n="Modifiable">true</v>
+                        <v n="Id">71L</v>
+                      </o>
+                      <v n="PageArea">3</v>
+                      <v n="Bounds">"33, 12, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">69L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">70L</v>
+                      <v n="DestPinId">61L</v>
+                      <v n="Id">72L</v>
+                    </o>
                   </l2>
                 </o>
                 <n n="ParameterInitializationMethodGenerator" />
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">29L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">28</v>
-                        <v n="Y">24</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">28</v>
-                          <v n="Y">24</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">24</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">33L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
-                        <v n="Y">26</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">45</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">53</v>
-                          <v n="Y">26</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">37L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">25</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">14</v>
-                          <v n="Y">25</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">25</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
                       <v n="ConnectionId">41L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">26</v>
+                        <v n="X">7</v>
+                        <v n="Y">11</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -549,14 +624,14 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">16</v>
-                          <v n="Y">26</v>
+                          <v n="X">7</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">26</v>
+                          <v n="X">20</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -565,8 +640,8 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <v n="ConnectionId">45L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">27</v>
+                        <v n="X">5</v>
+                        <v n="Y">12</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -577,14 +652,14 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
-                          <v n="Y">27</v>
+                          <v n="X">5</v>
+                          <v n="Y">12</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">27</v>
+                          <v n="X">20</v>
+                          <v n="Y">12</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -593,8 +668,8 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <v n="ConnectionId">49L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">28</v>
+                        <v n="X">6</v>
+                        <v n="Y">13</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -605,14 +680,154 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">15</v>
-                          <v n="Y">28</v>
+                          <v n="X">6</v>
+                          <v n="Y">13</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">28</v>
+                          <v n="X">20</v>
+                          <v n="Y">13</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">72L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">37</v>
+                        <v n="Y">12</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">37</v>
+                          <v n="Y">12</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">39</v>
+                          <v n="Y">12</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">68L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">49</v>
+                        <v n="Y">11</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">49</v>
+                          <v n="Y">11</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">52</v>
+                          <v n="Y">11</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">37L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">5</v>
+                        <v n="Y">10</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">5</v>
+                          <v n="Y">10</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">20</v>
+                          <v n="Y">10</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">29L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">19</v>
+                        <v n="Y">9</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">19</v>
+                          <v n="Y">9</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">20</v>
+                          <v n="Y">9</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">67L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">31</v>
+                        <v n="Y">11</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">31</v>
+                          <v n="Y">11</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">39</v>
+                          <v n="Y">11</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -621,8 +836,8 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">71</v>
-                <v n="CanvasHeight">30</v>
+                <v n="CanvasWidth">70</v>
+                <v n="CanvasHeight">15</v>
               </o>
             </Data>
             <TypeList>
@@ -752,6 +967,29 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">46L</v>
+                    </o>
+                    <o t="CFCInputElement">
+                      <o n="Output" t="CFCOutputPin">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Negated">false</v>
+                        <v n="SetReset" t="SetReset">None</v>
+                        <v n="SetResetRef" t="SetResetRef">None</v>
+                        <v n="PretendsToBeConnected">false</v>
+                        <v n="Id">126L</v>
+                      </o>
+                      <o n="Text" t="CFCText">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Text">"5"</v>
+                        <v n="Modifiable">true</v>
+                        <v n="Id">127L</v>
+                      </o>
+                      <v n="PageArea">3</v>
+                      <v n="Bounds">"51, 27, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">125L</v>
                     </o>
                     <o t="CFCBoxElement">
                       <o n="Inputs" t="CFCItemList">
@@ -1026,7 +1264,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">86L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 41, 0, 0"</v>
+                      <v n="Bounds">"78, 41, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">84L</v>
@@ -1076,6 +1314,140 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">59L</v>
+                    </o>
+                    <o t="CFCBoxElement">
+                      <o n="Inputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCInputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">113L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">114L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Outputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCOutputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">115L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">116L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Texts" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCText">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"In"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">117L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"TickMax"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">118L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Out"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">119L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Valid"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">120L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"FB_Median5"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">121L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"fbMedian5_HydroPressure"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">122L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Parameters" t="CFCItemList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <n n="PreparedParameters" />
+                      <v n="PageArea">0</v>
+                      <v n="Bounds">"56, 39, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="EnEno">false</v>
+                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
+                      <v n="ContainsExtensibleInputs">false</v>
+                      <v n="Forced">false</v>
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">112L</v>
+                    </o>
+                    <o t="CFCInputElement">
+                      <o n="Output" t="CFCOutputPin">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Negated">false</v>
+                        <v n="SetReset" t="SetReset">None</v>
+                        <v n="SetResetRef" t="SetResetRef">None</v>
+                        <v n="PretendsToBeConnected">false</v>
+                        <v n="Id">130L</v>
+                      </o>
+                      <o n="Text" t="CFCText">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Text">"5"</v>
+                        <v n="Modifiable">true</v>
+                        <v n="Id">131L</v>
+                      </o>
+                      <v n="PageArea">3</v>
+                      <v n="Bounds">"52, 42, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">129L</v>
                     </o>
                     <o t="CFCBoxElement">
                       <o n="Inputs" t="CFCItemList">
@@ -1261,6 +1633,117 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">1L</v>
                     </o>
+                    <o t="CFCBoxElement">
+                      <o n="Inputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCInputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">102L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">104L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Outputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCOutputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">106L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">108L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Texts" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCText">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"In"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">103L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"TickMax"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">105L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Out"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">107L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Valid"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">109L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"FB_Median5"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">100L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"fbMedian5_Pressure"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">101L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Parameters" t="CFCItemList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <n n="PreparedParameters" />
+                      <v n="PageArea">0</v>
+                      <v n="Bounds">"56, 24, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="EnEno">false</v>
+                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
+                      <v n="ContainsExtensibleInputs">false</v>
+                      <v n="Forced">false</v>
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">93L</v>
+                    </o>
                     <o t="CFCInputElement">
                       <o n="Output" t="CFCOutputPin">
                         <v n="Bounds">"0, 0, 0, 0"</v>
@@ -1311,17 +1794,10 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">32L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 26, 0, 0"</v>
+                      <v n="Bounds">"77, 26, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">30L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">24L</v>
-                      <v n="DestPinId">31L</v>
-                      <v n="Id">33L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
@@ -1361,13 +1837,6 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o t="CFCConnection">
                       <v n="Bounds">"-10, -21, 0, 0"</v>
                       <n n="ElementGroupId" />
-                      <v n="SourcePinId">70L</v>
-                      <v n="DestPinId">85L</v>
-                      <v n="Id">88L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"-10, -21, 0, 0"</v>
-                      <n n="ElementGroupId" />
                       <v n="SourcePinId">51L</v>
                       <v n="DestPinId">64L</v>
                       <v n="Id">89L</v>
@@ -1393,16 +1862,51 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <v n="DestPinId">67L</v>
                       <v n="Id">92L</v>
                     </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">24L</v>
+                      <v n="DestPinId">102L</v>
+                      <v n="Id">110L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">106L</v>
+                      <v n="DestPinId">31L</v>
+                      <v n="Id">111L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">115L</v>
+                      <v n="DestPinId">85L</v>
+                      <v n="Id">123L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">70L</v>
+                      <v n="DestPinId">113L</v>
+                      <v n="Id">124L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">126L</v>
+                      <v n="DestPinId">104L</v>
+                      <v n="Id">128L</v>
+                    </o>
                   </l2>
                 </o>
                 <n n="ParameterInitializationMethodGenerator" />
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">29L</v>
+                      <v n="ConnectionId">49L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">30</v>
-                        <v n="Y">24</v>
+                        <v n="X">15</v>
+                        <v n="Y">28</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1413,23 +1917,51 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">30</v>
-                          <v n="Y">24</v>
+                          <v n="X">15</v>
+                          <v n="Y">28</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">34</v>
-                          <v n="Y">24</v>
+                          <v n="Y">28</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">33L</v>
+                      <v n="ConnectionId">45L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
+                        <v n="X">14</v>
+                        <v n="Y">27</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">14</v>
+                          <v n="Y">27</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">27</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">41L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">16</v>
                         <v n="Y">26</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
@@ -1441,13 +1973,13 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">45</v>
+                          <v n="X">16</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">53</v>
+                          <v n="X">34</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -1483,10 +2015,10 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">41L</v>
+                      <v n="ConnectionId">29L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">26</v>
+                        <v n="X">30</v>
+                        <v n="Y">24</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1497,24 +2029,24 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">16</v>
-                          <v n="Y">26</v>
+                          <v n="X">30</v>
+                          <v n="Y">24</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">34</v>
-                          <v n="Y">26</v>
+                          <v n="Y">24</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">45L</v>
+                      <v n="ConnectionId">87L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">27</v>
+                        <v n="X">31</v>
+                        <v n="Y">39</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1525,126 +2057,14 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
-                          <v n="Y">27</v>
+                          <v n="X">31</v>
+                          <v n="Y">39</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">34</v>
-                          <v n="Y">27</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">49L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">28</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">15</v>
-                          <v n="Y">28</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">28</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">92L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">43</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">14</v>
-                          <v n="Y">43</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">43</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">91L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
-                        <v n="Y">42</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">14</v>
-                          <v n="Y">42</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">42</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">90L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">41</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">16</v>
-                          <v n="Y">41</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">41</v>
+                          <v n="Y">39</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -1679,7 +2099,147 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">88L</v>
+                      <v n="ConnectionId">90L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">16</v>
+                        <v n="Y">41</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">16</v>
+                          <v n="Y">41</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">41</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">91L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">14</v>
+                        <v n="Y">42</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">14</v>
+                          <v n="Y">42</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">42</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">92L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">14</v>
+                        <v n="Y">43</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">14</v>
+                          <v n="Y">43</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">43</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">110L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">45</v>
+                        <v n="Y">26</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">45</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">55</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">111L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">66</v>
+                        <v n="Y">26</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">66</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">76</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">124L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">48</v>
                         <v n="Y">41</v>
@@ -1699,7 +2259,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">53</v>
+                          <v n="X">55</v>
                           <v n="Y">41</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -1707,10 +2267,10 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">87L</v>
+                      <v n="ConnectionId">123L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">31</v>
-                        <v n="Y">39</v>
+                        <v n="X">68</v>
+                        <v n="Y">41</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -1721,14 +2281,42 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">31</v>
-                          <v n="Y">39</v>
+                          <v n="X">68</v>
+                          <v n="Y">41</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
-                          <v n="Y">39</v>
+                          <v n="X">77</v>
+                          <v n="Y">41</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">128L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">54</v>
+                        <v n="Y">27</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">54</v>
+                          <v n="Y">27</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">55</v>
+                          <v n="Y">27</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -1737,8 +2325,8 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">74</v>
-                <v n="CanvasHeight">45</v>
+                <v n="CanvasWidth">150</v>
+                <v n="CanvasHeight">87</v>
               </o>
             </Data>
             <TypeList>
@@ -3343,17 +3931,10 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                         <v n="Id">32L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"54, 26, 0, 0"</v>
+                      <v n="Bounds">"63, 26, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">30L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">24L</v>
-                      <v n="DestPinId">31L</v>
-                      <v n="Id">33L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
@@ -3383,16 +3964,171 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       <v n="DestPinId">18L</v>
                       <v n="Id">49L</v>
                     </o>
+                    <o t="CFCBoxElement">
+                      <o n="Inputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCInputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">59L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">61L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Outputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCOutputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">63L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">65L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Texts" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCText">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"In"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">60L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"TickMax"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">62L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Out"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">64L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"Valid"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">66L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"FB_Median5"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">57L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"fbMedian5_temp"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">58L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Parameters" t="CFCItemList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <n n="PreparedParameters" />
+                      <v n="PageArea">0</v>
+                      <v n="Bounds">"52, 24, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="EnEno">false</v>
+                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
+                      <v n="ContainsExtensibleInputs">false</v>
+                      <v n="Forced">false</v>
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">50L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">24L</v>
+                      <v n="DestPinId">59L</v>
+                      <v n="Id">67L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">63L</v>
+                      <v n="DestPinId">31L</v>
+                      <v n="Id">68L</v>
+                    </o>
+                    <o t="CFCInputElement">
+                      <o n="Output" t="CFCOutputPin">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Negated">false</v>
+                        <v n="SetReset" t="SetReset">None</v>
+                        <v n="SetResetRef" t="SetResetRef">None</v>
+                        <v n="PretendsToBeConnected">false</v>
+                        <v n="Id">70L</v>
+                      </o>
+                      <o n="Text" t="CFCText">
+                        <v n="Bounds">"0, 0, 0, 0"</v>
+                        <n n="ElementGroupId" />
+                        <v n="Text">"20"</v>
+                        <v n="Modifiable">true</v>
+                        <v n="Id">71L</v>
+                      </o>
+                      <v n="PageArea">3</v>
+                      <v n="Bounds">"46, 27, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">69L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">70L</v>
+                      <v n="DestPinId">61L</v>
+                      <v n="Id">72L</v>
+                    </o>
                   </l2>
                 </o>
                 <n n="ParameterInitializationMethodGenerator" />
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">29L</v>
+                      <v n="ConnectionId">49L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">29</v>
-                        <v n="Y">24</v>
+                        <v n="X">15</v>
+                        <v n="Y">28</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
                       </o>
@@ -3403,23 +4139,51 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">29</v>
-                          <v n="Y">24</v>
+                          <v n="X">15</v>
+                          <v n="Y">28</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">34</v>
-                          <v n="Y">24</v>
+                          <v n="Y">28</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">33L</v>
+                      <v n="ConnectionId">45L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">45</v>
+                        <v n="X">14</v>
+                        <v n="Y">27</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">14</v>
+                          <v n="Y">27</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">27</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">41L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">16</v>
                         <v n="Y">26</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
@@ -3431,13 +4195,13 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">45</v>
+                          <v n="X">16</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">53</v>
+                          <v n="X">34</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -3473,9 +4237,37 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">41L</v>
+                      <v n="ConnectionId">29L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
+                        <v n="X">29</v>
+                        <v n="Y">24</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">29</v>
+                          <v n="Y">24</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">34</v>
+                          <v n="Y">24</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">67L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">45</v>
                         <v n="Y">26</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
@@ -3487,13 +4279,13 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">16</v>
+                          <v n="X">45</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
+                          <v n="X">51</v>
                           <v n="Y">26</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -3501,9 +4293,37 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">45L</v>
+                      <v n="ConnectionId">68L</v>
                       <o n="StartPoint" t="CFCPoint">
-                        <v n="X">14</v>
+                        <v n="X">60</v>
+                        <v n="Y">26</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">60</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">62</v>
+                          <v n="Y">26</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">72L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">50</v>
                         <v n="Y">27</v>
                         <v n="IsJoint">false</v>
                         <v n="Flags">0</v>
@@ -3515,42 +4335,14 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                     <o>
                       <l2 n="InnerList" cet="CFCPoint">
                         <o>
-                          <v n="X">14</v>
+                          <v n="X">50</v>
                           <v n="Y">27</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">34</v>
+                          <v n="X">51</v>
                           <v n="Y">27</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">49L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">15</v>
-                        <v n="Y">28</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">15</v>
-                          <v n="Y">28</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">34</v>
-                          <v n="Y">28</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -3559,7 +4351,7 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">72</v>
+                <v n="CanvasWidth">81</v>
                 <v n="CanvasHeight">30</v>
               </o>
             </Data>
@@ -3591,5 +4383,21 @@ fbDrvContr_MX02.SetForward:=GVL_Fermentation.stDriveStatus_MX02.bForward;
         </CFC>
       </Implementation>
     </Action>
+    <LineIds Name="FermentationProcess">
+      <LineId Id="3" Count="15" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="58" Count="0" />
+    </LineIds>
+    <LineIds Name="FermentationProcess.ACT_LevelSens">
+      <LineId Id="2" Count="2" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FermentationProcess.ACT_Motor">
+      <LineId Id="2" Count="6" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

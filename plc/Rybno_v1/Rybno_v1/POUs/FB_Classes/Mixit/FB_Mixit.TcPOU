@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="FB_Mixit" Id="{098d0b48-8dda-455c-961e-1335cc98c155}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Mixit
 VAR
-	_core 	: FB_TwoPositionController;
-	_cv	  	: REAL := 0.0;		//aktualna temperatura 
-	_cvValid: BOOL := FALSE;	//czy czujnik CV aktualne został podpiety
-	_dem  	: BOOL;				//zadanie wlaczenia lub wyłaczenia mixit
-	_k1		: FB_COntactor( en := _dem );	//przekaznik k1 sterujacy mixitem z wyjsciem fizycznym jako zmienna prywatna	
-    	
+    _core    : FB_TwoPositionController;
+    _cv      : REAL := 0.0;
+    _cvValid : BOOL := FALSE;
+    _dem     : BOOL;      // wynik regulatora
+    _cmd     : BOOL;      // finalna komenda na stycznik
+    _k1      : FB_Contactor( en := _cmd );
+	
+	_median  : FB_Median5;	//filtr medianowy			
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -21,8 +23,8 @@ VAR_IN_OUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//pobierz temperature aktualna z czujnika temperatury
-_cv := Sensor.rValue; // ustaw aktualna temperature z czujnika
+        <ST><![CDATA[_cv := Sensor.rValue;
+
 _cvValid := TRUE;	  // ustaw że czujnik jest obezny i ważny]]></ST>
       </Implementation>
     </Method>
@@ -33,69 +35,110 @@ VAR_IN_OUT
 END_VAR
 
 VAR
-	_cmd: BOOL;
 	iStatusSel: INT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-
-// 1) policz rdzeń na podstawie SP/H i zapamiętanego CV
-_core(
-	bEnable	       := IO.bEnable,	  	// wlacz wylacz blok	
-    rSetPoint      := IO.rSP,		 	// Set Point z SCADA	
-    rCurrentValue  := _cv,				//CV z czujnika
-    rH             := IO.rH,			// histereza ze SCADA	
-	bManualON	   := (IO.Mode = 2),	// jesli IO.Mode = 2 to true przeciwnym razie false
-	bCooling	   := IO.bCooling, 		//chłodzenie = TRUE, grzanie= False		
-    bDemand        => _dem,
-	rE			   => IO.rE, 			//Opcjonalne do SCADA
-	rLo		       => IO.rLo,
-	rHi		       => IO.rHi			
+        <ST><![CDATA[_core(
+    bEnable       := IO.bEnable,
+    rSetPoint     := IO.rSP,
+    rCurrentValue := _cv,
+    rH            := IO.rH,
+    bManualON     := FALSE,
+    bCooling      := IO.bCooling,
+    bDemand       => _dem,
+    rE            => IO.rE,
+    rLo           => IO.rLo,
+    rHi           => IO.rHi
 );
 
-
-// 2) tryby: 0=Off, 1=Auto, 2=Manual(always ON) - informacje z PLC do SCADA
 CASE IO.Mode OF
-    0: 
-		IO.Cmd := FALSE;		
-    1: 
-		IO.Cmd := _dem;
-    2: 
-		IO.Cmd := TRUE;
+    0: // OFF
+        _cmd := FALSE;
+    1: // AUTO
+        _cmd := _dem;
+    2: // MANUAL
+        _cmd := TRUE;
 ELSE
-    IO.Cmd := FALSE; // fallback
+    _cmd := FALSE;
 END_CASE
 
-// 3) przenies komende na cewke (ciało FB_Contactor zrobi Q := _enRef)
-_k1();	//wywołanie cyklu przekaznika. Przekaznik jest zainicjowany FB_Init zmienna _dem  
+_k1();
 
-// 4) uzupełnienie IO dla SCADA
-IO.rCv	:= _cv;		//atualna temperatura
-IO.Cmd	:= _cmd;
-IO.Out	:= _k1.State; // stan logiczny wyjscia po przekazniku k1
+IO.rCv := _cv;
+IO.Cmd := _cmd;
+IO.Out := _k1.State;
 
 
-//Status
-// zakoduj 2 bity: [bit1 = cvValid] [bit0 = Out]
+// Status
 iStatusSel := SHL(BOOL_TO_INT(_cvValid), 1) OR BOOL_TO_INT(IO.Out);
 
-// 4 stany:
 CASE iStatusSel OF
-    0:  // _cvValid=FALSE, IO.Out=FALSE
+    0:
         IO.StatusText := 'Petla bez czujnika – obieg wyłaczony';
-
-    1:  // _cvValid=FALSE, IO.Out=TRUE
+    1:
         IO.StatusText := 'Petla bez czujnika – obieg właczony';
-
-    2:  // _cvValid=TRUE, IO.Out=FALSE
+    2:
         IO.StatusText := 'Czujnik aktywny – obieg wyłaczony';
-
-    3:  // _cvValid=TRUE, IO.Out=TRUE
+    3:
         IO.StatusText := 'Czujnik aktywny – obieg właczony';
 END_CASE
+
+
+
+//// 1) policz rdzeń na podstawie SP/H i zapamiętanego CV
+//_core(
+//    bEnable       := IO.bEnable,
+//    rSetPoint     := IO.rSP,
+//    rCurrentValue := _cv,
+//    rH            := IO.rH,
+//    bManualON     := (IO.Mode = 2),
+//    bCooling      := IO.bCooling,
+//    bDemand       => _dem,
+//    rE            => IO.rE,
+//    rLo           => IO.rLo,
+//    rHi           => IO.rHi
+//);
+
+//// 2) tryby: 0=Off, 1=Auto, 2=Manual(always ON)
+//CASE IO.Mode OF
+//    0:
+//        IO.Cmd := FALSE;
+//    1:
+//        IO.Cmd := _dem;
+//    2:
+//        IO.Cmd := TRUE;
+//ELSE
+//    IO.Cmd := FALSE;
+//END_CASE
+
+//// 3) przenies komende na cewke
+//_k1();
+
+//// 4) uzupełnienie IO dla SCADA
+//IO.rCv := _cv;
+//IO.Out := _k1.State;
 
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Mixit">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Mixit.MixitCv">
+      <LineId Id="19" Count="0" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Mixit.MixitState">
+      <LineId Id="116" Count="27" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="152" Count="1" />
+      <LineId Id="155" Count="11" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="114" Count="1" />
+      <LineId Id="68" Count="32" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

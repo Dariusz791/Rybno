@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <GVL Name="GVL_Fermentation" Id="{cc117358-723a-400c-85ce-155561b7a837}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
@@ -88,7 +88,11 @@ VAR_GLOBAL
 	PhSens_R01 : ST_AnalogSens;
 	
 	
-	
+	//***************************  ZW01 - Przekaźnik K301 ************************************************************************	
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stContactor (structured) type '} 
+	stContactor_ZW01 : ST_Contactor;
 	
 END_VAR]]></Declaration>
   </GVL>

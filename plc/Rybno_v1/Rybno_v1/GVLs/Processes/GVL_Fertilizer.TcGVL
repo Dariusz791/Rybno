@@ -146,6 +146,19 @@ VAR_GLOBAL
 	(*************** SP02 pump mode ****************************)
 	iSP02_Mode : INT;
 	
+	//***************************  ZW02 - Przekaźnik K302 ************************************************************************	
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stContactor (structured) type '} 
+	stContactor_ZW02 : ST_Contactor;
+	
+	//***************************  H01 - Przekaźnik K303 wentylator nagrzewnicy ************************************************************************	
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stContactor (structured) type '} 
+	stContactor_H01 : ST_Contactor;
+	
+	
 
 END_VAR]]></Declaration>
   </GVL>

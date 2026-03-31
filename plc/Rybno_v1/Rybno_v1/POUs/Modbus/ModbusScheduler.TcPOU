@@ -154,9 +154,9 @@ CASE iStep OF
     // tu potem wstawisz swój odczyt analizatora
    MB.ReadRegs(
         UnitID      := INT_TO_BYTE(iUnitId),
-        Quantity    := 12,
+        Quantity    := 10,
         MBAddr      := 16#0046, // Modbus 70 start mozna uzywac tylko parzystych Quantity i parzystych MBAaddr. Tu zapisane nieulotne wartosci
-        cbLength    := 24,
+        cbLength    := 20,
         pMemoryAddr := ADR(aMBData[0]),
         Execute     := TRUE,
         Timeout     := tTimeout,

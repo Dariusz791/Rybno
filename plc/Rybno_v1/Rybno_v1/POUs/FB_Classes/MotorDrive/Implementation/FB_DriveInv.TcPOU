@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="FB_DriveInv" Id="{998f157d-98f4-4a1d-a525-f21d6db1752c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DriveInv IMPLEMENTS I_Drive
 VAR
@@ -122,8 +122,7 @@ Cycle:=TRUE;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Fault" Id="{52a188d9-3e41-429e-817b-3f62a2e7e738}" FolderPath="Properties\Status\">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY Fault : BOOL
+      <Declaration><![CDATA[PROPERTY Fault : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{db474149-d812-4fda-97a3-a696d66daf32}">
         <Declaration><![CDATA[VAR
@@ -178,8 +177,7 @@ END_VAR
       </Set>
     </Property>
     <Property Name="IsRunning" Id="{d62d39a7-703c-4002-aa4a-0ed906638fe8}" FolderPath="Properties\Status\">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY IsRunning : BOOL
+      <Declaration><![CDATA[PROPERTY IsRunning : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{ea63fa90-ea31-4184-bbe4-465e0e3fa95c}">
         <Declaration><![CDATA[VAR
@@ -204,8 +202,7 @@ END_VAR
       </Get>
     </Property>
     <Method Name="ResetFault" Id="{15dd322f-e0ee-4399-a95c-70372cb8d9be}">
-      <Declaration><![CDATA[{warning 'add method implementation '}
-METHOD ResetFault : BOOL
+      <Declaration><![CDATA[METHOD ResetFault : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[ResetFault := TRUE;]]></ST>
@@ -396,8 +393,7 @@ END_VAR
       </Set>
     </Property>
     <Method Name="StartForward" Id="{003d36e1-d318-48ec-af4b-d479e535378b}">
-      <Declaration><![CDATA[{warning 'add method implementation '}
-METHOD StartForward : BOOL
+      <Declaration><![CDATA[METHOD StartForward : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_reqFwd := TRUE;
@@ -406,8 +402,7 @@ StartForward := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="StartReverse" Id="{0ea47be1-b422-400c-ae22-25031beeffc7}">
-      <Declaration><![CDATA[{warning 'add method implementation '}
-METHOD StartReverse : BOOL
+      <Declaration><![CDATA[METHOD StartReverse : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_reqRev := TRUE;
@@ -416,8 +411,7 @@ StartReverse := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Stop" Id="{b75b28f3-0cd6-48ad-bf32-26bf81ddd6ce}">
-      <Declaration><![CDATA[{warning 'add method implementation '}
-METHOD Stop : BOOL
+      <Declaration><![CDATA[METHOD Stop : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_reqFwd := FALSE;
@@ -447,5 +441,123 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <LineIds Name="FB_DriveInv">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.AtSpeed.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.CommOk.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.CommOk.Set">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.Cycle">
+      <LineId Id="3" Count="23" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.Fault.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.FB_init">
+      <LineId Id="3" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.InvStatWord.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.InvStatWord.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.IsRunning.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.IsRunningRev.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.ResetFault">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetAutoLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetAutoLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetFwdLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetFwdLed.Set">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetLedEnum.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetLedInt.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetRevLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetRevLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetStatusLabel.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetStatusLabel.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetSupplyLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetSupplyLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SetWorkCounter">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SlaveId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SpeedAct_Hz.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SpeedAct_Hz.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SpeedSet_Hz.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.SpeedSet_Hz.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.StartForward">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.StartReverse">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.Stop">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.TermFuseActive.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.WorkTime.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

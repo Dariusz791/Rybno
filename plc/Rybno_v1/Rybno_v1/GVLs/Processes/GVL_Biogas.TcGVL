@@ -4,8 +4,7 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
 	
-	bVar AT %I* : BOOL;
-
+	
 (**************************************************** GH-01 *****************************************************************)		
 	//**************************** Pressure Sensor 01 ***************************************************************
 	{attribute 'OPC.UA.DA' := '1'}
@@ -41,6 +40,12 @@ VAR_GLOBAL
 	{attribute 'OPC.UA.DA.Description' := 'FlowSens_F01 (structured) type '}
 	
 	FlowSens_F01 : ST_DigitalSens;
+	
+	//**************************** Flow Counter F-01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stFlowCounter_F01 (structured) type '}	
+	stFlowCounter_F01 : ST_FlowCounter; 
 		
 (**************************************************** GA-01 *****************************************************************)		
 	//**************************** Gas Analyzator GA 01 ***************************************************************
