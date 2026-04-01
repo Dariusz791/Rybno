@@ -1,5 +1,11 @@
 # Architecture – Rybno PLC & SCADA (TwinCAT 3)
 
+## Documentation Map
+- [01 - Technologia procesu](01_technologia.md)
+- [02 - Sterowanie PLC (TwinCAT)](02_sterowanie_plc.md)
+- [03 - Wizualizacja SCADA (Promotic)](03_wizualizacja_scada.md)
+- [Diagram procesu fermentacji](fermentacja_proces.drawio)
+
 ## Goal
 This project controls a micro biogas plant and a granulation line. The PLC uses:
 - TwinCAT 3 (IEC 61131-3, Structured Text)
