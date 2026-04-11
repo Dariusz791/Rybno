@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="FB_DriveControl" Id="{0a1c5668-9316-4811-96ef-c72d1ab63c01}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DriveControl 
 VAR 
@@ -243,6 +243,9 @@ StatusStruct.CommOK			  := iDrive.CommOk;	//MODBUS
 // --- Falownik (VFD) ---
 StatusStruct.FrequencySet     := iDrive.SpeedSet_Hz; 	//nastawa falownika odczytana getterem
 StatusStruct.FrequencyActual  := iDrive.SpeedAct_Hz; 	//aktualna predkosc odczytana z falownika
+StatusStruct.CurrentActual	  := iDrive.CurrAct_A;		//aktualny prad odczytany z falownika
+StatusStruct.TorqueActual	  := iDrive.TorqueAct_Percent;		//aktualny Moment odczytany z falownika w [%] momentu znamionowego
+StatusStruct.PowerActual	  := iDrive.PowerAct_Percent;		//aktualna Moc odczytana z falownika w [%] mocy znamionowej		
 StatusStruct.InvStatusWord	  := iDrive.InvStatWord; 	//status
 StatusStruct.Fault			  := iDrive.Fault;		    // Błąd falownika
 StatusStruct.AtSpeed		  := iDrive.AtSpeed;		// Silnik osiągnął prędkość zadaną
@@ -255,5 +258,46 @@ StatusStruct.WorkTime         := iDrive.WorkTime;
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_DriveControl">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.AutoMode.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.AutoMode.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.Execute">
+      <LineId Id="3" Count="90" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.FB_init">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.FreqSetPoint.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.FreqSetPoint.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.SetForward.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.SetForward.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.SetReverse.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.SetReverse.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveControl.StatusStruct">
+      <LineId Id="3" Count="25" />
+      <LineId Id="40" Count="2" />
+      <LineId Id="29" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

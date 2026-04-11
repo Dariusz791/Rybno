@@ -53,6 +53,7 @@ END_VAR
 ]]></ST>
     </Implementation>
     <Folder Name="Properties" Id="{ab91cccc-fd8c-48aa-9c62-433bf5d3d562}">
+      <Folder Name="CurrTorquePower" Id="{5cd0b6c8-99f6-4de6-bd3d-32e03d69da15}" />
       <Folder Name="HMI" Id="{7a1cb371-1287-48fe-8bf1-6e2347960f87}" />
       <Folder Name="Speed" Id="{13697b6e-c152-48ca-8364-c7b21cb26641}" />
       <Folder Name="Status" Id="{60b0fbd8-c2fb-4a59-b06b-b79a810a4fce}" />
@@ -88,6 +89,17 @@ END_VAR
 ]]></ST>
         </Implementation>
       </Set>
+    </Property>
+    <Property Name="CurrAct_A" Id="{43c153c6-d4a4-4b0c-bbe7-2a35f9d6ce8a}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY CurrAct_A : REAL]]></Declaration>
+      <Get Name="Get" Id="{c01a2d85-29f2-44ff-bb87-12dd602cae24}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrAct_A := _stInverter.rCurrActual;]]></ST>
+        </Implementation>
+      </Get>
     </Property>
     <Method Name="Cycle" Id="{5ff6d694-42e7-4915-a107-7ec0910a6f23}">
       <Declaration><![CDATA[METHOD Cycle : BOOL
@@ -198,6 +210,17 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[IsRunningRev := EtaHasBit(_stInverter.wInvStatusWord, E_EtaBit.DirRev);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="PowerAct_Percent" Id="{78fab5ff-021f-4f25-8e2f-091e69b7f8ab}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY PowerAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{26a9f75d-276e-48e7-a136-3f359479cbf8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PowerAct_Percent := _stInverter.rPowerActual;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -430,6 +453,18 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Property Name="TorqueAct_Percent" Id="{315562d8-47a7-48a3-8ea2-fc074c2b98dc}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY TorqueAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{9057984d-3179-44d8-bfd5-8abdcda836b4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TorqueAct_Percent := _stInverter.rTorqActual;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="WorkTime" Id="{cf99b721-49e6-4878-b917-5a7debef1ed3}" FolderPath="Properties\Status\">
       <Declaration><![CDATA[PROPERTY WorkTime : ST_WorkTime]]></Declaration>
       <Get Name="Get" Id="{ce67d592-f44b-4931-b88b-2c6c1dfe6336}">
@@ -456,6 +491,9 @@ END_VAR
       <LineId Id="3" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_DriveInv.CurrAct_A.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
     <LineIds Name="FB_DriveInv.Cycle">
       <LineId Id="3" Count="23" />
       <LineId Id="2" Count="0" />
@@ -478,6 +516,9 @@ END_VAR
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_DriveInv.IsRunningRev.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.PowerAct_Percent.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_DriveInv.ResetFault">
@@ -555,6 +596,10 @@ END_VAR
     </LineIds>
     <LineIds Name="FB_DriveInv.TermFuseActive.Get">
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DriveInv.TorqueAct_Percent.Get">
+      <LineId Id="2" Count="0" />
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_DriveInv.WorkTime.Get">
       <LineId Id="2" Count="0" />

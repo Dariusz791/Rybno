@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <POU Name="FB_InvModbusOperation" Id="{f454968d-cdec-4403-a28d-63aa0b90974c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_InvModbusOperation
 VAR
@@ -154,6 +154,99 @@ RUN:    // wykonaj wszystkie kroki dla bieżącego napędu
 			_invRef.bCommOk := TRUE;
 			_invRef.rFreqActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0]))*0.1; //dzielimy przez 10	
 			_MB.ReadRegs(Execute:=FALSE);
+			_step :=35;			
+		ELSIF NOT _bBusy AND _bError THEN
+			
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false			
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi
+			END_IF
+					
+			_step :=35; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
+			
+		END_IF
+
+    35: (*Read actual Current*)
+
+		_MB.ReadRegs(
+					UnitID:=_invRef.nSlaveId,
+					Quantity:=1,
+					MBAddr:=3204,
+					cbLength:= 2,
+					pMemoryAddr:= ADR(_MBdata[0]),
+					Execute:= TRUE,
+					Timeout:= _timeoutvalue,
+					Busy => _bBusy,
+					ERROR =>_bError);
+	
+		IF NOT _bBusy AND NOT _bError THEN
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false
+			_invRef.bCommOk := TRUE;
+			_invRef.rCurrActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0]))*0.1; //dzielimy przez 10 i mamy 	
+			_MB.ReadRegs(Execute:=FALSE);
+			_step :=36;			
+		ELSIF NOT _bBusy AND _bError THEN
+			
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false			
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi
+			END_IF
+					
+			_step :=36; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
+			
+		END_IF	
+
+	36: (*Read actual Torq*)
+
+		_MB.ReadRegs(
+					UnitID:=_invRef.nSlaveId,
+					Quantity:=1,
+					MBAddr:=3205,
+					cbLength:= 2,
+					pMemoryAddr:= ADR(_MBdata[0]),
+					Execute:= TRUE,
+					Timeout:= _timeoutvalue,
+					Busy => _bBusy,
+					ERROR =>_bError);
+	
+		IF NOT _bBusy AND NOT _bError THEN
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false
+			_invRef.bCommOk := TRUE;
+			_invRef.rTorqActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0]))*0.1; //dzielimy przez 10 i mamy %Torq	
+			_MB.ReadRegs(Execute:=FALSE);
+			_step :=37;			
+		ELSIF NOT _bBusy AND _bError THEN
+			
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false			
+			IF _MB.ErrorId <> 0 THEN
+				 _invRef.bCommOk := FALSE;
+				_invRef.nNoResp := _invRef.nNoResp +1;  //zliczaj brak odpowiedzi
+			END_IF
+					
+			_step :=37; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
+			
+		END_IF	
+		
+	37: (*Read actual Power*)
+
+		_MB.ReadRegs(
+					UnitID:=_invRef.nSlaveId,
+					Quantity:=1,
+					MBAddr:=3211,
+					cbLength:= 2,
+					pMemoryAddr:= ADR(_MBdata[0]),
+					Execute:= TRUE,
+					Timeout:= _timeoutvalue,
+					Busy => _bBusy,
+					ERROR =>_bError);
+	
+		IF NOT _bBusy AND NOT _bError THEN
+			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false
+			_invRef.bCommOk := TRUE;
+			_invRef.rPowerActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0])); // units 1%	
+			_MB.ReadRegs(Execute:=FALSE);
 			_step :=40;			
 		ELSIF NOT _bBusy AND _bError THEN
 			
@@ -166,6 +259,7 @@ RUN:    // wykonaj wszystkie kroki dla bieżącego napędu
 			_step :=40; // jesli wystepuje bład przejdz do nastepnego urzadzenia i nie blokuj
 			
 		END_IF	
+		
 	
 	
 	40:
@@ -211,5 +305,17 @@ END_CASE
 
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_InvModbusOperation">
+      <LineId Id="3" Count="139" />
+      <LineId Id="210" Count="29" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="242" Count="29" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="272" Count="0" />
+      <LineId Id="275" Count="28" />
+      <LineId Id="273" Count="1" />
+      <LineId Id="143" Count="42" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

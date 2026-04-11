@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <Itf Name="I_Drive" Id="{5652c658-3bc0-46b0-8a55-4cd96ce276a2}">
     <Declaration><![CDATA[INTERFACE I_Drive EXTENDS __System.IQueryInterface
 ]]></Declaration>
     <Folder Name="Properties" Id="{6188cf33-eac6-4dd3-999e-08f15132f7cc}">
+      <Folder Name="CurrTorquePower" Id="{7e63eb23-b3a4-4247-8ecf-e1d1746c7641}" />
       <Folder Name="HMI" Id="{0368c45f-4237-4001-822a-946a2cb87574}" />
       <Folder Name="Speed" Id="{6f47c755-e81f-4abf-a5bd-c023fe2f0be0}" />
       <Folder Name="Status" Id="{4649ee0d-a8e2-4f80-9501-9896de81c646}" />
@@ -22,6 +23,12 @@
       <Set Name="Set" Id="{16749a78-1280-40f3-ae8e-e21e0a4063e1}">
         <Declaration><![CDATA[]]></Declaration>
       </Set>
+    </Property>
+    <Property Name="CurrAct_A" Id="{4166286a-00e2-4323-ae86-a25acec55f64}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY CurrAct_A : REAL]]></Declaration>
+      <Get Name="Get" Id="{0dd5cd11-29cd-43ed-a210-07f9c1851c7f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
     </Property>
     <Method Name="Cycle" Id="{9b188fd1-b4d1-47c9-9507-2e3d557170ac}">
       <Declaration><![CDATA[METHOD Cycle : BOOL
@@ -58,6 +65,12 @@ PROPERTY IsRunning : BOOL
 PROPERTY IsRunningRev : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{faa526e1-298e-497d-9745-ecf5dad1c0c6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="PowerAct_Percent" Id="{72f89007-73d9-4fee-9d0b-8fb2b6aa0e53}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY PowerAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{6472d8cd-f939-4e51-a867-770cb37a53a3}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
@@ -176,6 +189,12 @@ END_VAR
     <Property Name="TermFuseActive" Id="{93c395fd-8ef2-4636-9a29-7b2f871faf56}" FolderPath="Properties\Status\">
       <Declaration><![CDATA[PROPERTY TermFuseActive : BOOL]]></Declaration>
       <Get Name="Get" Id="{3c5e7a1c-1ee1-42fe-b8e7-6c34d130a059}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="TorqueAct_Percent" Id="{d269f3f9-0b6f-4776-8e21-0d97ae3ba918}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY TorqueAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{353e6992-2dda-4bd9-b67c-deed05ed30b3}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>

@@ -53,7 +53,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{94840B67-DA12-6685-0C72-C9FC92BE4E89}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{FCD64776-73B1-9433-25B0-EB166575C709}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
