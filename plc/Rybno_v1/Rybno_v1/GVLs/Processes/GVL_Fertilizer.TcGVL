@@ -12,6 +12,15 @@ VAR_GLOBAL
 	{attribute 'OPC.UA.DA.StructuredType' := '1'}
 	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_SP02 (structured) type '} 
 	stDriveStatus_SP02 : ST_DriveStatus;
+	
+	//*********************************** SP-02 struktura detekcji suchobiegu pompy******************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDryRunStatus_SP02 (structured) type '} 
+	stDryRunStatus_SP02 : ST_DryRunStatus;
+	
+	
+	
 
 (**************************************************** VR-01 *****************************************************************)	
 	

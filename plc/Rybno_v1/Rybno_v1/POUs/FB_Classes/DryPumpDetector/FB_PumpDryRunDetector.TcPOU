@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_PumpDryRunDetector" Id="{140abfd7-8646-4809-bc70-32e7ce8c2ece}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PumpDryRunDetector
+VAR_INPUT
+    bEnable                 : BOOL;   // włączenie detekcji
+    bPumpRunning            : BOOL;   // pompa faktycznie pracuje
+    rSpeedAct_Hz            : REAL;   // aktualna częstotliwość falownika
+    rCurrAct_A              : REAL;   // aktualny prąd [A]
+    rPowerAct_Percent       : REAL;   // aktualna moc [%]
+    rTorqueAct_Percent      : REAL;   // aktualny moment [%]
+
+    rMinDetectSpeed_Hz      : REAL;   // minimalna częstotliwość aktywacji detekcji
+    rDryCurrLimit_A         : REAL;   // próg suchobiegu dla prądu
+    rDryPowerLimit_Percent  : REAL;   // próg suchobiegu dla mocy
+    rDryTorqueLimit_Percent : REAL;   // próg suchobiegu dla momentu
+
+    bUseTorque              : BOOL;   // czy moment bierze udział w decyzji
+    tStartIgnore            : TIME;   // ignorowanie po starcie
+    tDryConfirm             : TIME;   // czas potwierdzenia suchobiegu
+END_VAR
+
+VAR_OUTPUT
+    bDetectionActive        : BOOL;   // detekcja aktywna
+    bDryCondition           : BOOL;   // surowy warunek suchobiegu
+    bDryRunDetected         : BOOL;   // potwierdzony suchobieg
+END_VAR
+
+VAR
+    fbStartIgnore           : TON;
+    fbDryConfirm            : TON;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// timer ignorowania po starcie
+fbStartIgnore(
+    IN := bEnable AND bPumpRunning,
+    PT := tStartIgnore
+);
+
+// detekcja aktywna tylko gdy:
+// - blok włączony
+// - pompa pracuje
+// - częstotliwość jest powyżej minimum
+// - minął czas po starcie
+bDetectionActive := bEnable
+                 AND bPumpRunning
+                 AND (rSpeedAct_Hz >= rMinDetectSpeed_Hz)
+                 AND fbStartIgnore.Q;
+
+
+// warunek suchobiegu
+IF bUseTorque THEN
+    bDryCondition := bDetectionActive
+                  AND (rCurrAct_A < rDryCurrLimit_A)
+                  AND (rPowerAct_Percent < rDryPowerLimit_Percent)
+                  AND (rTorqueAct_Percent < rDryTorqueLimit_Percent);
+ELSE
+    bDryCondition := bDetectionActive AND (rCurrAct_A < rDryCurrLimit_A);
+                  //AND (rPowerAct_Percent < rDryPowerLimit_Percent);
+END_IF;
+
+
+// potwierdzenie czasowe
+fbDryConfirm(
+    IN := bDryCondition,
+    PT := tDryConfirm
+);
+
+bDryRunDetected := fbDryConfirm.Q;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_PumpDryRunDetector">
+      <LineId Id="38" Count="24" />
+      <LineId Id="64" Count="9" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

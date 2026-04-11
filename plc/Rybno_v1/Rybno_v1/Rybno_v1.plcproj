@@ -51,6 +51,9 @@
     <Compile Include="DUTs\Dewatering\ST_Dewatering.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Dewatering\ST_DryRunStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Drive\E_DriveLedState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +150,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\DigitalSens\FB_DigitalSensNO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Classes\DryPumpDetector\FB_PumpDryRunDetector.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\Flowmeter\FB_FlowCounter.TcPOU">
@@ -313,6 +319,7 @@
     <Folder Include="POUs\FB_Classes\DigitalSens" />
     <Folder Include="POUs\FB_Classes\Flowmeter" />
     <Folder Include="POUs\FB_Classes\MedianFiltr" />
+    <Folder Include="POUs\FB_Classes\DryPumpDetector" />
     <Folder Include="POUs\FB_Classes\SludgeDosing" />
     <Folder Include="POUs\FB_Classes\RotarySens" />
     <Folder Include="POUs\FB_Classes\ReactorMixer" />

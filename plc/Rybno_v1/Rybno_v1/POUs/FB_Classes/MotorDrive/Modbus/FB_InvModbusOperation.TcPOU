@@ -183,7 +183,7 @@ RUN:    // wykonaj wszystkie kroki dla bieżącego napędu
 		IF NOT _bBusy AND NOT _bError THEN
 			_MB.ReadRegs(Execute:=FALSE); //zmien poziom na false
 			_invRef.bCommOk := TRUE;
-			_invRef.rCurrActual := INT_TO_REAL(WORD_TO_INT(_MBdata[0]))*0.1; //dzielimy przez 10 i mamy 	
+			_invRef.rCurrActual := UINT_TO_REAL(_MBdata[0])*0.1; //dzielimy przez 10 i mamy 	
 			_MB.ReadRegs(Execute:=FALSE);
 			_step :=36;			
 		ELSIF NOT _bBusy AND _bError THEN
