@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <DUT Name="ST_SWG100_Biogas" Id="{e999bffa-6641-4b4a-b431-d78f6a4889ad}">
     <Declaration><![CDATA[TYPE ST_SWG100_Biogas :
 STRUCT
@@ -7,7 +7,7 @@ STRUCT
 	rCO2	 : REAL;
 	rCH4	 : REAL;
 	rH2S	 : REAL;
-	rH2		 : REAL;
+	rN2		 : REAL;
 	rWO_MjKg : REAL;	//Wartość opałowa MJ/kg 
 	rCS_MjKg : REAL;	//Ciepło spalania MJ/kg
 	rWO_Mjm3 : REAL;	//Wartość opałowa MJ/m3 

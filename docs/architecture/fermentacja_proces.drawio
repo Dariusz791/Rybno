@@ -1,0 +1,179 @@
+<mxfile host="65bd71144e">
+    <diagram id="fermentacja-v1" name="01_Technologia">
+        <mxGraphModel dx="1080" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Proces fermentacji - poziom 01 (technologia)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="500" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="n1" value="Przyjecie substratu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Magazyn substratu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="110" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="FermentationProcess\nnapedy mieszadel: fbDrv_MX01, fbDrv_MX02\nregulator: fbReactorMixers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="110" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="R01 - fermentor\nczujniki GVL_Fermentation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="110" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Komora fermentacyjna R01\nPROGRAM: FermentationProcess" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="100" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="GH-01\nGVL_Biogas.PressureSens_GH01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="240" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="DS-01\nGVL_Biogas.PressureSens_DS01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="330" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n8" value="F-01 przeplyw\nGVL_Biogas.FlowSens_F01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="1030" y="420" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n9" value="GA-01 + TCH-01\nGVL_Biogas.stSWG100_Biogas\nGVL_Biogas.stTorchAds_Tch01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="1030" y="510" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n10" value="Poferment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="250" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n11" value="Zbiornik pofermentu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="330" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="n12" value="Wykorzystanie jako nawoz" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="420" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="m1" value="R01 sensory PLC: TempSens_T01, PhSens_Ph01, PressureSens_P01, HydroPressSens_HP01, LevelSens_L01" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="620" width="460" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="n3" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="n4" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="gaz" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#d79b00;fontColor=#d79b00;" parent="1" source="n5" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#d79b00;" parent="1" source="n6" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#d79b00;" parent="1" source="n7" target="n8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#d79b00;" parent="1" source="n8" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="masa pofermentacyjna" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#9673a6;fontColor=#9673a6;" parent="1" source="n5" target="n10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#9673a6;" parent="1" source="n10" target="n11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;strokeColor=#9673a6;" parent="1" source="n11" target="n12" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" value="pomiar" style="edgeStyle=orthogonalEdgeStyle;dashed=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;strokeColor=#666666;fontColor=#666666;" parent="1" source="m1" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="fermentacja-v2" name="02_Automatyka_SCADA">
+        <mxGraphModel dx="3000" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="a_title" value="Proces fermentacji - poziom 02 (automatyka i SCADA)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="860" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="a1" value="PLC PROGRAM: FermentationProcess" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="100" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2" value="Napedy i mieszanie\nfbDrv_MX01\nfbDrv_MX02\nfbReactorMixers\nGVL_Fermentation.stMixStation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="90" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3" value="Sensory R01 (GVL_Fermentation)\nTempSens_R01\nPhSens_R01\nPressureSens_R01\nHydroPressSens_R01\nLevelSens_R01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="240" width="320" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="a4" value="PLC PROGRAM: BiogasProcess\nGH01, DS01, F01\nGA01: stSWG100_Biogas\nTCH01: stTorchAds_Tch01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="240" width="280" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="a5" value="SCADA obiekt: Kotly/{NazwaKotla}{SymbolKotla}\n../Kotly/.../Data/#vars/bReaktorR01\n../Kotly/.../Data/#vars/rSpR01\n../Kotly/.../Data/#vars/rCvR01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="450" width="440" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="a6" value="SCADA obiekt: Pochodnie/{NazwaPochodni}{SymbolPochodni}\n../Pochodnie/.../Data/#vars/CisnienieBiogazu\n../Pochodnie/.../Data/#vars/PoziomOtwarciaZaworu\n../Pochodnie/.../Data/#vars/sStatus" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="450" width="500" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="ae1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="a1" target="a2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ae2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="a1" target="a3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ae3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="a3" target="a4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ae4" value="wizualizacja" style="edgeStyle=orthogonalEdgeStyle;dashed=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;strokeColor=#b85450;fontColor=#b85450;" parent="1" source="a3" target="a5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ae5" value="wizualizacja" style="edgeStyle=orthogonalEdgeStyle;dashed=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;strokeColor=#b85450;fontColor=#b85450;" parent="1" source="a4" target="a6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="fermentacja-v3" name="03_Alarmy_i_Stany">
+        <mxGraphModel dx="3000" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="s_title" value="Proces fermentacji - poziom 03 (alarmy i stany)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="760" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1" value="Fermentacja - napedy mieszadel\nGVL_Fermentation.stDriveStatus_MX01\nGVL_Fermentation.stDriveStatus_MX02\nFB_ReactorMixer: bMixFault" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="100" width="320" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2" value="Analizator biogazu SWG100\nGVL_Biogas.stSWG100_Status\nGVL_Biogas.stSWG100_Alarms\nmapowanie: SWG100_StatusFromDword + SWG100_AlarmsFromDword" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="100" width="390" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3" value="Przyklady bitow status (SWG100)\nbPowerOn, bSystemAlarm, bStandBy, bPurgingPhase\nuiSamplePoint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="250" width="390" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4" value="Przyklady bitow alarm (SWG100)\nbFault, bSampleFlowAlarm, bCH4AmbientHigh, bCondensate, bDueForService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="360" width="390" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5" value="Pochodnia - interfejs operatorski\nGVL_Biogas.stTorchAds_Tch01\nST_TorchAdsStruct: bStartButton, bStopButton, bResetButton, wStatus, sStateLabel, sStatusLabel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="250" width="320" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6" value="SCADA: panel pochodni\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/sStatus\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/wStatus\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/bAutoManualSwitch\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/bStartButton\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/bStopButton\n../Pochodnie/{NazwaPochodni}{SymbolPochodni}/Data/#vars/bResetButton" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="420" width="750" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7" value="SCADA: panel wezla ciepla (R01)\n../Kotly/{NazwaKotla}{SymbolKotla}/Data/#vars/bReaktorR01\n../Kotly/{NazwaKotla}{SymbolKotla}/Data/#vars/rSpR01\n../Kotly/{NazwaKotla}{SymbolKotla}/Data/#vars/rCvR01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="590" width="750" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="sl1" value="Legenda: czerwony=alarm, zolty=ostrzezenie/status, szary=mapowanie SCADA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="640" width="470" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="se1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="s2" target="s3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="se2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;" parent="1" source="s3" target="s4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="se3" value="publikacja" style="edgeStyle=orthogonalEdgeStyle;dashed=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;strokeColor=#666666;fontColor=#666666;" parent="1" source="s5" target="s6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="se4" value="powiazanie R01" style="edgeStyle=orthogonalEdgeStyle;dashed=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;strokeColor=#666666;fontColor=#666666;" parent="1" source="s1" target="s7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

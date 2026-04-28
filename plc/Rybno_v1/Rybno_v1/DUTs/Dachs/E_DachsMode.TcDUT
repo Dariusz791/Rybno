@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_DachsMode" Id="{89bcfc96-f70f-4dbd-9c77-fa732066e1a9}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_DachsMode :
+(
+    Off := 0,
+    Auto := 1,
+    Manual := 2
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

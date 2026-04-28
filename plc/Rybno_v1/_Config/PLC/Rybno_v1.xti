@@ -53,7 +53,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{0DF4DA48-BCA7-8F50-4EF5-B51F5565DD48}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{671C0C7E-5E34-EA81-9D88-3DE89771EEC9}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
@@ -149,8 +149,8 @@
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
-					<Name>GVL_Fertilizer.RotarySens_S01.bRaw</Name>
-					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Name>GVL_Fertilizer.bSenZ</Name>
+					<Comment><![CDATA[ Status of input C z EL5151 ]]></Comment>
 					<Type>BOOL</Type>
 				</Var>
 				<Var>
@@ -179,12 +179,7 @@
 					<Type>INT</Type>
 				</Var>
 				<Var>
-					<Name>GVL_Fertilizer.bSenZ</Name>
-					<Comment><![CDATA[ Status of input C z EL5151 ]]></Comment>
-					<Type>BOOL</Type>
-				</Var>
-				<Var>
-					<Name>GVL_Fertilizer.RotarySens_S02.bRaw</Name>
+					<Name>GVL_Fertilizer.RotarySens_S01.bRaw</Name>
 					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
 					<Type>BOOL</Type>
 				</Var>
@@ -192,6 +187,11 @@
 					<Name>GVL_Fertilizer.TempSens_H01.iRawValue</Name>
 					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
 					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.RotarySens_S02.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
 				</Var>
 				<Var>
 					<Name>GVL_Fertilizer.nEnc</Name>
@@ -330,8 +330,13 @@
 					<Type GUID="{E4C24E72-EF65-C814-8E17-663F53275EE3}" Namespace="Tc2_ModbusRTU">MB_KL6outData22B</Type>
 				</Var>
 				<Var>
+					<Name>GVL_Cogeneration.DO_StykDachs</Name>
+					<Comment><![CDATA[ wyjście do DACHS zwarte = STOP, rozwarte = START]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
 					<Name>GVL_Dewatering.DO_Start</Name>
-					<Comment><![CDATA[ wyjście zwierające styk START do szafy odwadnianai]]></Comment>
+					<Comment><![CDATA[ wyjście zwierające styk START do szafy odwadniania]]></Comment>
 					<Type>BOOL</Type>
 				</Var>
 				<Var>

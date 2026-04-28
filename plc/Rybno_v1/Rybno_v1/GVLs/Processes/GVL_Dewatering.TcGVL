@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <GVL Name="GVL_Dewatering" Id="{4ed21a96-43d2-4d8f-9f46-0bfcbf81f0de}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
 	
 (**************************************************** Stacja odwadniania SO-01 *****************************************************************)
     // Wyjścia fizyczneI/O sterowania stacją odwadniania
-    DO_Start  AT %Q* : BOOL;   // wyjście zwierające styk START do szafy odwadnianai
+    DO_Start  AT %Q* : BOOL;   // wyjście zwierające styk START do szafy odwadniania
     DI_Praca  AT %I* : BOOL;   // wejście: PRACA ze stacji odwadniania
     DI_Awaria AT %I* : BOOL;  // wejście: AWARIA ze stacji odwadniania
 

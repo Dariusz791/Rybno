@@ -2930,7 +2930,7 @@ True = SP, False = Open/Close"</v>
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
                         <n n="ElementGroupId" />
-                        <v n="Text">"3.6"</v>
+                        <v n="Text">"3.5"</v>
                         <v n="Modifiable">true</v>
                         <v n="Id">85L</v>
                       </o>
@@ -3762,7 +3762,7 @@ True = SP, False = Open/Close"</v>
                           <v n="X">11</v>
                           <v n="Y">34</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">100</v>
+                          <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">30</v>
@@ -3998,7 +3998,7 @@ True = SP, False = Open/Close"</v>
                           <v n="X">10</v>
                           <v n="Y">30</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
+                          <v n="Flags">100</v>
                         </o>
                         <o>
                           <v n="X">30</v>
@@ -4220,7 +4220,7 @@ True = SP, False = Open/Close"</v>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
                 <v n="CanvasWidth">86</v>
-                <v n="CanvasHeight">37</v>
+                <v n="CanvasHeight">38</v>
               </o>
             </Data>
             <TypeList>

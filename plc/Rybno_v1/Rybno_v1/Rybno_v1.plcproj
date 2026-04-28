@@ -21,6 +21,15 @@
     <Compile Include="DUTs\Contactor\ST_Contactor.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Dachs\E_DachsMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Dachs\E_DachsState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Dachs\ST_DachsOpcUa.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Dewatering\Granulat\E_GranFault.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +156,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\Contact\FB_ContactNO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Classes\Dachs\FB_DachsControl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\DigitalSens\FB_DigitalSensNO.TcPOU">
@@ -294,6 +306,7 @@
     <Folder Include="DUTs\Mixit" />
     <Folder Include="DUTs\Dewatering" />
     <Folder Include="DUTs\Contactor" />
+    <Folder Include="DUTs\Dachs" />
     <Folder Include="DUTs\ReactorMixer" />
     <Folder Include="DUTs\Sensors\Biogas Analyzer" />
     <Folder Include="DUTs\Sensors\FlowCounter" />
@@ -320,6 +333,7 @@
     <Folder Include="POUs\FB_Classes\Flowmeter" />
     <Folder Include="POUs\FB_Classes\MedianFiltr" />
     <Folder Include="POUs\FB_Classes\DryPumpDetector" />
+    <Folder Include="POUs\FB_Classes\Dachs" />
     <Folder Include="POUs\FB_Classes\SludgeDosing" />
     <Folder Include="POUs\FB_Classes\RotarySens" />
     <Folder Include="POUs\FB_Classes\ReactorMixer" />

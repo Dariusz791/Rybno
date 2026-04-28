@@ -154,9 +154,9 @@ CASE iStep OF
     // tu potem wstawisz swój odczyt analizatora
    MB.ReadRegs(
         UnitID      := INT_TO_BYTE(iUnitId),
-        Quantity    := 10,
+        Quantity    := 22,
         MBAddr      := 16#0046, // Modbus 70 start mozna uzywac tylko parzystych Quantity i parzystych MBAaddr. Tu zapisane nieulotne wartosci
-        cbLength    := 20,
+        cbLength    := 44,
         pMemoryAddr := ADR(aMBData[0]),
         Execute     := TRUE,
         Timeout     := tTimeout,
@@ -175,17 +175,44 @@ CASE iStep OF
 			GVL_Biogas.stSWG100_Biogas.rCO2 := ModbusToReal(aMBData[6], aMBData[7]); // CO2 
 			GVL_Biogas.stSWG100_Biogas.rCH4 := ModbusToReal(aMBData[8], aMBData[9]); // CH4
  			GVL_Biogas.stSWG100_Biogas.rH2S := ModbusToReal(aMBData[10], aMBData[11]); // H2S
-			GVL_Biogas.stSWG100_Biogas.rH2 := ModbusToReal(aMBData[12], aMBData[13]); // H2
-			GVL_Biogas.stSWG100_Biogas.rWO_MjKg := ModbusToReal(aMBData[13], aMBData[14]); // Wartośc Opałowa w MJ/KG
-			GVL_Biogas.stSWG100_Biogas.rCS_MjKg := ModbusToReal(aMBData[15], aMBData[16]); // Ciepło Spalania w MJ/KG
-			GVL_Biogas.stSWG100_Biogas.rWO_Mjm3 := ModbusToReal(aMBData[17], aMBData[18]); // Wartośc Opałowa w MJ/m3
-			GVL_Biogas.stSWG100_Biogas.rCS_Mjm3 := ModbusToReal(aMBData[19], aMBData[20]); // Ciepło Spalania w MJ/m3
+			//GVL_Biogas.stSWG100_Biogas.rN2 := ModbusToReal(aMBData[12], aMBData[13]); // H2
+			GVL_Biogas.stSWG100_Biogas.rWO_MjKg := ModbusToReal(aMBData[14], aMBData[15]); // Wartośc Opałowa w MJ/KG
+			GVL_Biogas.stSWG100_Biogas.rCS_MjKg := ModbusToReal(aMBData[16], aMBData[17]); // Ciepło Spalania w MJ/KG
+			GVL_Biogas.stSWG100_Biogas.rWO_Mjm3 := ModbusToReal(aMBData[18], aMBData[19]); // Wartośc Opałowa w MJ/m3
+			GVL_Biogas.stSWG100_Biogas.rCS_Mjm3 := ModbusToReal(aMBData[20], aMBData[21]); // Ciepło Spalania w MJ/m3
+        END_IF
+
+        iStep := 51;
+    END_IF
+ 
+
+51:	
+	
+    iUnitId := 238;
+    // tu potem wstawisz swój odczyt analizatora
+   MB.ReadRegs(
+        UnitID      := INT_TO_BYTE(iUnitId),
+        Quantity    := 2,
+        MBAddr      := 16#0062, // Modbus 74 Odczyt N2 dodatkowo
+        cbLength    := 4,
+        pMemoryAddr := ADR(aMBData[0]),
+        Execute     := TRUE,
+        Timeout     := tTimeout,
+        Busy        => bMBBusy
+    );
+
+    IF NOT bMBBusy THEN
+        MB.ReadRegs(Execute := FALSE);
+        errMdb := MB.ErrorId;
+
+        IF NOT MB.Error THEN
+			 
+			GVL_Biogas.stSWG100_Biogas.rN2 := ModbusToReal(aMBData[0], aMBData[1]); // N2
         END_IF
 
         iStep := 0;
     END_IF
- 
-
+	
    //iStep := 0;
 
 END_CASE
@@ -196,7 +223,15 @@ END_CASE
 ]]></ST>
     </Implementation>
     <LineIds Name="ModbusScheduler">
-      <LineId Id="3" Count="163" />
+      <LineId Id="3" Count="155" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="196" Count="18" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="226" Count="3" />
+      <LineId Id="195" Count="0" />
+      <LineId Id="160" Count="6" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

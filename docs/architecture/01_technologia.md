@@ -58,18 +58,137 @@ Przełączenie pomiędzy tymi wariantami odbywa się przez ręczne przestawienie
 
 - **ZR02** - Zasuwa ustawia przepływ materiału po odwadnianiu w kierunku reaktora granulacji **VR01**.
 
-- **ZR03** - Zasuwa ustawia dopływ pofermentu z reaktora fermentacji **R01** do prasy odwadniającej **SPD01** poprzez pompę **SP01**.
+- **ZR03** - Zasuwa ustawia przepływ materiału w kierunku **Wiaty**.
 
 - **ZR04** - Zasuwa ustawia dopływ osadu ściekowego z układu **SBR** oczyszczalni do prasy odwadniającej **SPD01** poprzez pompę **SP01**.
 
-### 3. Warianty pracy układu
+- **ZR05** - Zasuwa ustawia dopływ pofermentu z reaktora **R01** do prasy odwadniającej **SPD01** poprzez pompę **SP01**
 
-### 3.1. Dozowanie osadu odwodnionego do reaktora fermentacji R01
+### 3. Warianty pracy układu odwadniania
 
-W tym wariancie osad ściekowy z oczyszczalni doprowadzany jest do prasy odwadniającej **SPD01**, a następnie po odwodnieniu kierowany do reaktora fermentacji **R01**.
+### 3.1. Tryby pracy układu odwadniania i transportu osadu/pofermentu
+
+Układ odwadniania i transportu osadu/pofermentu może pracować w dwóch podstawowych trybach, które są definiowane przez ustawienie zasuw i kierunek przepływu materiału:
+
+1. **Tryb podstawowy: SBR → SPD01 → R01**
+2. **Tryb podstawowy: R01 → SPD01 → VR01**
+
+### Tryb 1
+
+W trybie 1 osad nieodwodniony doprowadzany jest z obiektu `SBR` przez ręczną zasuwę `ZR04` do pompy `SP01`, a następnie do prasy odwadniającej `SPD01`. Po odwodnieniu materiał odbierany jest przez pompę `SP02` i kierowany głównie do reaktora fermentacji `R01` przez zasuwę `ZR01`.
+
+W sytuacjach awaryjnych materiał po odwodnieniu może zostać skierowany:
+
+- do reaktora granulacji `VR01` przez `ZR02`,
+- do `Wiaty` przez `ZR03`.
+
+### **Diagram odwadnianie osadu z SBR i podawanie do R01**
+
+```mermaid
+flowchart LR
+    SBR[SBR<br/>osad nieodwodniony] --> ZR04[ZR04]
+    ZR04 --> SP01[SP01]
+    SP01 --> SPD01[SPD01<br/>prasa odwadniająca]
+    SPD01 --> SP02[SP02]
+
+    SP02 ==> ZR01[ZR01] ==> R01[R01<br/>reaktor fermentacji]
+    SP02 -. awaryjnie .-> ZR02[ZR02] --> VR01[VR01<br/>reaktor granulacji]
+    SP02 -. awaryjnie .-> ZR03[ZR03] --> WIATA[Wiata]
+
+    classDef main fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef emergency fill:#fff8e1,stroke:#f57f17,stroke-dasharray: 5 5;
+    classDef shared fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+
+    class SP01,SPD01,SP02 shared;
+    class ZR04,ZR01 main;
+    class ZR02,ZR03 emergency;
+```
+
+### Tryb 2
+
+W trybie 2 poferment z reaktora `R01` doprowadzany jest przez ręczną zasuwę `ZR05` do pompy `SP01`, a następnie do prasy odwadniającej `SPD01`. Po odwodnieniu materiał odbierany jest przez pompę `SP02` i kierowany głównie do reaktora granulacji `VR01` przez zasuwę `ZR02`.
+
+- W sytuacjach awaryjnych materiał po odwodnieniu może zostać skierowany do `Wiaty` przez `ZR03`.
+
+### **Diagram odwadnianie pofermentu z R01 i podawanie do VR01**
+
+```mermaid
+flowchart LR
+    R01_IN["R01<br/>poferment"]
+    ZR05["ZR05<br/>zasuwa ręczna"]
+    SP01["SP01<br/>pompa zasilająca"]
+    SPD01["SPD01<br/>prasa odwadniająca<br/>sterowanie zewnętrzne"]
+    SP02["SP02<br/>pompa osadu odwodnionego"]
+    ZR02["ZR02<br/>tor podstawowy do VR01"]
+    ZR03["ZR03<br/>tor awaryjny do Wiaty"]
+    VR01["VR01<br/>reaktor granulacji"]
+    WIATA["Wiata<br/>odbiór awaryjny"]
+
+    R01_IN ==> ZR05 ==> SP01 ==> SPD01 ==> SP02 ==> ZR02 ==> VR01
+    SP02 -. awaryjnie .-> ZR03 --> WIATA
+
+    %% Wyróżnienia
+    classDef main fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef emergency fill:#fff8e1,stroke:#f57f17,stroke-dasharray: 5 5;
+    classDef shared fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+
+    class SP01,SPD01,SP02 shared;
+    class ZR05,ZR02 main;
+    class ZR03 emergency;
+```
+
+### **Diagram przepływu materiału dla obu trybów**
+
+```mermaid
+flowchart LR
+    %% Wejścia materiału
+    SBR[SBR<br/>osad nieodwodniony]
+    R01_IN[R01<br/>poferment do odwadniania]
+
+    %% Zasuwy wejściowe
+    ZR04[ZR04<br/>zasuwa ręczna]
+    ZR05[ZR05<br/>zasuwa ręczna]
+
+    %% Wspólna linia odwadniania
+    SP01[SP01<br/>pompa zasilająca]
+    SPD01[SPD01<br/>prasa odwadniająca<br/>sterowanie zewnętrzne]
+    SP02[SP02<br/>pompa osadu odwodnionego]
+
+    %% Zasuwy wyjściowe
+    ZR01[ZR01<br/>do R01]
+    ZR02[ZR02<br/>do VR01]
+    ZR03[ZR03<br/>do Wiaty]
+
+    %% Odbiory
+    R01_OUT[R01<br/>reaktor fermentacji]
+    VR01[VR01<br/>reaktor granulacji]
+    WIATA[Wiata<br/>odbiór awaryjny]
+
+    %% Główne dopływy do odwadniania
+    SBR --> ZR04 --> SP01 --> SPD01 --> SP02
+    R01_IN --> ZR05 --> SP01
+
+    %% Odbiór po odwodnieniu
+    SP02 --> ZR01 --> R01_OUT
+    SP02 -. awaryjnie .-> ZR02 --> VR01
+    SP02 -. awaryjnie .-> ZR03 --> WIATA
+
+    %% Główny tor pofermentu
+    SP02 ==> ZR02 ==> VR01
+    SP02 -. awaryjnie .-> ZR03
+
+    %% Wyróżnienia
+    classDef main fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef emergency fill:#fff8e1,stroke:#f57f17,stroke-dasharray: 5 5;
+    classDef shared fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+
+    class SP01,SPD01,SP02 shared;
+    class ZR04,ZR05,ZR01,ZR02 main;
+    class ZR03 emergency;
+```
 
 Aktywny tor przepływu:
-`SBR -> ZR04 -> SP01 -> SPD01 -> ZR01 -> R01`
+`SBR -> ZR04 -> SP01 -> SPD01 -> SP02 -> ZR01 -> R01`
 
 Wymagane ustawienie zasuw:
 
@@ -97,14 +216,172 @@ Linia z prasą pierścieniową **SPD01** oraz pompą **SP01** jest wspólna dla 
 
 W danym momencie aktywny może być tylko jeden wariant pracy układu, zależnie od ręcznego ustawienia zasuw.
 
-### 3.4.Znaczenie dla strategii sterowania
+### 3.4.Strategia sterowania
 
-Z punktu widzenia automatyki oznacza to konieczność wprowadzenia dwóch nadrzędnych trybów pracy:
+Strategia sterowania pracą instalacji fermentacji i produkcji nawozów polega na samoczynnym utrzymywaniu zadanego poziomu masy fermentacyjnej w reaktorze R01 poprzez naprzemienne realizowanie dwóch podstawowych operacji:
 
-- **tryb napełniania reaktora fermentacji R01 osadem odwodnionym**,
-- **tryb opróżniania reaktora fermentacji R01 poprzez odwadnianie pofermentu i podawanie do VR01**.
+- odwadnianie osadu ściekowego z oczyszczalni i kierowanie go do reaktora fermentacji R01,
+- odwadnianie pofermentu z reaktora R01 i kierowanie go do reaktora granulacji VR01.
 
-Uruchomienie pompy **SP01** oraz prasy **SPD01** powinno być możliwe wyłącznie dla poprawnie wybranego wariantu pracy i przy potwierdzonym ustawieniu odpowiednich zasuw. To odbywa się w ramach nadrzędnej logiki procesu, która nadzoruje i arbitruje działanie urządzeń w zależności od wybranego trybu pracy. W systemie SCADA operator powinien mieć możliwość wyboru trybu pracy, a system automatyki powinien egzekwować poprawność ustawień i sekwencji operacji, aby zapewnić bezpieczną i efektywną pracę instalacji.
+#### 3.4.1 Tryby pracy nadrzędnego sterowania procesu
+
+Nadrzędny system sterowania będzie umożliwiał operatorowi wybór trybu pracy układu odwadniania i transportu materiału, który będzie definiował aktywny tor przepływu. Dostępne będą dwa główne tryby:
+
+##### **Tryb Auto**
+
+Tryb automatyczny służy do samoczynnego utrzymywania poziomu materiału w reaktorze fermentacji `R01` w zadanym zakresie roboczym.
+
+W trybie tym układ realizuje naprzemiennie:
+
+- odwadnianie pofermentu z reaktora `R01` i kierowanie odwodnionego materiału do reaktora granulacji `VR01`,
+- dozowanie odwodnionego substratu z `SBR` do reaktora `R01`.
+
+Przełączanie pomiędzy fazą opróżniania i napełniania odbywa się automatycznie na podstawie poziomu materiału w reaktorze `R01` oraz zadanych progów sterowania. Przed fazą opróżniania i napełniania wymagane jest potwierdzenie położenia zasuw ręcznych. **Bez potwierdzenia prawidłowego położenia system nie uruchomi się samoczynnie i nie przejdzie do kolejnej fazy**. Tryb automatyczny realizuje pełny standardowy cykl pracy układu w stałej kolejności technologicznej.
+
+Cykl automatyczny przebiega według następującego schematu:
+
+1. odwadnianie pofermentu z reaktora `R01` i kierowanie materiału do `VR01` aż do osiągnięcia minimalnego poziomu roboczego w `R01`,
+2. zapamiętanie wielkości obniżenia poziomu w `R01`,
+3. odwadnianie osadu z `SBR` i podawanie materiału do `R01` aż do ponownego osiągnięcia górnego poziomu roboczego,
+4. zakończenie cyklu automatycznego.
+
+Tryb AUTO nie realizuje wyboru rodzaju operacji. Zawsze wykonuje pełny cykl obejmujący:
+
+- opróżnianie `R01 -> VR01`,
+- następnie napełnianie `SBR -> R01`.
+
+Operacje wymuszone, awaryjne lub niepełne realizowane są wyłącznie w trybie `MANUAL`.
+
+Po zakończeniu pełnego cyklu układ automatycznie przechodzi do stanu `STOP`. Każdy kolejny cykl automatyczny wymaga ponownego wydania polecenia `START` przez operatora.
+
+Tryb AUTO — logika działania
+
+Tryb AUTO realizuje jeden pełny cykl pracy instalacji, uruchamiany przez operatora poleceniem `START`.
+
+Cykl obejmuje następujące etapy:
+
+1. sprawdzenie warunków startu,
+2. oczekiwanie na potwierdzenie trasy opróżniania `R01 -> VR01`,
+3. odwadnianie pofermentu z `R01` do osiągnięcia poziomu `MIN`,
+4. oczekiwanie na potwierdzenie trasy napełniania `SBR -> R01`,
+5. odwadnianie osadu z `SBR` do osiągnięcia poziomu `MAX`,
+6. zakończenie cyklu i przejście układu do stanu `STOP`.
+
+W czasie pracy cykl może zostać:
+
+- wstrzymany poleceniem `PAUZA`,
+- zatrzymany poleceniem `STOP`,
+- przerwany przez stan `FAULT`.
+  
+## Flowchart trybu AUTO
+
+```mermaid
+flowchart TD
+    A([AUTO_IDLE<br/>Tryb AUTO wybrany<br/>Stan układu = STOP]) --> B{START?}
+
+    B -- Nie --> A
+    B -- Tak --> C[Sprawdzenie warunków startu]
+
+    C --> D{Warunki startu spełnione?}
+    D -- Nie --> E[Pozostań w STOP<br/>Wyświetl brak gotowości]
+    E --> A
+
+    D -- Tak --> F[AUTO_WAIT_DISCHARGE_ROUTE_CONFIRM<br/>Oczekiwanie na potwierdzenie trasy R01 -> VR01]
+
+    F --> G{Trasa opróżniania potwierdzona?}
+    G -- Nie --> F
+    G -- Tak --> H[AUTO_DISCHARGE_TO_MIN<br/>R01 -> VR01]
+
+    H --> I{PAUZA?}
+    I -- Tak --> P[Stan = PAUZA<br/>Zapamiętaj fazę]
+    P --> R{START / WZNÓW?}
+    R -- Nie --> P
+    R -- Tak --> H
+
+    I -- Nie --> J{STOP?}
+    J -- Tak --> S[Stan = STOP<br/>Natychmiastowe zatrzymanie]
+    S --> A
+
+    J -- Nie --> K{FAULT?}
+    K -- Tak --> T[Stan = FAULT<br/>Zapis przyczyny awarii]
+    T --> U{Reset fault i gotowość?}
+    U -- Nie --> T
+    U -- Tak --> A
+
+    K -- Nie --> L{Poziom R01 <= LevelMin?}
+    L -- Nie --> H
+    L -- Tak --> M[AUTO_WAIT_FEED_ROUTE_CONFIRM<br/>Oczekiwanie na potwierdzenie trasy SBR -> R01]
+
+    M --> N{Trasa napełniania potwierdzona?}
+    N -- Nie --> M
+    N -- Tak --> O[AUTO_FEED_TO_MAX<br/>SBR -> R01]
+
+    O --> V{PAUZA?}
+    V -- Tak --> P2[Stan = PAUZA<br/>Zapamiętaj fazę]
+    P2 --> R2{START / WZNÓW?}
+    R2 -- Nie --> P2
+    R2 -- Tak --> O
+
+    V -- Nie --> W{STOP?}
+    W -- Tak --> S2[Stan = STOP<br/>Natychmiastowe zatrzymanie]
+    S2 --> A
+
+    W -- Nie --> X{FAULT?}
+    X -- Tak --> T2[Stan = FAULT<br/>Zapis przyczyny awarii]
+    T2 --> U2{Reset fault i gotowość?}
+    U2 -- Nie --> T2
+    U2 -- Tak --> A
+
+    X -- Nie --> Y{Poziom R01 >= LevelMax?}
+    Y -- Nie --> O
+    Y -- Tak --> Z[AUTO_COMPLETE<br/>Cykl zakończony]
+
+    Z --> AA[Stan = STOP]
+    AA --> A
+```
+
+Flowchart trybu AUTO — wersja uproszczona
+
+```mermaid
+flowchart TD
+    A([AUTO_IDLE]) --> B{START?}
+    B -- Nie --> A
+    B -- Tak --> C[Sprawdź warunki startu]
+
+    C --> D{Warunki OK?}
+    D -- Nie --> A
+    D -- Tak --> E[Oczekiwanie na potwierdzenie trasy R01 -> VR01]
+
+    E --> F{Trasa potwierdzona?}
+    F -- Nie --> E
+    F -- Tak --> G[Opróżnianie R01 -> VR01 do LevelMin]
+
+    G --> H{Poziom R01 <= LevelMin?}
+    H -- Nie --> G
+    H -- Tak --> I[Oczekiwanie na potwierdzenie trasy SBR -> R01]
+
+    I --> J{Trasa potwierdzona?}
+    J -- Nie --> I
+    J -- Tak --> K[Napełnianie SBR -> R01 do LevelMax]
+
+    K --> L{Poziom R01 >= LevelMax?}
+    L -- Nie --> K
+    L -- Tak --> M[Cykl AUTO zakończony]
+
+    M --> N([STOP])
+```
+
+
+### Tryb Manual
+
+Tryb ręczny umożliwia operatorowi wybór pojedynczej operacji technologicznej bez realizacji pełnego automatycznego cyklu utrzymywania poziomu w reaktorze `R01`.
+
+W trybie ręcznym operator może wybrać jedną z następujących operacji:
+
+- karmienie reaktora: `SBR -> R01`,
+- produkcja nawozu: `R01 -> VR01`,
+- ewakuacja osadu do Wiaty: `SBR -> Wiata`,
+- ewakuacja pofermentu do Wiaty: `R01 -> Wiata`.
 
 ### Sekwencja pracy instalacji oraz nadrzędna logika procesu SCADA
 
