@@ -48,176 +48,6 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
               <o xml:space="preserve" t="CFCImplementationObject">
                 <o n="Items" t="CFCItemList">
                   <l2 n="InnerList">
-                    <o t="CFCBoxElement">
-                      <o n="Inputs" t="CFCItemList">
-                        <l2 n="InnerList">
-                          <o t="CFCInputPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">10L</v>
-                          </o>
-                          <o t="CFCInputPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">12L</v>
-                          </o>
-                          <o t="CFCInputPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">14L</v>
-                          </o>
-                          <o t="CFCInputPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">16L</v>
-                          </o>
-                          <o t="CFCInputPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="IsExtensiblePin">false</v>
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">18L</v>
-                          </o>
-                          <o t="CFCInOutPin">
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="ProcessValue">""</v>
-                            <v n="Access" t="ProcessValueAccess">None</v>
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">20L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Outputs" t="CFCItemList">
-                        <l2 n="InnerList" cet="CFCOutputPin">
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Negated">false</v>
-                            <v n="SetReset" t="SetReset">None</v>
-                            <v n="SetResetRef" t="SetResetRef">None</v>
-                            <v n="PretendsToBeConnected">false</v>
-                            <v n="Id">22L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Texts" t="CFCItemList">
-                        <l2 n="InnerList" cet="CFCText">
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"bEnable"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">11L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"rPressure_kPa"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">13L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"rBiogasFlow_m3h"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">15L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"rMinFlowRunning_m3h"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">17L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"tStartAlarmDelay"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">19L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"stDachs"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">21L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"xDachsStopContact"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">23L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"FB_DachsControl"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">8L</v>
-                          </o>
-                          <o>
-                            <v n="Bounds">"0, 0, 0, 0"</v>
-                            <n n="ElementGroupId" />
-                            <v n="Text">"fbDachsControl"</v>
-                            <v n="Modifiable">true</v>
-                            <v n="Id">9L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Parameters" t="CFCItemList">
-                        <l2 n="InnerList" />
-                      </o>
-                      <n n="PreparedParameters" />
-                      <v n="PageArea">0</v>
-                      <v n="Bounds">"23, 14, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="EnEno">false</v>
-                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
-                      <v n="ContainsExtensibleInputs">false</v>
-                      <v n="Forced">false</v>
-                      <v n="OwningPageId">-1L</v>
-                      <v n="Id">1L</v>
-                    </o>
                     <o t="CFCCommentElement">
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
@@ -275,7 +105,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                         <v n="Id">46L</v>
                       </o>
                       <v n="PageArea">4</v>
-                      <v n="Bounds">"44, 16, 0, 0"</v>
+                      <v n="Bounds">"41, 16, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">44L</v>
@@ -302,6 +132,176 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                       <n n="ElementGroupId" />
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">28L</v>
+                    </o>
+                    <o t="CFCBoxElement">
+                      <o n="Inputs" t="CFCItemList">
+                        <l2 n="InnerList">
+                          <o t="CFCInputPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">63L</v>
+                          </o>
+                          <o t="CFCInputPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">65L</v>
+                          </o>
+                          <o t="CFCInputPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">67L</v>
+                          </o>
+                          <o t="CFCInputPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">69L</v>
+                          </o>
+                          <o t="CFCInputPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="IsExtensiblePin">false</v>
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">71L</v>
+                          </o>
+                          <o t="CFCInOutPin">
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="ProcessValue">""</v>
+                            <v n="Access" t="ProcessValueAccess">None</v>
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">73L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Outputs" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCOutputPin">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Negated">false</v>
+                            <v n="SetReset" t="SetReset">None</v>
+                            <v n="SetResetRef" t="SetResetRef">None</v>
+                            <v n="PretendsToBeConnected">false</v>
+                            <v n="Id">75L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Texts" t="CFCItemList">
+                        <l2 n="InnerList" cet="CFCText">
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"bEnable"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">64L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"rPressure_kPa"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">66L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"rBiogasFlow_m3h"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">68L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"rMinFlowRunning_m3h"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">70L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"tStartAlarmDelay"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">72L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"stDachs"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">74L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"xDachsStopContact"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">76L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"FB_DachsControl"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">61L</v>
+                          </o>
+                          <o>
+                            <v n="Bounds">"0, 0, 0, 0"</v>
+                            <n n="ElementGroupId" />
+                            <v n="Text">"fbDachsControl"</v>
+                            <v n="Modifiable">true</v>
+                            <v n="Id">62L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Parameters" t="CFCItemList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <n n="PreparedParameters" />
+                      <v n="PageArea">0</v>
+                      <v n="Bounds">"22, 14, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="EnEno">false</v>
+                      <v n="KindOfCall" t="KindOfCall">FunctionBlock</v>
+                      <v n="ContainsExtensibleInputs">false</v>
+                      <v n="Forced">false</v>
+                      <v n="OwningPageId">-1L</v>
+                      <v n="Id">54L</v>
                     </o>
                     <o t="CFCInputElement">
                       <o n="Output" t="CFCOutputPin">
@@ -398,51 +398,51 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
-                      <v n="SourcePinId">25L</v>
-                      <v n="DestPinId">20L</v>
-                      <v n="Id">27L</v>
+                      <v n="SourcePinId">49L</v>
+                      <v n="DestPinId">63L</v>
+                      <v n="Id">77L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="SourcePinId">29L</v>
-                      <v n="DestPinId">12L</v>
-                      <v n="Id">31L</v>
+                      <v n="DestPinId">65L</v>
+                      <v n="Id">78L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="SourcePinId">33L</v>
-                      <v n="DestPinId">14L</v>
-                      <v n="Id">35L</v>
+                      <v n="DestPinId">67L</v>
+                      <v n="Id">79L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="SourcePinId">37L</v>
-                      <v n="DestPinId">16L</v>
-                      <v n="Id">39L</v>
+                      <v n="DestPinId">69L</v>
+                      <v n="Id">80L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
                       <v n="SourcePinId">41L</v>
-                      <v n="DestPinId">18L</v>
-                      <v n="Id">43L</v>
+                      <v n="DestPinId">71L</v>
+                      <v n="Id">81L</v>
                     </o>
                     <o t="CFCConnection">
                       <v n="Bounds">"0, 0, 0, 0"</v>
                       <n n="ElementGroupId" />
-                      <v n="SourcePinId">22L</v>
+                      <v n="SourcePinId">25L</v>
+                      <v n="DestPinId">73L</v>
+                      <v n="Id">82L</v>
+                    </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">75L</v>
                       <v n="DestPinId">45L</v>
-                      <v n="Id">47L</v>
-                    </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">49L</v>
-                      <v n="DestPinId">10L</v>
-                      <v n="Id">51L</v>
+                      <v n="Id">83L</v>
                     </o>
                   </l2>
                 </o>
@@ -450,147 +450,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                 <o n="RoutingPathTable" t="CFCRoutingPathTable">
                   <d2 n="InnerDictionary" ckt="CFCRoutingConnection" cvt="CFCPointList">
                     <o>
-                      <v n="ConnectionId">35L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">20</v>
-                        <v n="Y">18</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">20</v>
-                          <v n="Y">18</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">22</v>
-                          <v n="Y">18</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">39L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">5</v>
-                        <v n="Y">19</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">5</v>
-                          <v n="Y">19</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">22</v>
-                          <v n="Y">19</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">31L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">18</v>
-                        <v n="Y">17</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">18</v>
-                          <v n="Y">17</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">22</v>
-                          <v n="Y">17</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">43L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">7</v>
-                        <v n="Y">20</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">7</v>
-                          <v n="Y">20</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">22</v>
-                          <v n="Y">20</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">47L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">40</v>
-                        <v n="Y">16</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">40</v>
-                          <v n="Y">16</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">43</v>
-                          <v n="Y">16</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">27L</v>
+                      <v n="ConnectionId">82L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">16</v>
                         <v n="Y">21</v>
@@ -610,7 +470,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">22</v>
+                          <v n="X">21</v>
                           <v n="Y">21</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -618,7 +478,119 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                       </l2>
                     </o>
                     <o>
-                      <v n="ConnectionId">51L</v>
+                      <v n="ConnectionId">81L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">7</v>
+                        <v n="Y">20</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">7</v>
+                          <v n="Y">20</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">21</v>
+                          <v n="Y">20</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">80L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">5</v>
+                        <v n="Y">19</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">5</v>
+                          <v n="Y">19</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">21</v>
+                          <v n="Y">19</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">79L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">20</v>
+                        <v n="Y">18</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">20</v>
+                          <v n="Y">18</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">21</v>
+                          <v n="Y">18</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">78L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">18</v>
+                        <v n="Y">17</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">18</v>
+                          <v n="Y">17</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">21</v>
+                          <v n="Y">17</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">77L</v>
                       <o n="StartPoint" t="CFCPoint">
                         <v n="X">6</v>
                         <v n="Y">16</v>
@@ -638,7 +610,35 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                           <v n="Flags">68</v>
                         </o>
                         <o>
-                          <v n="X">22</v>
+                          <v n="X">21</v>
+                          <v n="Y">16</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
+                    <o>
+                      <v n="ConnectionId">83L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">39</v>
+                        <v n="Y">16</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">39</v>
+                          <v n="Y">16</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">100</v>
+                        </o>
+                        <o>
+                          <v n="X">40</v>
                           <v n="Y">16</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
@@ -648,7 +648,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">60</v>
+                <v n="CanvasWidth">57</v>
                 <v n="CanvasHeight">24</v>
               </o>
             </Data>
