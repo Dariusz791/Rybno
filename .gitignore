@@ -319,5 +319,6 @@ LineIDs.dbg
 *.tclrs
 
 # Wykluczaj kopie zapasowe i dane runtime Promotic
-Promotic/DtBackup/
-Promotic/Data/
+# Promotic - kopie zapasowe i dane runtime
+scada/Promotic/DtBackup/
+scada/Promotic/Data/
