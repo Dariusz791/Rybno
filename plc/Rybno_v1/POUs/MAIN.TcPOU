@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="MAIN" Id="{1f90028c-37a4-400b-9dcd-f4342dcec394}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	
+    fbLocalTime : FB_LocalSystemTime; // czas
+    dToday      : WORD;
+    dPrevDay    : WORD;
+    xResetDaily : BOOL;
+    xInit       : BOOL;
+	
+	//Obsługa Modbusa
+	fbModbusoperation	 : FB_InvModbusOperation;	
+
+		
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Procesy
+DewateringProcess();
+FermentationProcess();
+BiogasProcess();
+CogenerationProcess();
+FertilizerProcess();
+
+//Urzadzenia modbusa Simex, SWG100 Biocompact, Dachs
+ModbusScheduler();
+
+
+
+//Modbus Inverter obsługa wszystkich napedow
+fbModbusoperation();		// obsługa napędów Modbus U11-SP01, U71-VR01_M01, U81-VR01_M02, U91-VR01_M03
+
+
+
+
+// odczyt czasu systemowego
+fbLocalTime(
+    bEnable := TRUE,
+    dwCycle := 1000
+);
+
+dToday := fbLocalTime.systemTime.wDay;
+
+// inicjalizacja po starcie PLC
+IF NOT xInit THEN
+    dPrevDay := dToday;
+    xInit := TRUE;
+END_IF;
+
+// detekcja zmiany dnia
+IF dToday <> dPrevDay THEN
+    xResetDaily := TRUE;
+    dPrevDay := dToday;
+ELSE
+    xResetDaily := FALSE;
+END_IF;
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="3" Count="13" />
+      <LineId Id="57" Count="1" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="35" Count="8" />
+      <LineId Id="45" Count="11" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

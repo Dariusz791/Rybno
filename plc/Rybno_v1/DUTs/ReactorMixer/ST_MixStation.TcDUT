@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_MixStation" Id="{7f337141-c0de-4ea2-9061-88cc14cde07b}">
+    <Declaration><![CDATA[TYPE ST_MixStation :
+STRUCT
+    // ===========================================
+    // KOMENDY z SCADA → PLC
+    // ===========================================
+
+    bEnable        : BOOL;   // 1 = włącz cykl mieszania (AUTO)
+    iTon           : DINT;   // nastawa: czas pracy pojedynczego mieszadła [s]
+    iToff          : DINT;   // nastawa: czas przerwy po MX02 (oba stoją) [s]
+
+
+    // ===========================================
+    // STATUS z PLC → SCADA
+    // ===========================================
+	bFaultMixers   : BOOL;	 // awaria mieszadeł
+    iStep          : INT;    // aktualny krok sekwencji (10=MX01, 20=MX02, 30=TOFF)
+
+    // czasy trwania aktualnej fazy [s]
+    tMx01Elapsed   : TIME;   // ile sekund już miesza MX01 w bieżącym cyklu
+    tMx02Elapsed   : TIME;   // ile sekund już miesza MX02 w bieżącym cyklu
+    tOffElapsed    : TIME;   // ile sekund już trwa przestój TOFF
+	  	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_GranHmiSts" Id="{718846cd-8b2c-4f62-8531-bc5c2f144acb}">
+    <Declaration><![CDATA[TYPE ST_GranHmiSts :
+STRUCT
+    // Stany ogólne
+	bEnable		: BOOL;			   // Sygnał zezwolenia	
+    bRunning    : BOOL;            // proces wykonuje kroki (nie HOLD/FAULT/IDLE/DONE)
+    bHold       : BOOL;            // proces wstrzymany (HOLD)
+    bFault      : BOOL;            // awaria (FAULT)
+
+    // Diagnostyka kroku
+    eStep       : E_GranStep;      // aktualny krok automatu głownmego
+	eSlDoseStep : E_SludgeDoseStep; // aktualny krok nini automatu osadu
+    eFault      : E_GranFault;     // aktualny fault (jeśli FAULT)
+    eHoldReason : E_GranHoldReason;// powód HOLD
+    eStepFrozen : E_GranStep;      // zamrożony krok (na którym stoi HOLD)
+
+    // Waga i masy pomocnicze
+    rMassKg     : REAL;            // aktualny odczyt wagi
+    rTareKg     : REAL;            // tara cyklu
+    rBatchKg    : REAL;            // wsad = rMassKg - rTareKg
+
+    // Dozowania (przyrosty)
+    rDosSludgeKg  : REAL;
+    rDosPerliteKg : REAL;
+    rDosLimeKg    : REAL;
+
+  	// Licznik cykli
+	uiCycleCnt    : UDINT;
+
+	// Tekst diagnostyczny
+    sDiag       : T_MaxString;
+	
+	
+	
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

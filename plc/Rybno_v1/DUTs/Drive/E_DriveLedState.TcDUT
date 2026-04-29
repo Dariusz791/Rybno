@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_DriveLedState" Id="{edd31590-3bc2-4499-b1b4-95cb1d25c38c}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_DriveLedState :
+(
+	NotReady := 0,
+	Ready	 := 1,
+	Running	 := 2,
+	Fault    := 3
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

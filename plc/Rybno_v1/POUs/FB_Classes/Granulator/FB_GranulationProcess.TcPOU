@@ -1,0 +1,616 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_GranulationProcess" Id="{3d67fde4-c1e9-4f29-898f-7d50f923d7fc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GranulationProcess
+VAR_INPUT
+    // --- Sterowanie ---
+    bRun         : BOOL;      // START / STOP procesu
+    bFlapPosMode : BOOL;      // FALSE=Open/Close, TRUE=pozycjonowanie (SP)
+
+    // --- Nastawy dozowań ---
+    rSludgeKg_SP  : REAL;     // osad [kg]
+    rPerliteKg_SP : REAL;     // perlit [kg]
+    rLimeKg_SP    : REAL;     // wapno [kg]
+
+    // --- Pomiar ---
+    rMassRawKg    : REAL;     // waga aktualna [kg]
+END_VAR
+
+VAR_OUTPUT
+    // --- Takeover (do SEL w ACT_Motor) ---
+    bAutoTakeOver : BOOL;
+
+    // --- Wyjścia procesowe (AUTO) ---
+    bDewaterStart : BOOL;
+
+    bSP02_Fwd     : BOOL;
+    rSP02_Hz      : REAL;
+
+    bSC01_On      : BOOL; //wapno podajnik
+	bSC02_On      : BOOL; //perlit podajnik
+ 
+
+    bE01_On       : BOOL; //wapno vibrator
+    bE02_On       : BOOL; //perlit vibrator
+
+    bBL01_On      : BOOL;
+
+    bM01_Fwd      : BOOL;
+    bM02_Fwd      : BOOL;
+    rMix_Hz       : REAL;
+
+    bFlapOpen     : BOOL;
+    bFlapClose    : BOOL;
+    uiFlapPosSP   : UINT;
+
+    // --- Diagnostyka ---
+    bRunning      : BOOL;
+    eStep         : E_GranStep;        //kroki automatu głównego
+	eSlDoseStep   : E_SludgeDoseStep;  //mini automat dozowania osadu
+
+    rTareKg       : REAL;
+    rBatchKg      : REAL;
+
+    rDosSludgeKg  : REAL;
+    rDosPerliteKg : REAL;
+    rDosLimeKg    : REAL;
+
+    uiCycleCnt    : UDINT;
+    sDiag         : T_MaxString;
+END_VAR
+
+VAR
+    // --- Stan automatu głównego ---
+    _step     : E_GranStep := E_GranStep.IDLE;
+    _stepPrev : E_GranStep := E_GranStep.IDLE;
+
+    // --- Referencje masy dozowań ---
+    _mSludge0 : REAL := 0.0;  // start osadu
+    _mPerl0   : REAL := 0.0;  // start perlitu (po osadzie)
+    _mLime0   : REAL := 0.0;  // start wapna   (po perlicie)
+
+    // --- Timery procesu ---
+    _tMix     : TON;
+    _tStep    : TON;
+
+    // --- Wibratory: generator 2s ON / 5s OFF ---
+    _tE01      : TON;
+    _tE02      : TON;
+    _bE01Phase : BOOL := FALSE;
+    _bE02Phase : BOOL := FALSE;
+
+    // --- Licznik cykli ---
+    _cycleCnt : UDINT := 0;
+
+    // --- STOP-hold takeover ---
+    _ftRun       : F_TRIG;
+    _tStopHold   : TON;
+    _bStopHold   : BOOL := FALSE;
+
+    // =========================================================================
+    // MINI-AUTOMAT DOZOWANIA OSADU (SP02)
+    // =========================================================================
+    _slStep       : E_SludgeDoseStep := E_SludgeDoseStep.IDLE;
+    _slStepPrev   : E_SludgeDoseStep := E_SludgeDoseStep.IDLE;
+
+    _tSl          : TON;       // timer impulsów/czekania osadu
+    _mSlTestStart : REAL := 0; // masa na starcie impulsu test/collect
+    _mSlDelta     : REAL := 0; // Δm z ostatniego impulsu
+    _bSlFlow      : BOOL := FALSE;
+
+    // --- Stałe technologiczne ---
+    cPumpHz_Prime    : REAL := 10.0;    // opcjonalne "prime"
+    cPumpHz_Test     : REAL := 25.0;    // test czy leci
+    cPumpHz_Collect  : REAL := 30.0;    // robocze impulsy
+
+    cSlPrimeTime     : TIME := T#60S;   // wstępne przepchnięcie (możesz dać 0 i pominąć)
+    cSlTestOnTime    : TIME := T#30S;   // impuls testowy ON
+    cSlTestOffTime   : TIME := T#20S;   // pauza po teście + ocena
+    cSlWaitEmptyTime : TIME := T#10M;   // długie czekanie, gdy nic nie poleciało
+    cSlWaitFlowTime  : TIME := T#20S;   // krótkie czekanie, gdy było poleciało
+    cSlCollectOnTime : TIME := T#30S;   // impuls roboczy ON
+
+    cSlMinDeltaKg    : REAL := 1.0;     // próg Δm uznający "poleciało" (waga stabilna ~1kg)
+
+    cMixHz       : REAL := 50.0;
+    cMixTime     : TIME := T#90S;
+    cDischTime   : TIME := T#60S;
+    cCloseSettle : TIME := T#5S;
+
+    cVibOnTime   : TIME := T#5S;
+    cVibOffTime  : TIME := T#5S;
+
+    cStopHoldTime: TIME := T#1S;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ============================================================================
+// 0) Detekcja STOP + krótki takeover na OFF
+// ============================================================================
+_ftRun(CLK := bRun);
+
+IF _ftRun.Q THEN
+    _bStopHold := TRUE;
+END_IF
+
+IF _bStopHold THEN
+    _tStopHold(IN := TRUE, PT := cStopHoldTime);
+    IF _tStopHold.Q THEN
+        _tStopHold(IN := FALSE);
+        _bStopHold := FALSE;
+    END_IF
+ELSE
+    _tStopHold(IN := FALSE);
+END_IF
+
+
+// ============================================================================
+// 1) DOMYŚLNE WYJŚCIA OFF
+// ============================================================================
+bDewaterStart := FALSE;
+
+bSP02_Fwd := FALSE;
+rSP02_Hz  := cPumpHz_Test;
+
+bSC02_On := FALSE;   // PERLIT
+bSC01_On := FALSE;   // WAPNO
+
+bE01_On  := FALSE;   // WAPNO (wibrator)
+bE02_On  := FALSE;   // PERLIT (wibrator)
+
+bBL01_On := FALSE;
+
+bM01_Fwd := FALSE;
+bM02_Fwd := FALSE;
+rMix_Hz  := cMixHz;
+
+bFlapOpen   := FALSE;
+bFlapClose  := FALSE;
+uiFlapPosSP := 0;
+
+
+// ============================================================================
+// 2) DIAGNOSTYKA
+// ============================================================================
+eStep := _step;
+eSlDoseStep := _slStep;
+
+bRunning := bRun AND (_step <> E_GranStep.IDLE);
+bAutoTakeOver := bRunning OR _bStopHold;
+
+rBatchKg := rMassRawKg - rTareKg;
+
+rDosSludgeKg  := rMassRawKg - _mSludge0;
+rDosPerliteKg := rMassRawKg - _mPerl0;
+rDosLimeKg    := rMassRawKg - _mLime0;
+
+uiCycleCnt := _cycleCnt;
+
+
+// ============================================================================
+// 3) MASTER STOP
+// ============================================================================
+IF NOT bRun THEN
+    _step := E_GranStep.IDLE;
+    _stepPrev := E_GranStep.IDLE;
+
+    _slStep := E_SludgeDoseStep.IDLE;
+    _slStepPrev := E_SludgeDoseStep.IDLE;
+
+    _tMix(IN := FALSE);
+    _tStep(IN := FALSE);
+
+    _tE01(IN := FALSE);
+    _tE02(IN := FALSE);
+    _bE01Phase := FALSE;
+    _bE02Phase := FALSE;
+
+    _tSl(IN := FALSE);
+    _bSlFlow := FALSE;
+    _mSlDelta := 0.0;
+
+    sDiag := 'STOP: bRun=0';
+    RETURN;
+END_IF
+
+
+// ============================================================================
+// 4) AUTOMAT GŁÓWNY (ENTRY + logika w każdym kroku)
+// ============================================================================
+CASE _step OF
+
+    // ------------------------------------------------------------
+    E_GranStep.IDLE:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tMix(IN := FALSE);
+            _tStep(IN := FALSE);
+
+            _tE01(IN := FALSE);
+            _tE02(IN := FALSE);
+            _bE01Phase := FALSE;
+            _bE02Phase := FALSE;
+
+            _tSl(IN := FALSE);
+            _slStep := E_SludgeDoseStep.IDLE;
+            _slStepPrev := E_SludgeDoseStep.IDLE;
+
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'IDLE: start procesu';
+        _step := E_GranStep.START_DEWATER;
+
+
+    // ------------------------------------------------------------
+    E_GranStep.START_DEWATER:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'START_DEWATER: uruchomienie odwadniania';
+        bDewaterStart := TRUE;
+        _step := E_GranStep.TARE;
+
+
+    // ------------------------------------------------------------
+    E_GranStep.TARE:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'TARE: zapis tary';
+        rTareKg := rMassRawKg;
+        _mSludge0 := rMassRawKg;
+        _step := E_GranStep.DOSE_SLUDGE;
+
+
+    // ------------------------------------------------------------
+    // DOSE_SLUDGE (mini automat w środku)
+    // ------------------------------------------------------------
+    E_GranStep.DOSE_SLUDGE:
+        // ENTRY kroku głównego
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+
+            // reset mini-automatu osadu na start kroku
+            _tSl(IN := FALSE);
+            _slStep := E_SludgeDoseStep.PRIME;          // PRIME = TAK
+            _slStepPrev := E_SludgeDoseStep.IDLE;       // aby PRIME miał entry
+            _bSlFlow := FALSE;
+            _mSlDelta := 0.0;
+
+            _stepPrev := _step;
+        END_IF
+
+        bDewaterStart := TRUE;
+
+        // WARUNEK NADRZĘDNY: dobite SP osadu -> przejdź dalej
+        IF (rMassRawKg - _mSludge0) >= rSludgeKg_SP THEN
+            _mPerl0 := rMassRawKg;
+            _tSl(IN := FALSE);
+            _slStep := E_SludgeDoseStep.IDLE;
+
+            sDiag := 'DOSE_SLUDGE: SP osiągnięte -> DOSE_PERLITE';
+            _step := E_GranStep.DOSE_PERLITE;
+
+        ELSE
+            // ==============================
+            // MINI-AUTOMAT OSADU (ENTRY w każdym podkroku)
+            // ==============================
+            CASE _slStep OF
+
+                // ---------------- IDLE ----------------
+                E_SludgeDoseStep.IDLE:
+                    // ENTRY
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/IDLE -> TEST_ON';
+                    _slStep := E_SludgeDoseStep.TEST_ON;
+
+
+                // ---------------- PRIME ----------------
+                E_SludgeDoseStep.PRIME:
+                    // ENTRY
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/PRIME';
+                    bSP02_Fwd := TRUE;
+                    rSP02_Hz  := cPumpHz_Prime;
+
+                    IF cSlPrimeTime = T#0S THEN
+                        _tSl(IN := FALSE);
+                        _slStep := E_SludgeDoseStep.TEST_ON;
+                    ELSE
+                        _tSl(IN := TRUE, PT := cSlPrimeTime);
+                        IF _tSl.Q THEN
+                            _tSl(IN := FALSE);
+                            _slStep := E_SludgeDoseStep.TEST_ON;
+                        END_IF
+                    END_IF
+
+
+                // ---------------- TEST_ON ----------------
+                E_SludgeDoseStep.TEST_ON:
+                    // ENTRY (ZAPIS MASY STARTOWEJ TESTU)
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _mSlTestStart := rMassRawKg;
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/TEST_ON';
+                    bSP02_Fwd := TRUE;
+                    rSP02_Hz  := cPumpHz_Test;
+
+                    _tSl(IN := TRUE, PT := cSlTestOnTime);
+                    IF _tSl.Q THEN
+                        _tSl(IN := FALSE);
+                        _slStep := E_SludgeDoseStep.TEST_OFF_EVAL;
+                    END_IF
+
+
+                // ---------------- TEST_OFF_EVAL ----------------
+                E_SludgeDoseStep.TEST_OFF_EVAL:
+                    // ENTRY (OCENA Δm)
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _mSlDelta := rMassRawKg - _mSlTestStart;
+                        _bSlFlow  := (_mSlDelta >= cSlMinDeltaKg);
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/TEST_OFF_EVAL';
+                    // pompa OFF (z defaultów)
+
+                    _tSl(IN := TRUE, PT := cSlTestOffTime);
+                    IF _tSl.Q THEN
+                        _tSl(IN := FALSE);
+
+                        IF _bSlFlow THEN
+                            _slStep := E_SludgeDoseStep.COLLECT_ON;
+                        ELSE
+                            _slStep := E_SludgeDoseStep.WAIT_EMPTY;
+                        END_IF
+                    END_IF
+
+
+                // ---------------- WAIT_EMPTY ----------------
+                E_SludgeDoseStep.WAIT_EMPTY:
+                    // ENTRY
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/WAIT_EMPTY';
+                    _tSl(IN := TRUE, PT := cSlWaitEmptyTime);
+                    IF _tSl.Q THEN
+                        _tSl(IN := FALSE);
+                        _slStep := E_SludgeDoseStep.TEST_ON;
+                    END_IF
+
+
+                // ---------------- COLLECT_ON ----------------
+                E_SludgeDoseStep.COLLECT_ON:
+                    // ENTRY (ZAPIS MASY STARTOWEJ IMPULSU ROBOCZEGO)
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _mSlTestStart := rMassRawKg;
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    sDiag := 'DOSE_SLUDGE/COLLECT_ON';
+                    bSP02_Fwd := TRUE;
+                    rSP02_Hz  := cPumpHz_Collect;
+
+                    _tSl(IN := TRUE, PT := cSlCollectOnTime);
+                    IF _tSl.Q THEN
+                        _tSl(IN := FALSE);
+                        _slStep := E_SludgeDoseStep.WAIT_COLLECT;
+                    END_IF
+
+
+                // ---------------- WAIT_COLLECT ----------------
+                E_SludgeDoseStep.WAIT_COLLECT:
+                    // ENTRY (OCENA Δm PO COLLECT)
+                    IF _slStep <> _slStepPrev THEN
+                        _tSl(IN := FALSE);
+                        _mSlDelta := rMassRawKg - _mSlTestStart;
+                        _bSlFlow  := (_mSlDelta >= cSlMinDeltaKg);
+                        _slStepPrev := _slStep;
+                    END_IF
+
+                    IF _bSlFlow THEN
+                        sDiag := 'DOSE_SLUDGE/WAIT_FLOW';
+                        _tSl(IN := TRUE, PT := cSlWaitFlowTime);
+
+                        IF _tSl.Q THEN
+                            _tSl(IN := FALSE);
+
+                            // przejście do następnego impulsu roboczego
+                            _slStep := E_SludgeDoseStep.COLLECT_ON;
+
+                            // >>> POPRAWKA: start pompy już w tym skanie (bez 1-skanowej dziury)
+                            bSP02_Fwd := TRUE;
+                            rSP02_Hz  := cPumpHz_Collect;
+                        END_IF
+
+                    ELSE
+                        sDiag := 'DOSE_SLUDGE/WAIT_EMPTY_AFTER_COLLECT';
+                        _tSl(IN := TRUE, PT := cSlWaitEmptyTime);
+
+                        IF _tSl.Q THEN
+                            _tSl(IN := FALSE);
+                            _slStep := E_SludgeDoseStep.TEST_ON;
+                        END_IF
+                    END_IF
+
+            ELSE
+                // awaryjnie
+                _slStep := E_SludgeDoseStep.TEST_ON;
+            END_CASE
+        END_IF
+
+
+    // ------------------------------------------------------------
+    // PERLIT: SC02 + E02
+    // ------------------------------------------------------------
+    E_GranStep.DOSE_PERLITE:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+
+            _tE02(IN := FALSE);
+            _bE02Phase := TRUE;     // start od ON
+
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'DOSE_PERLITE';
+        bDewaterStart := TRUE;
+
+        bSC02_On := TRUE;          // PERLIT
+
+        _tE02(IN := TRUE, PT := SEL(_bE02Phase, cVibOffTime, cVibOnTime));
+        IF _tE02.Q THEN
+            _tE02(IN := FALSE);
+            _bE02Phase := NOT _bE02Phase;
+        END_IF
+        bE02_On := _bE02Phase;     // PERLIT
+
+        IF (rMassRawKg - _mPerl0) >= rPerliteKg_SP THEN
+            _mLime0 := rMassRawKg;
+            _step := E_GranStep.DOSE_LIME;
+        END_IF
+
+
+    // ------------------------------------------------------------
+    // WAPNO: SC01 + E01
+    // ------------------------------------------------------------
+    E_GranStep.DOSE_LIME:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+
+            _tE01(IN := FALSE);
+            _bE01Phase := TRUE;     // start od ON
+
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'DOSE_LIME';
+        bDewaterStart := TRUE;
+
+        bSC01_On := TRUE;          // WAPNO
+
+        _tE01(IN := TRUE, PT := SEL(_bE01Phase, cVibOffTime, cVibOnTime));
+        IF _tE01.Q THEN
+            _tE01(IN := FALSE);
+            _bE01Phase := NOT _bE01Phase;
+        END_IF
+        bE01_On := _bE01Phase;     // WAPNO
+
+        IF (rMassRawKg - _mLime0) >= rLimeKg_SP THEN
+            _tMix(IN := FALSE);
+            _tStep(IN := FALSE);
+            _step := E_GranStep.MIXING;
+        END_IF
+
+
+    // ------------------------------------------------------------
+    E_GranStep.MIXING:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tMix(IN := FALSE);
+            _tStep(IN := FALSE);
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'MIXING';
+        bM01_Fwd := TRUE;
+        bM02_Fwd := TRUE;
+        rMix_Hz  := cMixHz;
+        bBL01_On := TRUE;
+
+        _tMix(IN := TRUE, PT := cMixTime);
+        IF _tMix.Q THEN
+            _tMix(IN := FALSE);
+            _tStep(IN := FALSE);
+            _step := E_GranStep.DISCH_WAIT;
+        END_IF
+
+
+    // ------------------------------------------------------------
+    E_GranStep.DISCH_WAIT:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'DISCH_WAIT';
+        bM01_Fwd := TRUE;
+        bM02_Fwd := TRUE;
+        rMix_Hz  := cMixHz;
+        bBL01_On := TRUE;
+
+        IF bFlapPosMode THEN
+            uiFlapPosSP := 100;
+        ELSE
+            bFlapOpen := TRUE;
+        END_IF
+
+        _tStep(IN := TRUE, PT := cDischTime);
+        IF _tStep.Q THEN
+            _tStep(IN := FALSE);
+            _step := E_GranStep.DISCH_CLOSE;
+        END_IF
+
+
+    // ------------------------------------------------------------
+    E_GranStep.DISCH_CLOSE:
+        // ENTRY
+        IF _step <> _stepPrev THEN
+            _tStep(IN := FALSE);
+            _stepPrev := _step;
+        END_IF
+
+        sDiag := 'DISCH_CLOSE';
+        IF bFlapPosMode THEN
+            uiFlapPosSP := 0;
+        ELSE
+            bFlapClose := TRUE;
+        END_IF
+
+        _tStep(IN := TRUE, PT := cCloseSettle);
+        IF _tStep.Q THEN
+            _tStep(IN := FALSE);
+
+            _cycleCnt := _cycleCnt + 1;
+
+            _mSludge0 := rMassRawKg;
+            _mPerl0   := rMassRawKg;
+            _mLime0   := rMassRawKg;
+
+            _step := E_GranStep.TARE;
+        END_IF
+
+ELSE
+    // awaryjnie
+    _step := E_GranStep.IDLE;
+END_CASE
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

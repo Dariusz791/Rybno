@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_SWG100_Alarms" Id="{5b0486cc-81f1-4ad3-8b4c-f8b98a54c643}">
+    <Declaration><![CDATA[TYPE ST_SWG100_Alarms :
+STRUCT
+    dwRawAlarm : DWORD;   // surowe słowo alarmów
+
+    // sumaryczne (do lampek SCADA)
+    bFault     : BOOL;    // OR alarmów "Meas. halted"
+    bWarning   : BOOL;    // OR ostrzeżeń (niehaltujących)
+
+    // ===== FAULT: Measurement halted =====
+    bMainboardOffline      : BOOL;  // bit 0
+    bMainboardBootloader   : BOOL;  // bit 1
+    bCH4AmbientHigh        : BOOL;  // bit 2
+    bCondensate            : BOOL;  // bit 3
+    bSampleFlowAlarm       : BOOL;  // bit 4
+    bTProbeTooLow          : BOOL;  // bit 12
+    bTHoseTooLow           : BOOL;  // bit 14
+    bMeasCtrlModuleOffline : BOOL;  // bit 24
+    bValveCtrlModuleOffline: BOOL;  // bit 25
+    bCondensateThermal     : BOOL;  // bit 30
+
+    // ===== WARNING: Measurement NOT halted =====
+    bSampleFlowWarning     : BOOL;  // bit 5
+    bCaseFanLow            : BOOL;  // bit 6
+    bTGascoolerTooHigh     : BOOL;  // bit 7
+    bTGascoolerTooLow      : BOOL;  // bit 8
+    bTSensorTooHigh        : BOOL;  // bit 9
+    bTSensorTooLow         : BOOL;  // bit 10
+    bTProbeTooHigh         : BOOL;  // bit 11
+    bTHoseTooHigh          : BOOL;  // bit 13
+    bTNDIRTooLow           : BOOL;  // bit 15
+    bSensorZeroError       : BOOL;  // bit 16
+    bAutoCalError          : BOOL;  // bit 17
+
+    bCondensatePumpOffline : BOOL;  // bit 22
+    bNDIRBenchOffline      : BOOL;  // bit 23
+    bGascoolerModuleOffline: BOOL;  // bit 26
+    bESModuleOffline       : BOOL;  // bit 27
+    bIOModuleOffline       : BOOL;  // bit 28
+    bPellistorCheckRequest : BOOL;  // bit 29
+    bDueForService         : BOOL;  // bit 31
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

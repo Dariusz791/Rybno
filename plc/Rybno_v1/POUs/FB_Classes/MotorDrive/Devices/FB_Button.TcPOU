@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_Button" Id="{ffad6a76-7dc4-4a02-aa18-08e1b9c2ca2d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Button IMPLEMENTS I_Button
+VAR
+	_input	: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="IsPressed" Id="{10cf29b0-9559-43f8-a48e-a9cf4dd85a59}">
+      <Declaration><![CDATA[PROPERTY IsPressed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{10f11ed5-8449-444f-a742-6371d9c29366}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsPressed:= _input;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6f1170f3-71af-477c-992f-a1456b55b3e5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_input := IsPressed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

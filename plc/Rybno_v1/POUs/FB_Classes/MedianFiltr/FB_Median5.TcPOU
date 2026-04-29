@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_Median5" Id="{53e84e85-1c8a-4cb2-9bd0-c3002f32ab4f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Median5
+VAR_INPUT
+	In		:	REAL;
+	TickMax	:	UINT :=10;	//co ile cykli pobierać próbkę do filtra medianowego	
+END_VAR
+VAR_OUTPUT
+	Out		:	REAL;	//wynik
+	Valid	:	BOOL;	//czy bufor już pełny
+END_VAR
+
+VAR
+	Buf			:	ARRAY[1..5]	OF REAL;
+	Tmp			:	ARRAY[1..5] OF REAL;
+	Count		:	UINT := 0;
+	Tick		:	UINT := 0;
+	TickLimit	:	UINT;
+	i			:	INT;
+	j			:	INT;
+	x			:	REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// zabezpieczenie
+IF TickMax = 0 THEN
+    TickLimit := 1;
+ELSE
+	TickLimit := TickMax;	
+END_IF;
+
+// decymacja probkowania
+Tick := Tick + 1;
+
+IF Tick >= TickMax THEN
+    Tick := 0;
+	
+	// przesuniecie bufora
+    FOR i := 5 TO 2 BY -1 DO
+        Buf[i] := Buf[i - 1];
+    END_FOR;
+    Buf[1] := In;
+	
+	// zliczanie zapelnienia bufora
+    IF Count < 5 THEN
+        Count := Count + 1;
+    END_IF;
+	
+	 // przed zapelnieniem bufora zwracaj surowy sygnal
+    IF Count < 5 THEN
+        Out := In;
+        Valid := FALSE;
+    ELSE
+        // kopiowanie do tablicy roboczej
+        FOR i := 1 TO 5 DO
+            Tmp[i] := Buf[i];
+        END_FOR;
+
+        // sortowanie rosnaco
+        FOR i := 1 TO 4 DO
+            FOR j := i + 1 TO 5 DO
+                IF Tmp[j] < Tmp[i] THEN
+                    x := Tmp[i];
+                    Tmp[i] := Tmp[j];
+                    Tmp[j] := x;
+                END_IF;
+            END_FOR;
+        END_FOR;
+
+        // mediana z 5
+        Out := Tmp[3];
+        Valid := TRUE;
+    END_IF;
+	
+
+END_IF;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Median5">
+      <LineId Id="25" Count="2" />
+      <LineId Id="75" Count="1" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="36" Count="3" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="44" Count="2" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="50" Count="23" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

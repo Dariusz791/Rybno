@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_FlowCounter" Id="{0cf18b0d-cac9-4205-9b5e-09b0ae7eb5a5}">
+    <Declaration><![CDATA[{attribute 'OPC.UA.DA.StructuredType' := '1'} //publikuj zmienna jako strukture
+TYPE ST_FlowCounter :
+STRUCT
+	
+	dTotalCount		: DINT;
+	rTotal_m3     	: REAL;
+	rFlowInst_m3h 	: REAL;
+	rDaily_m3		: REAL;
+	rDailyLast_m3	: REAL;
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

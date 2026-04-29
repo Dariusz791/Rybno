@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="HasBit_Dword" Id="{1066ba27-7cab-4ddc-b9e2-2f17d1f9272f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION HasBit_Dword : BOOL
+VAR_INPUT
+	dw   : DWORD;
+    uBit : USINT;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[HasBit_DWORD := (dw AND SHL(DWORD#1, uBit)) <> 0;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

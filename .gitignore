@@ -266,7 +266,7 @@ __pycache__/
 *.DB
 *.plc
 *.runtime
-*.tmc
+!*.tmc
 *.tsproj.user
 *.tsproj~
 *.TcSln

@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_Mixit" Id="{098d0b48-8dda-455c-961e-1335cc98c155}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Mixit
+VAR
+    _core    : FB_TwoPositionController;
+    _cv      : REAL := 0.0;
+    _cvValid : BOOL := FALSE;
+    _dem     : BOOL;      // wynik regulatora
+    _cmd     : BOOL;      // finalna komenda na stycznik
+    _k1      : FB_Contactor( en := _cmd );
+	
+	_median  : FB_Median5;	//filtr medianowy			
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="MixitCv" Id="{9c6322ca-1bda-4f0b-9d90-62d4f41872b7}">
+      <Declaration><![CDATA[METHOD MixitCv
+VAR_IN_OUT
+	Sensor : ST_AnalogSens;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_cv := Sensor.rValue;
+
+_cvValid := TRUE;	  // ustaw że czujnik jest obezny i ważny]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MixitState" Id="{ca472dc9-84c7-4a85-8fa8-56c04e533a08}">
+      <Declaration><![CDATA[METHOD MixitState : BOOL
+VAR_IN_OUT
+	IO	: ST_MixitIO;
+END_VAR
+
+VAR
+	iStatusSel: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_core(
+    bEnable       := IO.bEnable,
+    rSetPoint     := IO.rSP,
+    rCurrentValue := _cv,
+    rH            := IO.rH,
+    bManualON     := FALSE,
+    bCooling      := IO.bCooling,
+    bDemand       => _dem,
+    rE            => IO.rE,
+    rLo           => IO.rLo,
+    rHi           => IO.rHi
+);
+
+CASE IO.Mode OF
+    0: // OFF
+        _cmd := FALSE;
+    1: // AUTO
+        _cmd := _dem;
+    2: // MANUAL
+        _cmd := TRUE;
+ELSE
+    _cmd := FALSE;
+END_CASE
+
+_k1();
+
+IO.rCv := _cv;
+IO.Cmd := _cmd;
+IO.Out := _k1.State;
+
+
+// Status
+iStatusSel := SHL(BOOL_TO_INT(_cvValid), 1) OR BOOL_TO_INT(IO.Out);
+
+CASE iStatusSel OF
+    0:
+        IO.StatusText := 'Petla bez czujnika – obieg wyłaczony';
+    1:
+        IO.StatusText := 'Petla bez czujnika – obieg właczony';
+    2:
+        IO.StatusText := 'Czujnik aktywny – obieg wyłaczony';
+    3:
+        IO.StatusText := 'Czujnik aktywny – obieg właczony';
+END_CASE
+
+
+
+//// 1) policz rdzeń na podstawie SP/H i zapamiętanego CV
+//_core(
+//    bEnable       := IO.bEnable,
+//    rSetPoint     := IO.rSP,
+//    rCurrentValue := _cv,
+//    rH            := IO.rH,
+//    bManualON     := (IO.Mode = 2),
+//    bCooling      := IO.bCooling,
+//    bDemand       => _dem,
+//    rE            => IO.rE,
+//    rLo           => IO.rLo,
+//    rHi           => IO.rHi
+//);
+
+//// 2) tryby: 0=Off, 1=Auto, 2=Manual(always ON)
+//CASE IO.Mode OF
+//    0:
+//        IO.Cmd := FALSE;
+//    1:
+//        IO.Cmd := _dem;
+//    2:
+//        IO.Cmd := TRUE;
+//ELSE
+//    IO.Cmd := FALSE;
+//END_CASE
+
+//// 3) przenies komende na cewke
+//_k1();
+
+//// 4) uzupełnienie IO dla SCADA
+//IO.rCv := _cv;
+//IO.Out := _k1.State;
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Mixit">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Mixit.MixitCv">
+      <LineId Id="19" Count="0" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Mixit.MixitState">
+      <LineId Id="116" Count="27" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="152" Count="1" />
+      <LineId Id="155" Count="11" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="114" Count="1" />
+      <LineId Id="68" Count="32" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
