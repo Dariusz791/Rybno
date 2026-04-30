@@ -295,6 +295,8 @@ Sys/Plc/*
 ~*.*
 *.backup
 *.bak
+**/*.bak
+plc/**/*.bak
 
 # TwinCAT build artifacts
 _Boot/
