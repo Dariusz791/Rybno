@@ -21,6 +21,15 @@
     <Compile Include="DUTs\Contactor\ST_Contactor.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Dachs\E_DachsMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Dachs\E_DachsState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Dachs\ST_DachsOpcUa.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Dewatering\Granulat\E_GranFault.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +156,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\Contact\FB_ContactNO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Classes\Dachs\FB_DachsControl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Classes\DigitalSens\FB_DigitalSensNO.TcPOU">
@@ -285,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="DUTs\Dachs" />
     <Folder Include="DUTs\Dewatering\Granulat" />
     <Folder Include="DUTs\Dewatering\Granulat\OPCUA" />
     <Folder Include="DUTs\Dewatering\Sludge" />
@@ -306,6 +319,7 @@
     <Folder Include="POUs\ADS" />
     <Folder Include="POUs\FB_Classes" />
     <Folder Include="POUs\FB_Classes\Contact" />
+    <Folder Include="POUs\FB_Classes\Dachs" />
     <Folder Include="POUs\FB_Classes\MotorDrive" />
     <Folder Include="POUs\FB_Classes\MotorDrive\Devices" />
     <Folder Include="POUs\FB_Classes\MotorDrive\Devices\ITFs" />
@@ -364,6 +378,10 @@
     <None Include="Rybno_v1.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <SubObject Include="CogenerationProcess.ACT_DachsControl" />
+    <SubObject Include="CogenerationProcess.ACT_TempSens" />
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

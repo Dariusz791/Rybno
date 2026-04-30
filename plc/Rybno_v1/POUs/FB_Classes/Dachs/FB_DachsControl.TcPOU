@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_DachsControl" Id="{ab6c365b-ad34-458f-adc8-9dd28619edd4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DachsControl
+VAR_INPUT
+	bEnable             : BOOL;
+	
+    rPressure_kPa       : REAL;
+	rBiogasFlow_m3h     : REAL;
+	
+	rMinFlowRunning_m3h    : REAL;  // np. 1.0
+    tStartAlarmDelay       : TIME;  // np. T#120s
+END_VAR
+
+VAR_IN_OUT
+    stDachs             : ST_DachsOpcUa;
+END_VAR
+
+VAR_OUTPUT
+	xDachsStopContact   : BOOL;  // TRUE  = styk zwarty  = STOP / brak zgody pracy // FALSE = styk rozwarty = zgoda pracy Dachsa
+END_VAR
+VAR
+	bControlEnabled     : BOOL;
+	
+	fbRunHyst           : FB_Hysteresis;
+    fbStopContactNC     : FB_ContactNC;
+	tonStartAlarmDelay  : TON;
+
+    bHystRunPermission  : BOOL; // żadanie uruchomienia z histerezy tryb auto
+    bRunPermission      : BOOL;
+	
+	bAlarmLatch         : BOOL; // zatrzask alarmu
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ======================================================
+// FB_DachsControl
+// Sterowanie kogeneratorem Dachs przez styk NC.
+//
+// TRUE  = styk zwarty  = STOP / brak zgody pracy
+// FALSE = styk rozwarty = zgoda pracy Dachsa
+//
+// Reset ze SCADA kasuje tylko alarm PLC.
+// Alarm na urządzeniu Dachs musi być skasowany lokalnie.
+// ======================================================
+
+
+// --- Diagnostyka progów ciśnienia ---
+stDachs.bPressureStartReached := rPressure_kPa >= stDachs.rPressureStart_kPa;
+stDachs.bPressureStopReached  := rPressure_kPa <= stDachs.rPressureStop_kPa;
+
+
+// --- Sterowanie aktywacja bloku ze SCADA ---
+// Przyciski monostabilne: START / STOP.
+// STOP ma priorytet nad START.
+IF NOT bEnable THEN
+    bControlEnabled := FALSE;
+ELSIF stDachs.bStopCmd THEN
+    bControlEnabled := FALSE;
+ELSIF stDachs.bStartCmd THEN
+    bControlEnabled := TRUE;
+END_IF;
+
+stDachs.bControlEnabled := bControlEnabled;
+
+
+
+// --- Histereza pracy w AUTO ---
+fbRunHyst(
+    fIn  := rPressure_kPa,
+    fOn  := stDachs.rPressureStart_kPa,
+    fOff := stDachs.rPressureStop_kPa
+);
+
+bHystRunPermission := fbRunHyst.bQ;
+
+
+// --- Potwierdzenie pracy po przepływie ---
+stDachs.bFlowOk := rBiogasFlow_m3h >= rMinFlowRunning_m3h;
+
+
+// --- Domyślnie bezpiecznie: brak zgody pracy ---
+bRunPermission := FALSE;
+
+
+// --- Reset zatrzasku alarmu PLC ze SCADA ---
+IF stDachs.bReset THEN
+    bAlarmLatch := FALSE;
+END_IF;
+
+
+// --- Wybór trybu pracy ---
+IF NOT bEnable OR NOT bControlEnabled THEN
+
+    bRunPermission := FALSE;
+    stDachs.eState := E_DachsState.Off;
+
+ELSE
+
+    CASE stDachs.eMode OF
+
+        E_DachsMode.Off:
+            bRunPermission := FALSE;
+            stDachs.eState := E_DachsState.Off;
+
+        E_DachsMode.Auto:
+            bRunPermission := bHystRunPermission;
+
+            IF bRunPermission THEN
+                stDachs.eState := E_DachsState.RunPermission;
+            ELSE
+                stDachs.eState := E_DachsState.WaitingPressure;
+            END_IF
+
+        E_DachsMode.Manual:
+            bRunPermission := stDachs.bManualRunPermission;
+
+            IF bRunPermission THEN
+                stDachs.eState := E_DachsState.RunPermission;
+            ELSE
+                stDachs.eState := E_DachsState.Off;
+            END_IF
+
+    ELSE
+        bRunPermission := FALSE;
+        stDachs.eState := E_DachsState.Off;
+
+    END_CASE
+
+END_IF;
+
+
+// --- Alarm: zgoda pracy aktywna, ale brak przepływu po czasie rozruchu ---
+tonStartAlarmDelay(
+    IN := bRunPermission AND NOT stDachs.bFlowOk,
+    PT := tStartAlarmDelay
+);
+
+IF tonStartAlarmDelay.Q THEN
+    bAlarmLatch := TRUE;
+END_IF;
+
+
+// --- Reakcja na alarm zatrzaśnięty ---
+IF bAlarmLatch THEN
+    bRunPermission := FALSE;
+    stDachs.eState := E_DachsState.Alarm;
+END_IF;
+
+
+// --- Stan Running tylko jeśli jest zgoda pracy i przepływ ---
+IF bRunPermission AND stDachs.bFlowOk THEN
+    stDachs.eState := E_DachsState.Running;
+END_IF;
+
+
+// --- Konwersja zgody pracy na fizyczny styk NC ---
+fbStopContactNC(
+    _input := bRunPermission
+);
+
+xDachsStopContact := fbStopContactNC._output;
+
+
+// --- Statusy do SCADA ---
+stDachs.bRunPermission := bRunPermission;
+stDachs.bStopContact   := xDachsStopContact;
+
+stDachs.bIsRunning     := bRunPermission AND stDachs.bFlowOk;
+stDachs.bIsStopped     := NOT stDachs.bIsRunning;
+
+stDachs.bAutoActive    := stDachs.eMode = E_DachsMode.Auto;
+stDachs.bManualActive  := stDachs.eMode = E_DachsMode.Manual;
+
+stDachs.bAlarm         := bAlarmLatch;
+
+
+// --- Tekst diagnostyczny do SCADA ---
+IF bAlarmLatch THEN
+
+    stDachs.sDiag := 'ALARM: Brak przeplywu biogazu. Skasuj alarm lokalnie na Dachs, potem reset PLC w SCADA';
+
+ELSIF NOT bEnable THEN
+
+    stDachs.sDiag := 'Blok wylaczony - brak zezwolenia technicznego';
+
+ELSIF NOT bControlEnabled THEN
+	
+	 stDachs.sDiag := 'Sterowanie Dachs zatrzymane ze SCADA - nacisnij START';
+	 
+ELSIF stDachs.eMode = E_DachsMode.Off THEN
+
+    stDachs.sDiag := 'Tryb OFF - styk zwarty, Dachs zatrzymany';
+
+ELSIF stDachs.eMode = E_DachsMode.Manual THEN
+
+    IF bRunPermission AND stDachs.bFlowOk THEN
+        stDachs.sDiag := 'MANUAL - Dachs pracuje, przeplyw biogazu OK';
+    ELSIF bRunPermission AND NOT stDachs.bFlowOk THEN
+        stDachs.sDiag := 'MANUAL - zgoda pracy aktywna, oczekiwanie na przeplyw';
+    ELSE
+        stDachs.sDiag := 'MANUAL - brak zgody pracy, styk zwarty';
+    END_IF
+
+ELSIF stDachs.eMode = E_DachsMode.Auto THEN
+
+    IF bRunPermission AND stDachs.bFlowOk THEN
+        stDachs.sDiag := 'AUTO - Dachs pracuje, przeplyw biogazu OK';
+    ELSIF bRunPermission AND NOT stDachs.bFlowOk THEN
+        stDachs.sDiag := 'AUTO - zgoda pracy aktywna, oczekiwanie na przeplyw';
+    ELSIF stDachs.bPressureStopReached THEN
+        stDachs.sDiag := 'AUTO - niskie cisnienie, styk zwarty';
+    ELSE
+        stDachs.sDiag := 'AUTO - oczekiwanie na cisnienie startu';
+    END_IF
+
+ELSE
+
+    stDachs.sDiag := 'Nieznany tryb pracy Dachsa';
+
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_DachsControl">
+      <LineId Id="3" Count="184" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

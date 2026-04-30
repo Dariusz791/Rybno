@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
   <GVL Name="GVL_Cogeneration" Id="{e7620885-021d-49c4-969f-184fa29d0368}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
@@ -41,6 +41,9 @@ VAR_GLOBAL
 	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '} 
 	stMixit_H01 : ST_MixitIO;
 	
+	
+	{attribute 'OPC.UA.DA' := '1'}
+	DO_StykDachs : ;
 	
 	
 END_VAR]]></Declaration>
