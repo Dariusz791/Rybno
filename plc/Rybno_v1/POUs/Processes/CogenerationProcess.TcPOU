@@ -22,6 +22,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[ACT_TempSens(); //skalowanie i zapisywanie do GVL z czujników temperatury
+ACT_DachsControl();
 
 
 //obsługa obiegu chłodnicy C01 z regulacja dwustawnowa  jesli temperatura za wysoka to wlacz chlodnice jesli nie wylacz 
@@ -97,7 +98,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                       <o n="Text" t="CFCText">
                         <v n="Bounds">"0, 0, 0, 0"</v>
                         <n n="ElementGroupId" />
-                        <v n="Text">"T#120s"</v>
+                        <v n="Text">"T#480s"</v>
                         <v n="Modifiable">true</v>
                         <v n="Id">42L</v>
                       </o>
@@ -495,7 +496,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                           <v n="X">7</v>
                           <v n="Y">20</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
+                          <v n="Flags">100</v>
                         </o>
                         <o>
                           <v n="X">22</v>
@@ -1240,7 +1241,9 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
       </Implementation>
     </Action>
     <LineIds Name="CogenerationProcess">
-      <LineId Id="3" Count="15" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="4" Count="14" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

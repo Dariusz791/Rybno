@@ -330,6 +330,10 @@ LineIDs.dbg
 !plc/**/*.tmc
 !plc/**/_Config/
 !plc/**/_Config/**
+# Ignore TwinCAT backup files even inside _Config
+*.bak
+**/*.bak
+plc/**/*.bak
 
 # Wykluczaj kopie zapasowe i dane runtime Promotic
 # Promotic - kopie zapasowe i dane runtime

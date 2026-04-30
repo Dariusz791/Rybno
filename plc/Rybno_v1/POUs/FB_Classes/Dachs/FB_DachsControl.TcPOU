@@ -31,6 +31,8 @@ VAR
 	
 	bAlarmLatch         : BOOL; // zatrzask alarmu
 	
+	bStartAlarmTimerEnable : BOOL;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -130,16 +132,19 @@ ELSE
 
 END_IF;
 
-
 // --- Alarm: zgoda pracy aktywna, ale brak przepływu po czasie rozruchu ---
+
+bStartAlarmTimerEnable := bRunPermission AND NOT stDachs.bFlowOk AND NOT bAlarmLatch;
+
 tonStartAlarmDelay(
-    IN := bRunPermission AND NOT stDachs.bFlowOk,
+    IN := bStartAlarmTimerEnable,
     PT := tStartAlarmDelay
 );
 
 IF tonStartAlarmDelay.Q THEN
     bAlarmLatch := TRUE;
 END_IF;
+
 
 
 // --- Reakcja na alarm zatrzaśnięty ---
@@ -222,7 +227,12 @@ ELSE
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_DachsControl">
-      <LineId Id="3" Count="184" />
+      <LineId Id="3" Count="94" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="221" Count="9" />
+      <LineId Id="98" Count="2" />
+      <LineId Id="110" Count="77" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

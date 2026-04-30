@@ -53,7 +53,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{DFC2712A-8AD7-D952-A815-F4B6D78AF150}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{9EA473C4-E8B2-5D9D-6278-92298EEDF6FF}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">
@@ -563,6 +563,7 @@
 				<Link VarA="PlcTask Outputs^FermentationProcess.fbContactor_ZW01.Q" VarB="Channel 5^Output" Size="1"/>
 				<Link VarA="PlcTask Outputs^FertilizerProcess.fbContactor_H01.Q" VarB="Channel 7^Output" Size="1"/>
 				<Link VarA="PlcTask Outputs^FertilizerProcess.fbContactor_ZW02.Q" VarB="Channel 6^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^GVL_Cogeneration.DO_StykDachs" VarB="Channel 3^Output" Size="1"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL3058)">
 				<Link VarA="PlcTask Inputs^GVL_Biogas.PressureSens_GH01.iRawValue" VarB="AI Standard Channel 7^Value"/>
