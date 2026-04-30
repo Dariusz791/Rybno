@@ -5,9 +5,6 @@
 VAR_INPUT
 	bEnable             : BOOL;
 	
-	bStartCmd : BOOL;   // impuls ze SCADA
-	bStopCmd  : BOOL;   // impuls ze SCADA
-	
     rPressure_kPa       : REAL;
 	rBiogasFlow_m3h     : REAL;
 	
