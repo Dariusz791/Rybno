@@ -4,9 +4,16 @@
     <Declaration><![CDATA[TYPE ST_DachsOpcUa :
 STRUCT
     // --- Komendy / tryb ze SCADA ---
+	bStartCmd 			  : BOOL;          // przycisk START ze SCADA, monostabilny
+	bStopCmd              : BOOL;  		   // przycisk STOP ze SCADA, monostabilny
+	bReset                : BOOL;          // reset zatrzasku alarmu
+	
+	//Status
+	bControlEnabled       : BOOL; 			// blok sterowania aktywny
+
     eMode                 : E_DachsMode;   // Off / Auto / Manual
     bManualRunPermission  : BOOL;          // ręczna zgoda pracy
-    bReset                : BOOL;          // reset zatrzasku alarmu
+    
 
     // --- Nastawy ze SCADA ---
     rPressureStart_kPa    : REAL;          // próg załączenia, np. 5.5

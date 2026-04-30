@@ -4,6 +4,10 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_DachsControl
 VAR_INPUT
 	bEnable             : BOOL;
+	
+	bStartCmd : BOOL;   // impuls ze SCADA
+	bStopCmd  : BOOL;   // impuls ze SCADA
+	
     rPressure_kPa       : REAL;
 	rBiogasFlow_m3h     : REAL;
 	
@@ -19,6 +23,8 @@ VAR_OUTPUT
 	xDachsStopContact   : BOOL;  // TRUE  = styk zwarty  = STOP / brak zgody pracy // FALSE = styk rozwarty = zgoda pracy Dachsa
 END_VAR
 VAR
+	bControlEnabled     : BOOL;
+	
 	fbRunHyst           : FB_Hysteresis;
     fbStopContactNC     : FB_ContactNC;
 	tonStartAlarmDelay  : TON;
@@ -48,6 +54,21 @@ stDachs.bPressureStartReached := rPressure_kPa >= stDachs.rPressureStart_kPa;
 stDachs.bPressureStopReached  := rPressure_kPa <= stDachs.rPressureStop_kPa;
 
 
+// --- Sterowanie aktywacja bloku ze SCADA ---
+// Przyciski monostabilne: START / STOP.
+// STOP ma priorytet nad START.
+IF NOT bEnable THEN
+    bControlEnabled := FALSE;
+ELSIF stDachs.bStopCmd THEN
+    bControlEnabled := FALSE;
+ELSIF stDachs.bStartCmd THEN
+    bControlEnabled := TRUE;
+END_IF;
+
+stDachs.bControlEnabled := bControlEnabled;
+
+
+
 // --- Histereza pracy w AUTO ---
 fbRunHyst(
     fIn  := rPressure_kPa,
@@ -73,7 +94,7 @@ END_IF;
 
 
 // --- Wybór trybu pracy ---
-IF NOT bEnable THEN
+IF NOT bEnable OR NOT bControlEnabled THEN
 
     bRunPermission := FALSE;
     stDachs.eState := E_DachsState.Off;
@@ -165,8 +186,12 @@ IF bAlarmLatch THEN
 
 ELSIF NOT bEnable THEN
 
-    stDachs.sDiag := 'Blok wylaczony - brak zgody pracy';
+    stDachs.sDiag := 'Blok wylaczony - brak zezwolenia technicznego';
 
+ELSIF NOT bControlEnabled THEN
+	
+	 stDachs.sDiag := 'Sterowanie Dachs zatrzymane ze SCADA - nacisnij START';
+	 
 ELSIF stDachs.eMode = E_DachsMode.Off THEN
 
     stDachs.sDiag := 'Tryb OFF - styk zwarty, Dachs zatrzymany';
@@ -200,7 +225,19 @@ ELSE
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_DachsControl">
-      <LineId Id="361" Count="165" />
+      <LineId Id="361" Count="14" />
+      <LineId Id="561" Count="1" />
+      <LineId Id="578" Count="10" />
+      <LineId Id="376" Count="0" />
+      <LineId Id="573" Count="0" />
+      <LineId Id="572" Count="0" />
+      <LineId Id="377" Count="118" />
+      <LineId Id="575" Count="0" />
+      <LineId Id="574" Count="0" />
+      <LineId Id="576" Count="0" />
+      <LineId Id="496" Count="0" />
+      <LineId Id="577" Count="0" />
+      <LineId Id="497" Count="29" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>
