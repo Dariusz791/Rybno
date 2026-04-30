@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_Label" Id="{99f62dc0-a62f-4cdb-a670-69828f32a7c1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Label 
+VAR
+	_label : T_MaxString;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Text" Id="{ef9897b6-4f54-4bba-be45-b634137a863a}">
+      <Declaration><![CDATA[PROPERTY Text : STRING]]></Declaration>
+      <Get Name="Get" Id="{5db493e6-fd87-40a8-bb89-353eea06e4c1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Text := _label;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{10848ee5-409c-4e22-a2b2-7aad9c97ba77}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_label := Text;
+ ]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,573 @@
+<?xml version="1.0"?>
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.74" ClassName="CNestedPlcProjDef">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{F852D9F7-9DB9-AE77-EE6D-D9BA52CDE308}" Namespace="Tc2_ModbusRTU" AutoDeleteType="true">MB_KL6inData22B</Name>
+			<BitSize>192</BitSize>
+			<SubItem>
+				<Name>Status</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>D</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>22</Elements>
+				</ArrayInfo>
+				<BitSize>176</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<Properties>
+				<Property>
+					<Name>hide</Name>
+				</Property>
+			</Properties>
+		</DataType>
+		<DataType>
+			<Name GUID="{E4C24E72-EF65-C814-8E17-663F53275EE3}" Namespace="Tc2_ModbusRTU" AutoDeleteType="true">MB_KL6outData22B</Name>
+			<BitSize>192</BitSize>
+			<SubItem>
+				<Name>Ctrl</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>D</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>22</Elements>
+				</ArrayInfo>
+				<BitSize>176</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<Properties>
+				<Property>
+					<Name>hide</Name>
+				</Property>
+			</Properties>
+		</DataType>
+	</DataTypes>
+	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{E9A86F0E-5137-11B7-7584-63421CFEDDC8}">
+			<Name>Rybno_v1 Instance</Name>
+			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+			<Vars VarGrpType="1">
+				<Name>PlcTask Inputs</Name>
+				<Var>
+					<Name>MAIN.fbModbusoperation._MB.InData</Name>
+					<Type GUID="{F852D9F7-9DB9-AE77-EE6D-D9BA52CDE308}" Namespace="Tc2_ModbusRTU">MB_KL6inData22B</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbModbusoperation._MB.WcState</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FermentationProcess.fbDrv_MX01._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FermentationProcess.fbDrv_MX02._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_SP02._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M01._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M02._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M03._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_BL01._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_SC01._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_SC02._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_E01._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_E02._termFuseOk._input</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>ModbusScheduler.MB.InData</Name>
+					<Type GUID="{F852D9F7-9DB9-AE77-EE6D-D9BA52CDE308}" Namespace="Tc2_ModbusRTU">MB_KL6inData22B</Type>
+				</Var>
+				<Var>
+					<Name>ModbusScheduler.MB.WcState</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Biogas.FlowSens_F01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Biogas.PressureSens_GH01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Biogas.PressureSens_DS01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Cogeneration.TempSens_HC01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Dewatering.DI_Praca</Name>
+					<Comment><![CDATA[ wejście: PRACA ze stacji odwadniania]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Dewatering.DI_Awaria</Name>
+					<Comment><![CDATA[ wejście: AWARIA ze stacji odwadniania]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.RotarySens_S01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fermentation.TempSens_R01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fermentation.LevelSens_R01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fermentation.PressureSens_R01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fermentation.HydroPressSens_R01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fermentation.PhSens_R01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.bSenZ</Name>
+					<Comment><![CDATA[ Status of input C z EL5151 ]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.RotarySens_S02.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.TempSens_H01.iRawValue</Name>
+					<Comment><![CDATA[ raw value from A/D converter PLC]]></Comment>
+					<Type>INT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.nEnc</Name>
+					<Comment><![CDATA[ Counter value z EL5151 (do podglądu)]]></Comment>
+					<Type>UINT</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.ValvePosition_ZR01.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.ValvePosition_ZR02.bRaw</Name>
+					<Comment><![CDATA[ bez DA → nie pokazuj w SCADA]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+			</Vars>
+			<Vars VarGrpType="2" AreaNo="1">
+				<Name>PlcTask Outputs</Name>
+				<Var>
+					<Name>MAIN.fbModbusoperation._MB.OutData</Name>
+					<Type GUID="{E4C24E72-EF65-C814-8E17-663F53275EE3}" Namespace="Tc2_ModbusRTU">MB_KL6outData22B</Type>
+				</Var>
+				<Var>
+					<Name>FermentationProcess.fbDrv_MX01.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FermentationProcess.fbDrv_MX02.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FermentationProcess.fbContactor_ZW01.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>CogenerationProcess.fbMixit_C01._k1.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>CogenerationProcess.fbMixit_R01._k1.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>CogenerationProcess.fbMixit_EX01._k1.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>CogenerationProcess.fbMixit_H01._k1.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_SP02.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_SP02.Rev.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M01.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M01.Rev.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M02.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M02.Rev.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M03.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrvInv_M03.Rev.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_BL01.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_SC01.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_SC02.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_E01.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbDrv_E02.Fwd.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbContactor_ZW02.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>FertilizerProcess.fbContactor_H01.Q</Name>
+					<Comment><![CDATA[ fizyczna cewka]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>ModbusScheduler.MB.OutData</Name>
+					<Type GUID="{E4C24E72-EF65-C814-8E17-663F53275EE3}" Namespace="Tc2_ModbusRTU">MB_KL6outData22B</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Dewatering.DO_Start</Name>
+					<Comment><![CDATA[ wyjście zwierające styk START do szafy odwadnianai]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.SetCounter</Name>
+					<Comment><![CDATA[Set Counter command]]></Comment>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>GVL_Fertilizer.SetCounterValue</Name>
+					<Comment><![CDATA[Set Counter Value]]></Comment>
+					<Type>UINT</Type>
+				</Var>
+			</Vars>
+			<UnrestoredVarLinks ImportTime="2025-09-13T15:28:16">
+				<OwnerA Name="OutputSrc" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="2">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL2008)">
+						<Link VarA="FermentationProcess.fbDrvInv_SP03.Fwd.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Output" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="FermentationProcess.fbDrvInv_SP03.Rev.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Output" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="FermentationProcess.fbDrvInv_SP04.Fwd.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Output" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="FermentationProcess.fbDrvInv_SP04.Rev.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Output" Size="1" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+			</UnrestoredVarLinks>
+			<UnrestoredVarLinks ImportTime="2025-10-10T12:47:45">
+				<OwnerA Name="InputDst" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="1">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+						<Link VarA="DewateringProcess.fbDrvInv_SP01._termFuseOk._input" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+				<OwnerA Name="OutputSrc" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="2">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL2008)">
+						<Link VarA="DewateringProcess.fbDrvInv_SP01.Fwd.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Output" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="DewateringProcess.fbDrvInv_SP01.Rev.Q" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Output" Size="1" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+			</UnrestoredVarLinks>
+			<UnrestoredVarLinks ImportTime="2025-12-10T16:33:46">
+				<OwnerA Name="InputDst" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="1">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 15 (EL5151)">
+						<Link VarA="FertilizerProcess.bSenZ" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="ENC Inputs^Status^Status of input C" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="FertilizerProcess.nEnc" TypeA="UINT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000005}" VarB="ENC Inputs^Counter value" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+				<OwnerA Name="OutputSrc" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="2">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 15 (EL5151)">
+						<Link VarA="FertilizerProcess.SetCounter" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="ENC Outputs^Control^Set counter" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="FertilizerProcess.SetCounterValue" TypeA="UINT" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000005}" VarB="ENC Outputs^Set counter value" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+			</UnrestoredVarLinks>
+			<UnrestoredVarLinks ImportTime="2025-12-13T10:17:49">
+				<OwnerA Name="InputDst" Prefix="TIPC^Rybno_v1^Rybno_v1 Instance" Type="1">
+					<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL1008)">
+						<Link VarA="MAIN.bSensA" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1" RestoreInfo="ANotFound"/>
+						<Link VarA="MAIN.bSensB" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1" RestoreInfo="ANotFound"/>
+					</OwnerB>
+				</OwnerA>
+			</UnrestoredVarLinks>
+			<Contexts>
+				<Context>
+					<Id>0</Id>
+					<Name>PlcTask</Name>
+					<ManualConfig>
+						<OTCID>#x02010030</OTCID>
+					</ManualConfig>
+					<Priority>20</Priority>
+					<CycleTime>10000000</CycleTime>
+				</Context>
+			</Contexts>
+			<TaskPouOids>
+				<TaskPouOid Prio="20" OTCID="#x08502001"/>
+			</TaskPouOids>
+		</Instance>
+	</Project>
+	<Mappings>
+		<OwnerA Name="Rybno_v1 Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL6022)">
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 0" Size="8"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 1" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 10" Size="8" OffsA="80"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 11" Size="8" OffsA="88"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 12" Size="8" OffsA="96"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 13" Size="8" OffsA="104"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 14" Size="8" OffsA="112"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 15" Size="8" OffsA="120"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 16" Size="8" OffsA="128"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 17" Size="8" OffsA="136"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 18" Size="8" OffsA="144"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 19" Size="8" OffsA="152"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 2" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 20" Size="8" OffsA="160"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 21" Size="8" OffsA="168"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 3" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 4" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 5" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 6" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 7" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 8" Size="8" OffsA="64"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^D" VarB="COM Inputs Channel 2^Data In 9" Size="8" OffsA="72"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbModbusoperation._MB.InData^Status" VarB="COM Inputs Channel 2^Status"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 0" Size="8"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 1" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 10" Size="8" OffsA="80"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 11" Size="8" OffsA="88"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 12" Size="8" OffsA="96"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 13" Size="8" OffsA="104"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 14" Size="8" OffsA="112"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 15" Size="8" OffsA="120"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 16" Size="8" OffsA="128"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 17" Size="8" OffsA="136"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 18" Size="8" OffsA="144"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 19" Size="8" OffsA="152"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 2" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 20" Size="8" OffsA="160"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 21" Size="8" OffsA="168"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 3" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 4" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 5" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 6" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 7" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 8" Size="8" OffsA="64"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^D" VarB="COM Inputs Channel 1^Data In 9" Size="8" OffsA="72"/>
+				<Link VarA="PlcTask Inputs^ModbusScheduler.MB.InData^Status" VarB="COM Inputs Channel 1^Status"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^Ctrl" VarB="COM Outputs Channel 2^Ctrl"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 0" Size="8"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 1" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 10" Size="8" OffsA="80"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 11" Size="8" OffsA="88"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 12" Size="8" OffsA="96"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 13" Size="8" OffsA="104"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 14" Size="8" OffsA="112"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 15" Size="8" OffsA="120"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 16" Size="8" OffsA="128"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 17" Size="8" OffsA="136"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 18" Size="8" OffsA="144"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 19" Size="8" OffsA="152"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 2" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 20" Size="8" OffsA="160"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 21" Size="8" OffsA="168"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 3" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 4" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 5" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 6" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 7" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 8" Size="8" OffsA="64"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbModbusoperation._MB.OutData^D" VarB="COM Outputs Channel 2^Data Out 9" Size="8" OffsA="72"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^Ctrl" VarB="COM Outputs Channel 1^Ctrl"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 0" Size="8"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 1" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 10" Size="8" OffsA="80"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 11" Size="8" OffsA="88"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 12" Size="8" OffsA="96"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 13" Size="8" OffsA="104"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 14" Size="8" OffsA="112"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 15" Size="8" OffsA="120"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 16" Size="8" OffsA="128"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 17" Size="8" OffsA="136"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 18" Size="8" OffsA="144"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 19" Size="8" OffsA="152"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 2" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 20" Size="8" OffsA="160"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 21" Size="8" OffsA="168"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 3" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 4" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 5" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 6" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 7" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 8" Size="8" OffsA="64"/>
+				<Link VarA="PlcTask Outputs^ModbusScheduler.MB.OutData^D" VarB="COM Outputs Channel 1^Data Out 9" Size="8" OffsA="72"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 15 (EL5151)">
+				<Link VarA="PlcTask Inputs^GVL_Fertilizer.bSenZ" VarB="ENC Inputs^Status^Status of input C" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Fertilizer.nEnc" VarB="ENC Inputs^Counter value"/>
+				<Link VarA="PlcTask Outputs^GVL_Fertilizer.SetCounter" VarB="ENC Outputs^Control^Set counter" Size="1"/>
+				<Link VarA="PlcTask Outputs^GVL_Fertilizer.SetCounterValue" VarB="ENC Outputs^Set counter value"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+				<Link VarA="PlcTask Inputs^FermentationProcess.fbDrv_MX01._termFuseOk._input" VarB="Channel 3^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FermentationProcess.fbDrv_MX02._termFuseOk._input" VarB="Channel 4^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M01._termFuseOk._input" VarB="Channel 7^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M02._termFuseOk._input" VarB="Channel 8^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_SP02._termFuseOk._input" VarB="Channel 1^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Biogas.FlowSens_F01.bRaw" VarB="Channel 2^Input" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL1008)">
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrvInv_M03._termFuseOk._input" VarB="Channel 1^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrv_BL01._termFuseOk._input" VarB="Channel 2^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrv_E01._termFuseOk._input" VarB="Channel 5^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrv_E02._termFuseOk._input" VarB="Channel 6^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrv_SC01._termFuseOk._input" VarB="Channel 3^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^FertilizerProcess.fbDrv_SC02._termFuseOk._input" VarB="Channel 4^Input" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL1008)">
+				<Link VarA="PlcTask Inputs^GVL_Dewatering.DI_Awaria" VarB="Channel 6^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Dewatering.DI_Praca" VarB="Channel 5^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Fertilizer.RotarySens_S01.bRaw" VarB="Channel 4^Input" Size="1"/>
+				<Link VarA="PlcTask Inputs^GVL_Fertilizer.RotarySens_S02.bRaw" VarB="Channel 3^Input" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL2008)">
+				<Link VarA="PlcTask Outputs^FermentationProcess.fbDrv_MX01.Fwd.Q" VarB="Channel 2^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FermentationProcess.fbDrv_MX02.Fwd.Q" VarB="Channel 3^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M01.Fwd.Q" VarB="Channel 6^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M01.Rev.Q" VarB="Channel 7^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M02.Fwd.Q" VarB="Channel 8^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_SP02.Fwd.Q" VarB="Channel 1^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_SP02.Rev.Q" VarB="Channel 4^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^GVL_Dewatering.DO_Start" VarB="Channel 5^Output" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL2008)">
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M02.Rev.Q" VarB="Channel 1^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M03.Fwd.Q" VarB="Channel 2^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrvInv_M03.Rev.Q" VarB="Channel 3^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrv_BL01.Fwd.Q" VarB="Channel 4^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrv_E01.Fwd.Q" VarB="Channel 7^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrv_E02.Fwd.Q" VarB="Channel 8^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrv_SC01.Fwd.Q" VarB="Channel 5^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbDrv_SC02.Fwd.Q" VarB="Channel 6^Output" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+				<Link VarA="PlcTask Outputs^CogenerationProcess.fbMixit_C01._k1.Q" VarB="Channel 8^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^CogenerationProcess.fbMixit_EX01._k1.Q" VarB="Channel 4^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^CogenerationProcess.fbMixit_H01._k1.Q" VarB="Channel 2^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^CogenerationProcess.fbMixit_R01._k1.Q" VarB="Channel 1^CogenerationProcess.fbMixit_R01._k1.Q" Size="1"/>
+				<Link VarA="PlcTask Outputs^FermentationProcess.fbContactor_ZW01.Q" VarB="Channel 5^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbContactor_H01.Q" VarB="Channel 7^Output" Size="1"/>
+				<Link VarA="PlcTask Outputs^FertilizerProcess.fbContactor_ZW02.Q" VarB="Channel 6^Output" Size="1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL3058)">
+				<Link VarA="PlcTask Inputs^GVL_Biogas.PressureSens_GH01.iRawValue" VarB="AI Standard Channel 7^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Cogeneration.TempSens_HC01.iRawValue" VarB="AI Standard Channel 8^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Fermentation.HydroPressSens_R01.iRawValue" VarB="AI Standard Channel 4^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Fermentation.PhSens_R01.iRawValue" VarB="AI Standard Channel 2^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Fermentation.PressureSens_R01.iRawValue" VarB="AI Standard Channel 3^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Fermentation.TempSens_R01.iRawValue" VarB="AI Standard Channel 1^Value"/>
+				<Link VarA="PlcTask Inputs^GVL_Fertilizer.TempSens_H01.iRawValue" VarB="AI Standard Channel 6^Value"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
+</TcSmItem>

@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <GVL Name="GVL_Fertilizer" Id="{da997031-fdea-45ad-96a1-4686f409976f}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+
+
+	
+(**************************************************** SP-02 *****************************************************************)
+	//*********************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_SP02 (structured) type '} 
+	stDriveStatus_SP02 : ST_DriveStatus;
+	
+	//*********************************** SP-02 struktura detekcji suchobiegu pompy******************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDryRunStatus_SP02 (structured) type '} 
+	stDryRunStatus_SP02 : ST_DryRunStatus;
+	
+	
+	
+
+(**************************************************** VR-01 *****************************************************************)	
+	
+	//*************************************   M01    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_M01 (structured) type '} 
+	stDriveStatus_M01 : ST_DriveStatus;
+
+	//*************************************   M02    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_M02 (structured) type '} 
+	stDriveStatus_M02 : ST_DriveStatus;
+	
+	//*************************************   M03    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_M03 (structured) type '} 
+	stDriveStatus_M03 : ST_DriveStatus;
+
+(**************************************************** S-01 S-02 *****************************************************************)	
+	
+	//*************************************   SC01    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_SC01 (structured) type '} 
+	stDriveStatus_SC01 : ST_DriveStatus;
+
+	//*************************************   SC02    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_SC02 (structured) type '} 
+	stDriveStatus_SC02 : ST_DriveStatus;
+	
+
+	//*************************************   E01    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_E01 (structured) type '} 
+	stDriveStatus_E01 : ST_DriveStatus;
+
+	//*************************************   E02    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_E02 (structured) type '} 
+	stDriveStatus_E02 : ST_DriveStatus;
+	
+	
+(**************************************************** BL-01 *****************************************************************)	
+	
+	//*************************************   BL01    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stDriveStatus_BL01 (structured) type '} 
+	stDriveStatus_BL01 : ST_DriveStatus;
+	
+	
+
+
+	//**************************** Weight Sensor  01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '4388801'} // EngineeringUnit = kg
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:2000'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '0:2000'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)  
+	WeightSens_VR01 : ST_WeightSens;
+	
+	//**************************** Temperature Sensor  01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '4408652'  }(*EngeneeringUnit = degree Celsius*)
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:100'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '40:55'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)  
+	TempSens_H01 : ST_AnalogSens;
+	
+	//**************************** Rotary Sensor  S01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}	
+	RotarySens_S01 : ST_DigitalSens;
+	
+	//**************************** Rotary Sensor  S02 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}	
+	RotarySens_S02 : ST_DigitalSens;
+	
+	
+	//**************************** Encoder Sensor  01 ***************************************************************
+		
+	//enkoder wej
+	bSenZ      		AT %I*: BOOL;   // Status of input C z EL5151 
+    nEnc       		AT %I*: UINT;   // Counter value z EL5151 (do podglądu)
+	//enkoder wyj
+	SetCounter      AT %Q* : BOOL;  //Set Counter command
+	SetCounterValue AT %Q* : UINT;  //Set Counter Value
+	
+
+
+(***************************************************** Granulowanie *****************************************************************)
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stGranHmi (structured) type '} 
+	stGranHmi : ST_GranHmi;
+	
+	//*************************************   Flap Control    ********************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stFlapControl (structured) type '} 
+	stFlapControl : ST_FlapControl;
+	
+
+(************************************************** Sludge Dosing to R01 *****************************************************************)
+
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stFlapControl (structured) type '}
+	stSludgeDosing	: ST_SludgeDosing;
+	
+	
+	//**************************** Valve Position  ZR01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}	
+	ValvePosition_ZR01 : ST_DigitalSens;
+	
+	//**************************** Valve Position  ZR02 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}	
+	ValvePosition_ZR02 : ST_DigitalSens;
+	
+	(*************** SP02 pump mode ****************************)
+	iSP02_Mode : INT;
+	
+	//***************************  ZW02 - Przekaźnik K302 ************************************************************************	
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stContactor (structured) type '} 
+	stContactor_ZW02 : ST_Contactor;
+	
+	//***************************  H01 - Przekaźnik K303 wentylator nagrzewnicy ************************************************************************	
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stContactor (structured) type '} 
+	stContactor_H01 : ST_Contactor;
+	
+	
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

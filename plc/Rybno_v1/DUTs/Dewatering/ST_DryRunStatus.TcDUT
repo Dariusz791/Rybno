@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_DryRunStatus" Id="{547609ff-f401-47c0-b23b-758451fe3382}">
+    <Declaration><![CDATA[TYPE ST_DryRunStatus :
+STRUCT
+    bEnabled            : BOOL;   // Detekcja suchobiegu włączona
+    bDetectionActive    : BOOL;   // Detekcja aktywna: pompa pracuje, spełnione warunki startowe do oceny
+    bDryCondition       : BOOL;   // Chwilowo spełniony warunek suchobiegu przed potwierdzeniem czasowym
+    bDryRunConfirmed    : BOOL;   // Suchobieg potwierdzony po czasie potwierdzenia
+
+    bNoMaterialDetected : BOOL;   // Wykryto brak materiału / pusty kosz na podstawie logiki procesu
+    bPumpProtectionTrip : BOOL;   // Zadziałała ochrona pompy z powodu potwierdzonego suchobiegu
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

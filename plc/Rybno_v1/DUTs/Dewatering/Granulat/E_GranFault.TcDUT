@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="E_GranFault" Id="{5f52b5cb-734a-46d5-bcb6-00fa6c6519f2}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+
+(*
+===============================================================================
+  ENUM: Błędy (FAULT)
+===============================================================================
+*)
+TYPE E_GranFault :
+(
+    NONE                      := 0,   // brak błędu
+
+    // Odwadnianie
+    DEWATER_NO_RUN_TIMEOUT    := 20,  // po starcie nie pojawiła się PRACA w czasie
+
+    // Osad / waga
+    SLUDGE_NO_WEIGHT_INCREASE := 30,  // pompa działa, a po 60s masa nie urosła o min. próg
+
+    // Klapa / wysyp
+    FLAP_OPEN_TIMEOUT         := 50,  // nie potwierdzono otwarcia/pozycji w czasie
+    FLAP_CLOSE_TIMEOUT        := 51,  // nie potwierdzono zamknięcia w czasie
+    DISCH_TIMEOUT             := 52,  // wysyp nie osiągnął residuum w czasie
+
+    // Napędy
+    DRIVE_FAULT               := 90   // fault dowolnego napędu (falownik/stycznik/klapa)
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

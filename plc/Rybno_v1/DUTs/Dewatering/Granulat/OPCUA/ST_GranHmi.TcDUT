@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <DUT Name="ST_GranHmi" Id="{2447fe4e-4c19-4c73-9f8c-40ad83caf1b1}">
+    <Declaration><![CDATA[TYPE ST_GranHmi :
+STRUCT
+    Cmd : ST_GranHmiCmd;  // SCADA → PLC (komendy)
+    SP  : ST_GranHmiSP;   // SCADA → PLC (nastawy)
+    Sts : ST_GranHmiSts;  // PLC → SCADA (status)
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

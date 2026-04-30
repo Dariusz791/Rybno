@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <POU Name="FB_ReactorMixer" Id="{bc8f2a9f-7be2-4bbe-8a2a-e238f6924287}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReactorMixer
+VAR_INPUT
+	bEnable   	: BOOL;   // zezwolenie na cały cykl z SCADA -> PLC
+    tOn       	: TIME;   // czas pracy każdego mieszadła SCADA -> PLC
+    tOff      	: TIME;   // czas przerwy, gdy oba stoją SCADA -> PLC
+	bMx01Fault  : BOOL;   // GVL.stDriveStatus_MX01.Fault
+    bMx02Fault  : BOOL;   // GVL.stDriveStatus_MX02.Fault
+END_VAR
+VAR_OUTPUT
+	bCmd_MX01 : BOOL;   // rozkaz PRACA dla MX01
+    bCmd_MX02 : BOOL;   // rozkaz PRACA dla MX02
+    iStep     : INT;    // krok sekwencji (do diagnostyki/HMI)
+	
+	tMx01Elapsed : TIME;   // ile czasu już miesza MX01 w bieżącym cyklu
+    tMx02Elapsed : TIME;   // ile czasu już miesza MX02 w bieżącym cyklu
+    tOffElapsed  : TIME;   // ile czasu już trwa przestój TOFF
+	bMixFault    : BOOL;   // AWARIA całej funkcji mieszania
+END_VAR
+VAR
+	fbTON       : TON;     // timer LOGICZNY (TON/TOFF)
+    fbPhase     : TON;     // timer STOPER fazy (dla podglądu czasu)
+    iStepPrev   : INT;     // do wykrywania zmiany kroku
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// OBSŁUGA AWARII BŁĘDÓW MIESZADEL
+IF (bMx01Fault OR bMx02Fault) THEN // jesli awaria ustaw iStep=40 dla SCADA do ustawienia informacji graficznej systemu mieszania i wyjdz z bloku funkcyjnego RETURN
+    bCmd_MX01 := FALSE;
+    bCmd_MX02 := FALSE;
+    fbTON(IN := FALSE);
+    fbPhase(IN := FALSE);
+    iStep := 40;     // <<< AWARIA
+    bMixFault := TRUE;
+    RETURN;
+END_IF;
+
+// brak awarii napędów → możemy działać normalnie
+bMixFault := FALSE;
+
+
+// ---------------------------------------------------------
+// STOP / RESET GLOBALNY
+// ---------------------------------------------------------
+IF NOT bEnable THEN
+    // wyłącz wszystko i zresetuj sekwencję oraz timery
+    bCmd_MX01 := FALSE;
+    bCmd_MX02 := FALSE;
+
+    fbTON(IN := FALSE);
+    fbPhase(IN := FALSE);
+
+    iStep := 0;
+    iStepPrev := 0;
+
+    tMx01Elapsed := T#0s;
+    tMx02Elapsed := T#0s;
+    tOffElapsed  := T#0s;
+
+    RETURN;
+END_IF;
+
+
+// ---------------------------------------------------------
+// SEKWENCJA KROKOWA MX01 -> MX02 -> TOFF
+// ---------------------------------------------------------
+CASE iStep OF
+
+    // 0 – inicjalizacja, przejście do MX01
+    0:
+        bCmd_MX01 := FALSE;
+        bCmd_MX02 := FALSE;
+        fbTON(IN := FALSE);
+        iStep := 10;
+
+    // 10 – PRACA MX01 (TON)
+    10:
+        bCmd_MX01 := TRUE;
+        bCmd_MX02 := FALSE;
+
+        fbTON(IN := TRUE, PT := tOn);
+
+        IF fbTON.Q THEN
+            fbTON(IN := FALSE);           // koniec czasu MX01
+            bCmd_MX01 := FALSE;
+            iStep := 20;                  // od razu MX02
+        END_IF
+
+    // 20 – PRACA MX02 (TON)
+    20:
+        bCmd_MX01 := FALSE;
+        bCmd_MX02 := TRUE;
+
+        fbTON(IN := TRUE, PT := tOn);
+
+        IF fbTON.Q THEN
+            fbTON(IN := FALSE);           // koniec czasu MX02
+            bCmd_MX02 := FALSE;
+            iStep := 30;                  // przejście do przerwy
+        END_IF
+
+    // 30 – PRZERWA (TOFF) – oba wyłączone
+    30:
+        bCmd_MX01 := FALSE;
+        bCmd_MX02 := FALSE;
+
+        fbTON(IN := TRUE, PT := tOff);
+
+        IF fbTON.Q THEN
+            fbTON(IN := FALSE);           // koniec przerwy
+            iStep := 10;                  // znowu MX01
+        END_IF
+
+    // default – awaryjny reset
+    ELSE
+        iStep := 0;
+END_CASE;
+
+
+// ---------------------------------------------------------
+// STOPER FAZY – LICZENIE CZASU TRWANIA BIEŻĄCEGO KROKU
+// ---------------------------------------------------------
+
+// Wykrycie zmiany kroku
+IF iStep <> iStepPrev THEN
+    // resetujemy stoper fazy przy każdej zmianie kroku
+    fbPhase(IN := FALSE);       // jedno wywołanie z FALSE kasuje ET
+    iStepPrev := iStep;
+END_IF;
+
+// Po resecie wchodzimy w stałe liczenie czasu fazy
+fbPhase(IN := TRUE, PT := T#7D);   // PT dowolne duże, ET nas interesuje
+
+// -------------------------------------------------
+// Mapowanie ET stopera na odpowiednie wyjścia
+// -------------------------------------------------
+CASE iStep OF
+    10: // MX01 pracuje
+        tMx01Elapsed := fbPhase.ET;
+        tMx02Elapsed := T#0s;
+        tOffElapsed  := T#0s;
+
+    20: // MX02 pracuje
+        tMx01Elapsed := T#0s;
+        tMx02Elapsed := fbPhase.ET;
+        tOffElapsed  := T#0s;
+
+    30: // przerwa TOFF
+        tMx01Elapsed := T#0s;
+        tMx02Elapsed := T#0s;
+        tOffElapsed  := fbPhase.ET;
+
+    ELSE
+        tMx01Elapsed := T#0s;
+        tMx02Elapsed := T#0s;
+        tOffElapsed  := T#0s;
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

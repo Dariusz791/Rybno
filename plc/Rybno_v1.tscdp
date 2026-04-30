@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<DisabledProjects>
+	<Project Name="Rybno_v1">
+		<Configuration>TwinCAT OS (x64)|Debug</Configuration>
+		<Configuration>TwinCAT OS (x64)|Release</Configuration>
+	</Project>
+</DisabledProjects>

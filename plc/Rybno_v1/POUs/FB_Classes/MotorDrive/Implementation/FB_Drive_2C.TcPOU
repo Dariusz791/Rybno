@@ -1,0 +1,585 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_Drive_2C" Id="{a45d9083-543b-4ab8-badd-8428a370dd47}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Drive_2C IMPLEMENTS I_Drive
+VAR
+	//HMI
+	_autoLed			: FB_Led;			//obiekt diody LED stacyjka SCADA - auto
+	_supplyLed			: FB_Led;			//obiekt diody LED stacyjka SCADA - zasilanie
+	_fwdLed				: FB_Led;			//obiekt diody LED Stacyjka SCADA - kierunek
+	_revLed				: FB_LED;			//obiekt diody LED Stacyjka SCADA - kierunek do tyłu
+	_stateLed			: FB_LedColorful;	//obiekt etykiety LABEL stacyjka SCADA
+	_statusLabel    	: FB_Label;			//obiekt etykiety LABEL sstatus
+
+
+	// Latch RUN tylko w Drive
+    _reqFwd, _reqRev : BOOL;
+	_fault			 : BOOL;
+	
+	// poziomy do styczników
+    _cmdFwd, _cmdRev : BOOL;
+	
+	//zezwolenia
+	_safetyOk        : BOOL := TRUE;	// Zawsze TRUE jesli brak przekazników safety
+    _permOk	 		 : BOOL := TRUE;    // „zawsze TRUE”, jeśli brak per-permitu
+	
+	
+	
+	// instancje styczników – referencje wiązane w FB_init
+    Fwd	: FB_Contactor( en := _cmdFwd);
+    Rev : FB_Contactor( en := _cmdRev);
+	
+	//stan napędu
+	_termFuseOk				  : FB_TermFuse;		//obiekt wylacznika silnikowego fizyczne szafa sterownicza
+	_isRunning, _isRunningRev : BOOL;
+	
+	//czas pracy
+	_fbWorkTimeCounter	: FB_WorkTimeCounter; //obiekt do zarzadzania czasem pracy napędu
+	_stWorkTime			: ST_WorkTime;		 //struktura przechowywania czasu pracy
+	_wtEnable			: BOOL;				//uruchamia licznik czasu pracy
+
+
+	//nastawa i aktualna czestotliwość w HZ pracy
+	_rSetHz 			: REAL:=0;   // 0 brak falownika
+    _rActHz 			: REAL:=50;  // 50 brak falownika
+
+	//struktura wymiany z falownikiem
+	_stInverter			: St_Inverter;		// brak falownika wiec trzeba ustawic recznie
+	
+	
+		
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Properties" Id="{ea3ec526-2b4b-4fdc-a0ba-ddb2b60f096a}">
+      <Folder Name="CurrTorquePower" Id="{ce4bc8c9-e37b-4400-be06-c1b9b5be7957}" />
+      <Folder Name="HMI" Id="{5f26987e-7752-43a2-ba3a-8e8eb2693667}" />
+      <Folder Name="Speed" Id="{83b4f48f-13b1-422c-9371-4811674be9b3}" />
+      <Folder Name="Status" Id="{7093d3ab-25f2-4196-88cb-96c3957a9a00}" />
+    </Folder>
+    <Property Name="AtSpeed" Id="{6cbe0b2b-da46-4b95-96c9-9299c8ba8f19}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY AtSpeed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{ab17bc77-a581-48ca-ac89-a49fdcef3a7d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AtSpeed := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="CommOk" Id="{06a58425-8bae-458e-aa89-2a56c7d80d06}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY CommOk : BOOL]]></Declaration>
+      <Get Name="Get" Id="{df3d2fe5-6724-426f-ba82-c2937cd21a5f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CommOk := _stInverter.bCommOk;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{f2967e7f-bbb2-49e8-abd7-6cd0ee4cb953}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stInverter.bCommOk := CommOk;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="CurrAct_A" Id="{cb6b80f8-f67d-4baf-ae1f-bfb11400a8b0}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY CurrAct_A : REAL]]></Declaration>
+      <Get Name="Get" Id="{5b6b0e21-6a0f-4cf5-ad8c-57585484d448}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrAct_A := 0.0; //stub dla napedow bez falownika]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Cycle" Id="{6a4da2c1-e1d8-48c2-80d7-a9979a12b290}">
+      <Declaration><![CDATA[METHOD Cycle : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// wywoływane co cykl
+
+//błąd napedu
+_fault := NOT _termFuseOk.IsActive; //zadziałał termik lub falownik ma bład z słowa statusu 
+
+_cmdFwd := _reqFwd AND NOT _reqRev AND _safetyOk AND _permOk AND NOT _fault;
+_cmdRev := _reqRev AND NOT _reqFwd AND _safetyOk AND _permOk AND NOT _fault;
+
+//instancje styczników (przekażników) załączajaccyh przód tył
+Fwd();  Rev();
+
+_isRunning    := Fwd.State OR Rev.State;
+_isRunningRev := Rev.State;
+
+//Odliczanie czasu pracy
+_fbWorkTimeCounter.Execute(_wtEnable AND _isRunning);
+_stWorkTime := _fbWorkTimeCounter.WorkTime;
+
+//ustawienia _stInverter gdy brak falownika
+_stInverter.bCommOk   := TRUE;
+_stInverter.eInvModel := E_InvType.brak;
+_stInverter.nSlaveId  := 0;
+_stInverter.rFreqActual := 50;
+_stInverter.rFreqSetPoint := 0;
+_stInverter.wInvStatusWord :=0;
+
+
+Cycle:=TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Fault" Id="{8c31d762-fa0b-4ebb-a2ab-36d34070cece}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Fault : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{d1c00ef5-11c8-4cd4-ac5d-28f82947551d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Fault := _Fault;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="InvStatWord" Id="{8186e382-34b4-4323-b520-b66dab090ffe}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY InvStatWord : WORD]]></Declaration>
+      <Get Name="Get" Id="{4376abec-5668-4036-909e-70801664accf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InvStatWord := _stInverter.wInvStatusWord;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b3c4b829-0e57-49ae-ab32-c06fc610bf07}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stInverter.wInvStatusWord	:= InvStatWord;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="IsRunning" Id="{da48af19-0618-4a63-9f38-9f60766d6ab5}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY IsRunning : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{3437b3ad-a980-4979-95d3-8589135af52d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsRunning:=_isRunning;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsRunningRev" Id="{2db7cc20-2be3-45a0-9c11-de2e1f4a75fc}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY IsRunningRev : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{fe7cadd1-a98a-4dc1-a0a7-bef2c3bb989f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsRunningRev:=_isRunningRev;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="PowerAct_Percent" Id="{5bd45119-661e-4267-892c-e32f7d90327d}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY PowerAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{ace677ac-32d1-4890-9ea3-0ed9ee3a2600}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PowerAct_Percent := 0.0; //stub dla napedow bez falownika ]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ResetFault" Id="{d06a4fc1-ae6f-4db9-b795-71ccf7d0ab37}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD ResetFault : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ResetFault := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SetAutoLed" Id="{635a9f2d-6f8d-4f45-89a9-30fab929f94b}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetAutoLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fbed78c1-63c6-4cf0-b4f4-57a233593d1e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetAutoLed:=_autoLed.State;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{34b908ce-2af3-4dfd-a8ff-ae6b0fb567a2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_autoLed.State:=SetAutoLed;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SetFwdLed" Id="{d86c8bf3-941e-4ac2-98e4-73fb894f70b5}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetFwdLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3f9d0ac2-3e2e-4e8c-9dd9-79e4a9c79099}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetFwdLed:=_fwdLed.State;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ae3b795e-25a0-4580-a67b-5c90e33f0c19}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_fwdLed.State := SetFwdLed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SetLedEnum" Id="{c423653a-71ac-4021-b486-415f762742ce}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetLedEnum : E_DriveLedState]]></Declaration>
+      <Set Name="Set" Id="{661b9cac-54a6-4d40-b3f4-6e2a7536e084}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_stateLed.StateAsEnum:=SetLedEnum;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SetLedInt" Id="{ccac2a54-1bd9-433d-81a4-09b33f7c4c9b}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetLedInt : INT]]></Declaration>
+      <Get Name="Get" Id="{ae1490bf-3c0e-4365-aab6-2ba736d83e31}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetLedInt := _stateLed.StateAsInt;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SetRevLed" Id="{4a26127f-ac99-4115-9620-8484fe94b7e2}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetRevLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{26cdb5b1-afb8-475b-8329-62ddece4199e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetRevLed:=_revLed.State;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4580d134-c619-4135-bb81-1f11dd7f3bb1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_revLed.State:=SetRevLed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SetStatusLabel" Id="{57d77e47-0192-45bb-9a20-c03ac814b2b1}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetStatusLabel : STRING]]></Declaration>
+      <Get Name="Get" Id="{ea52c41f-0804-40a5-96cb-019d3aeff842}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetStatusLabel := _statusLabel.Text;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{d7862fe8-597b-4a3e-b4bd-0f967e9adad5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_statusLabel.Text := SetStatusLabel;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SetSupplyLed" Id="{13c70a8a-8670-454e-b2fa-39596a0d47f2}" FolderPath="Properties\HMI\">
+      <Declaration><![CDATA[PROPERTY SetSupplyLed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b3b1816c-5f9b-4651-8408-976511c8b029}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SetSupplyLed:=_supplyLed.State;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{93659940-7484-455a-8cf8-eb00e6c9ee9d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_supplyLed.State:=SetSupplyLed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="SetWorkCounter" Id="{b86d7144-9b4e-4836-a4ef-73ade8dfa981}">
+      <Declaration><![CDATA[METHOD SetWorkCounter : BOOL
+VAR_INPUT
+	bEnable	:	BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_wtEnable := bEnable;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SlaveId" Id="{b4ab7b55-2400-4d0a-aa9e-e1c26c562e45}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY SlaveId : BYTE]]></Declaration>
+      <Get Name="Get" Id="{9cdfc4f9-8093-4be8-af6c-b235c78f0ba5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SlaveId:=_stInverter.nSlaveId;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="SpeedAct_Hz" Id="{bd402bae-3ded-4adb-a79b-58d33de4b74b}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY SpeedAct_Hz : REAL]]></Declaration>
+      <Get Name="Get" Id="{c58c798c-53aa-4427-8d77-b264f39a7a08}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SpeedAct_Hz := 0.0; //stub dla napedow bez falownika]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e8777535-f045-4383-b84f-7834fd566fdb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SpeedSet_Hz" Id="{d9dfc2d9-b3f5-4b58-9020-f0bdaceae3d5}" FolderPath="Properties\Speed\">
+      <Declaration><![CDATA[PROPERTY SpeedSet_Hz : REAL]]></Declaration>
+      <Get Name="Get" Id="{0998d7f1-e8b4-49a4-9fa3-6967a5bc42c4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{83448df3-fc2b-4df5-8c43-b8276537cb5d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="StartForward" Id="{13c10e87-7bc4-482e-819e-b5c0add105f7}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD StartForward : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_reqFwd := TRUE;
+_reqRev := FALSE;   // antykolizja
+StartForward := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartReverse" Id="{44f3e9f3-4380-4380-885c-03601972bc01}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD StartReverse : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_reqRev := TRUE;
+_reqFwd := FALSE;   // antykolizja
+StartReverse := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{7be520c3-6262-4d9b-b105-211e75898825}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Stop : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_reqFwd := FALSE;
+_reqRev := FALSE;
+Stop := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TermFuseActive" Id="{70330a59-f0cb-4387-b522-6246676e1325}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY TermFuseActive : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0f68d760-62ca-439d-bc94-39833695cb58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TermFuseActive:=_termFuseOk.IsActive;
+	]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="TorqueAct_Percent" Id="{eb089be4-d660-4636-a3ed-ff0d6edf3022}" FolderPath="Properties\CurrTorquePower\">
+      <Declaration><![CDATA[PROPERTY TorqueAct_Percent : REAL]]></Declaration>
+      <Get Name="Get" Id="{a03de56b-04cc-4011-816e-69bbf01d3207}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TorqueAct_Percent := 0.0; //stub dla napedow bez falownika]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="WorkTime" Id="{8879a09a-b63a-404e-83f2-7dc9a06ee8a0}" FolderPath="Properties\Status\">
+      <Declaration><![CDATA[PROPERTY WorkTime : ST_WorkTime]]></Declaration>
+      <Get Name="Get" Id="{40b4e7c8-1895-41e4-8cb6-364219fcdd14}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[WorkTime := _stWorkTime;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_Drive_2C">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.AtSpeed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.CommOk.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.CommOk.Set">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.CurrAct_A.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.Cycle">
+      <LineId Id="3" Count="27" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.Fault.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.InvStatWord.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.InvStatWord.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.IsRunning.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.IsRunningRev.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.PowerAct_Percent.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.ResetFault">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetAutoLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetAutoLed.Set">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetFwdLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetFwdLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetLedEnum.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetLedInt.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetRevLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetRevLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetStatusLabel.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetStatusLabel.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetSupplyLed.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetSupplyLed.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SetWorkCounter">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SlaveId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SpeedAct_Hz.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SpeedAct_Hz.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SpeedSet_Hz.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.SpeedSet_Hz.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.StartForward">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.StartReverse">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.Stop">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.TermFuseActive.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.TorqueAct_Percent.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_2C.WorkTime.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

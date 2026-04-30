@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_GranHmiCmd" Id="{8ce7e1fd-7309-4f15-8f87-2c57d0542cbe}">
+    <Declaration><![CDATA[
+(*
+===============================================================================
+  Struktury SCADA (OPC UA): Cmd / SP / Sts
+===============================================================================
+*)
+TYPE ST_GranHmiCmd :
+STRUCT
+    bRun        : BOOL;   // Bistabilny START/STOP procesu: 1=RUN, 0=STOP (pauza)
+    bResetFault : BOOL;   // Impuls resetu FAULT (po naprawie przyczyny)
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

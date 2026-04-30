@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+  <GVL Name="GVL_Cogeneration" Id="{e7620885-021d-49c4-969f-184fa29d0368}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	
+
+(**************************************************** HC-01 *****************************************************************)	
+	//**************************** Temperature Sensor  01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType' := '1'}
+	{attribute 'OPC.UA.DA.AnalogItemType.EngineeringUnits' := '4408652'  }(*EngeneeringUnit = degree Celsius*)
+	{attribute 'OPC.UA.DA.AnalogItemType.InstrumentRange' := '0:100'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.EURange' := '50:90'  }
+	{attribute 'OPC.UA.DA.AnalogItemType.WriteBehavior' := '2'  } (*AnalogWrMode_AllowAny = 0,
+																	AnalogWrMode_Clamp = 1,
+																	AnalogWrMode_Reject = 2,*)  
+	TempSens_HC01 : ST_AnalogSens;
+	
+	//**************************** MIXIT 01 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_C01 (structured) type '} 
+	stMixit_C01 : ST_MixitIO;
+	
+	//**************************** MIXIT 02 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX02 (structured) type '} 
+	stMixit_R01 : ST_MixitIO;
+	
+	//**************************** MIXIT 03 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX03 (structured) type '} 
+	stMixit_EX01 : ST_MixitIO;
+	
+	//**************************** MIXIT 04 ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '} 
+	stMixit_H01 : ST_MixitIO;
+	
+	
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
