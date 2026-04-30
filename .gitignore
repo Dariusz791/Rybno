@@ -317,6 +317,20 @@ _Libraries/
 LineIDs.dbg
 *.tclrs
 
+
+# TwinCAT 3 - pliki, które MUSZĄ być śledzone w repo
+# Ważne dla odtwarzania konfiguracji PLC, I/O, EtherCAT i linkowania zmiennych.
+!plc/**/*.tsproj
+!plc/**/*.plcproj
+!plc/**/*.TcPOU
+!plc/**/*.TcGVL
+!plc/**/*.TcDUT
+!plc/**/*.TcIO
+!plc/**/*.xti
+!plc/**/*.tmc
+!plc/**/_Config/
+!plc/**/_Config/**
+
 # Wykluczaj kopie zapasowe i dane runtime Promotic
 # Promotic - kopie zapasowe i dane runtime
 scada/Promotic/DtBackup/
