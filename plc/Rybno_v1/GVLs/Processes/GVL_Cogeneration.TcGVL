@@ -41,10 +41,15 @@ VAR_GLOBAL
 	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '} 
 	stMixit_H01 : ST_MixitIO;
 	
+		
+	//**************************** DACHS CONTROL ***************************************************************
+	{attribute 'OPC.UA.DA' := '1'}
+	{attribute 'OPC.UA.DA.StructuredType' := '1'}
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '}
+	stDachsOpcUa : ST_DachsOpcUa;
 	
 	{attribute 'OPC.UA.DA' := '1'}
-	DO_StykDachs : ;
-	
+	DO_StykDachs AT %Q* : BOOL;  // wyjście zwierające styk DACHS utrzymanie w STOP oraz w gotowości.
 	
 END_VAR]]></Declaration>
   </GVL>

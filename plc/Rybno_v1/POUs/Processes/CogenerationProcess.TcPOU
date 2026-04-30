@@ -54,13 +54,6 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                       <v n="DestPinId">5L</v>
                       <v n="Id">48L</v>
                     </o>
-                    <o t="CFCConnection">
-                      <v n="Bounds">"0, 0, 0, 0"</v>
-                      <n n="ElementGroupId" />
-                      <v n="SourcePinId">45L</v>
-                      <v n="DestPinId">13L</v>
-                      <v n="Id">47L</v>
-                    </o>
                     <o t="CFCInputElement">
                       <o n="Output" t="CFCOutputPin">
                         <v n="Bounds">"0, 0, 0, 0"</v>
@@ -444,6 +437,13 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                       <v n="OwningPageId">-1L</v>
                       <v n="Id">4L</v>
                     </o>
+                    <o t="CFCConnection">
+                      <v n="Bounds">"0, 0, 0, 0"</v>
+                      <n n="ElementGroupId" />
+                      <v n="SourcePinId">45L</v>
+                      <v n="DestPinId">13L</v>
+                      <v n="Id">49L</v>
+                    </o>
                   </l2>
                 </o>
                 <n n="ParameterInitializationMethodGenerator" />
@@ -472,34 +472,6 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                         <o>
                           <v n="X">43</v>
                           <v n="Y">16</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">97</v>
-                        </o>
-                      </l2>
-                    </o>
-                    <o>
-                      <v n="ConnectionId">47L</v>
-                      <o n="StartPoint" t="CFCPoint">
-                        <v n="X">16</v>
-                        <v n="Y">21</v>
-                        <v n="IsJoint">false</v>
-                        <v n="Flags">0</v>
-                      </o>
-                      <v n="Unroutable">false</v>
-                      <n n="CorrespondingPageId" />
-                      <v n="Locked">false</v>
-                    </o>
-                    <o>
-                      <l2 n="InnerList" cet="CFCPoint">
-                        <o>
-                          <v n="X">16</v>
-                          <v n="Y">21</v>
-                          <v n="IsJoint">false</v>
-                          <v n="Flags">68</v>
-                        </o>
-                        <o>
-                          <v n="X">22</v>
-                          <v n="Y">21</v>
                           <v n="IsJoint">false</v>
                           <v n="Flags">97</v>
                         </o>
@@ -635,7 +607,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                           <v n="X">6</v>
                           <v n="Y">16</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">100</v>
+                          <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">22</v>
@@ -645,11 +617,39 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                         </o>
                       </l2>
                     </o>
+                    <o>
+                      <v n="ConnectionId">49L</v>
+                      <o n="StartPoint" t="CFCPoint">
+                        <v n="X">16</v>
+                        <v n="Y">21</v>
+                        <v n="IsJoint">false</v>
+                        <v n="Flags">0</v>
+                      </o>
+                      <v n="Unroutable">false</v>
+                      <n n="CorrespondingPageId" />
+                      <v n="Locked">false</v>
+                    </o>
+                    <o>
+                      <l2 n="InnerList" cet="CFCPoint">
+                        <o>
+                          <v n="X">16</v>
+                          <v n="Y">21</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">68</v>
+                        </o>
+                        <o>
+                          <v n="X">22</v>
+                          <v n="Y">21</v>
+                          <v n="IsJoint">false</v>
+                          <v n="Flags">97</v>
+                        </o>
+                      </l2>
+                    </o>
                   </d2>
                 </o>
                 <v n="AutoSizeCanvas">true</v>
-                <v n="CanvasWidth">0</v>
-                <v n="CanvasHeight">0</v>
+                <v n="CanvasWidth">58</v>
+                <v n="CanvasHeight">22</v>
               </o>
             </Data>
             <TypeList>
