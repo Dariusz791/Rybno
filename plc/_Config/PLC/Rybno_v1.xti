@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.74" ClassName="CNestedPlcProjDef">
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.75" ClassName="CNestedPlcProjDef">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{F852D9F7-9DB9-AE77-EE6D-D9BA52CDE308}" Namespace="Tc2_ModbusRTU" AutoDeleteType="true">MB_KL6inData22B</Name>
@@ -53,7 +53,7 @@
 		</DataType>
 	</DataTypes>
 	<Project GUID="{344CDE8E-E24E-4ACF-8D6B-B5DFB0F04075}" Name="Rybno_v1" PrjFilePath="..\..\Rybno_v1\Rybno_v1.plcproj" TmcFilePath="..\..\Rybno_v1\Rybno_v1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{9EA473C4-E8B2-5D9D-6278-92298EEDF6FF}">
+		<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" AutoReloadTmc="true" TmcPath="Rybno_v1\Rybno_v1.tmc" TmcHash="{AA6DF983-EFE9-9EFE-B315-4E68901178B1}">
 			<Name>Rybno_v1 Instance</Name>
 			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 			<Vars VarGrpType="1">

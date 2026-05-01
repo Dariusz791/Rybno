@@ -26,26 +26,26 @@ VAR_GLOBAL
 	//**************************** MIXIT 02 ***************************************************************
 	{attribute 'OPC.UA.DA' := '1'}
 	{attribute 'OPC.UA.DA.StructuredType' := '1'}
-	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX02 (structured) type '} 
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_R01 (structured) type '} 
 	stMixit_R01 : ST_MixitIO;
 	
 	//**************************** MIXIT 03 ***************************************************************
 	{attribute 'OPC.UA.DA' := '1'}
 	{attribute 'OPC.UA.DA.StructuredType' := '1'}
-	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX03 (structured) type '} 
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_EX01 (structured) type '} 
 	stMixit_EX01 : ST_MixitIO;
 	
 	//**************************** MIXIT 04 ***************************************************************
 	{attribute 'OPC.UA.DA' := '1'}
 	{attribute 'OPC.UA.DA.StructuredType' := '1'}
-	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '} 
+	{attribute 'OPC.UA.DA.Description' := 'stMixit_H01 (structured) type '} 
 	stMixit_H01 : ST_MixitIO;
 	
 		
 	//**************************** DACHS CONTROL ***************************************************************
 	{attribute 'OPC.UA.DA' := '1'}
 	{attribute 'OPC.UA.DA.StructuredType' := '1'}
-	{attribute 'OPC.UA.DA.Description' := 'stMixit_MX04 (structured) type '}
+	{attribute 'OPC.UA.DA.Description' := 'stDachsOpcUa (structured) type '}
 	stDachsOpcUa : ST_DachsOpcUa;
 	
 	{attribute 'OPC.UA.DA' := '1'}
