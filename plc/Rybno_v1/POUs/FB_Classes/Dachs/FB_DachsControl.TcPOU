@@ -116,13 +116,10 @@ ELSE
             END_IF
 
         E_DachsMode.Manual:
-            bRunPermission := stDachs.bManualRunPermission;
+            bRunPermission := TRUE;
 
-            IF bRunPermission THEN
-                stDachs.eState := E_DachsState.RunPermission;
-            ELSE
-                stDachs.eState := E_DachsState.Off;
-            END_IF
+    		bRunPermission := TRUE;
+    		stDachs.eState := E_DachsState.RunPermission;
 
     ELSE
         bRunPermission := FALSE;
@@ -205,7 +202,7 @@ ELSIF stDachs.eMode = E_DachsMode.Manual THEN
     ELSIF bRunPermission AND NOT stDachs.bFlowOk THEN
         stDachs.sDiag := 'MANUAL - zgoda pracy aktywna, oczekiwanie na przeplyw';
     ELSE
-        stDachs.sDiag := 'MANUAL - brak zgody pracy, styk zwarty';
+        stDachs.sDiag := 'MANUAL - sterowanie zatrzymane, styk zwarty';
     END_IF
 
 ELSIF stDachs.eMode = E_DachsMode.Auto THEN
@@ -227,12 +224,18 @@ ELSE
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="FB_DachsControl">
-      <LineId Id="3" Count="94" />
+      <LineId Id="3" Count="81" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="89" Count="8" />
       <LineId Id="232" Count="0" />
       <LineId Id="231" Count="0" />
       <LineId Id="221" Count="9" />
       <LineId Id="98" Count="2" />
-      <LineId Id="110" Count="77" />
+      <LineId Id="110" Count="52" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="269" Count="5" />
+      <LineId Id="268" Count="0" />
+      <LineId Id="171" Count="16" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

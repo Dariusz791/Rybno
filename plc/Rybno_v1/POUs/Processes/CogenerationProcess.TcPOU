@@ -496,7 +496,7 @@ fbMixit_H01.MixitState(IO := GVL_Cogeneration.stMixit_H01); // pobiera dostep do
                           <v n="X">7</v>
                           <v n="Y">20</v>
                           <v n="IsJoint">false</v>
-                          <v n="Flags">100</v>
+                          <v n="Flags">68</v>
                         </o>
                         <o>
                           <v n="X">22</v>

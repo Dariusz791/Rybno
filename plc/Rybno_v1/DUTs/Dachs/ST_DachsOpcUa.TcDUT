@@ -12,7 +12,6 @@ STRUCT
 	bControlEnabled       : BOOL; 			// blok sterowania aktywny
 
     eMode                 : E_DachsMode;   // Off / Auto / Manual
-    bManualRunPermission  : BOOL;          // ręczna zgoda pracy
     
 
     // --- Nastawy ze SCADA ---
